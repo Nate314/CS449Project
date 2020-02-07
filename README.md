@@ -5,6 +5,8 @@
 ### University of Missouri – Kansas City
 # **Vision Statement**
 
+[Scroll to end to look at original whiteboard mockups]
+
 Finance App is inspired by my mother&#39;s small business needs for bookkeeping but could also be used as a personal finance tracker. The app&#39;s main functionality is to allow the user to input expenses and income, view reports over month/year timelines, and reconcile balances between bank accounts and what the user has input into the system. Every transaction will allow the user to associate a date, description, category, and amount so that later reports can be ran based on those amounts, dates, and categories.
 
 When the user opens the application, he/she will be greeted with a login screen which they will type in their username/password into and then move on to the main welcome screen. From the welcome screen the user will be able to perform 5 actions:
@@ -66,20 +68,6 @@ Stretch Goals:
 | 16 | Attach a photo of a receipt to each income/expense transaction | 5 | 4.5 | TODO |
 | 17 | Localization | 10 | 4.6 | TODO |
 
-# Original Mockup Drawings:
-![login](readme_assets/login.jpg?raw=true | width=100)
-![accounts](readme_assets/accounts.jpg?raw=true | width=100)
-![dev_settings](readme_assets/dev_settings.jpg?raw=true | width=100)
-![home](readme_assets/home.jpg?raw=true | width=100)
-![income_expense](readme_assets/income_expense.jpg?raw=true | width=100)
-![register](readme_assets/register.jpg?raw=true | width=100)
-![report_view](readme_assets/report_view.jpg?raw=true | width=100)
-![reports](readme_assets/reports.jpg?raw=true | width=100)
-![settings](readme_assets/settings.jpg?raw=true | width=100)
-![transfer](readme_assets/transfer.jpg?raw=true | width=100)
-![login](readme_assets/login.jpg?raw=true | width=100)
-
-
 # Sprint #1
 
 Sprint Backlog
@@ -102,3 +90,19 @@ Sprint Backlog
 ## Retrospective
 
 [TODO]
+
+
+
+# Original Mockup Drawings:
+
+![login](readme_assets/login.jpg?raw=true)
+![accounts](readme_assets/accounts.jpg?raw=true)
+![dev_settings](readme_assets/dev_settings.jpg?raw=true)
+![home](readme_assets/home.jpg?raw=true)
+![income_expense](readme_assets/income_expense.jpg?raw=true)
+![register](readme_assets/register.jpg?raw=true)
+![report_view](readme_assets/report_view.jpg?raw=true)
+![reports](readme_assets/reports.jpg?raw=true)
+![settings](readme_assets/settings.jpg?raw=true)
+![transfer](readme_assets/transfer.jpg?raw=true)
+![login](readme_assets/login.jpg?raw=true)
