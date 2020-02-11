@@ -1,5 +1,5 @@
 {	
-	"dbConnectionURL": "jdbc:mysql://localhost:3306/testing",
+	"dbConnectionURL": "jdbc:mysql://localhost:3306/cs449project",
 	"dbUser": "root",
 	"dbPassword": "r00t",
 	"jwtSecretKey": "TmF0aGFuIEdhd2l0aCBTZWNyZXQgS2V5"

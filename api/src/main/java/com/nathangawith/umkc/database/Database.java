@@ -25,7 +25,7 @@ public class Database implements IDatabase {
 		T obj = null;
         try {
         	Connection conn = this.getConnection();
-        	ResultSet rs = this.ex(conn, sql, params);
+        	ResultSet rs = this.ex(conn, sql, params, false);
             JSONArray json = new JSONArray();
             ResultSetMetaData rsmd = rs.getMetaData();
             while(rs.next()) {
@@ -51,7 +51,7 @@ public class Database implements IDatabase {
     public boolean execute(String sql, List<String> params) {
     	try {
         	Connection conn = this.getConnection();
-        	this.ex(conn, sql, params);
+        	this.ex(conn, sql, params, true);
         	conn.close();
         	return true;
     	} catch (Exception e) {
@@ -59,11 +59,14 @@ public class Database implements IDatabase {
     	}
     }
     
-    private ResultSet ex(Connection conn, String sql, List<String> params) throws SQLException {
+    private ResultSet ex(Connection conn, String sql, List<String> params, boolean dml) throws SQLException {
         int paramIndex = 0;
         PreparedStatement prepStmt = conn.prepareStatement(sql);
         for (String param : params) prepStmt.setString(++paramIndex, param);
-        return prepStmt.executeQuery();
+        if (dml) {
+        	prepStmt.execute();
+        	return null;
+        } else return prepStmt.executeQuery();
     }
     
     private Connection getConnection() throws ClassNotFoundException, SQLException {

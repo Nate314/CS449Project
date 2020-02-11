@@ -26,7 +26,7 @@ public class AccountService implements IAccountService {
 	public String getToken(String username, String password) {
 		if (mAccountRepository.isValidLogin(username, password)) {
 			int issued_at = (int) (System.currentTimeMillis() / 1000);
-			int expire_at = issued_at + (1000 * 60 * 15);
+			int expire_at = issued_at + (60 * 15); // token lasts for 15 minutes
 		    Algorithm algorithm = Algorithm.HMAC256(Config.jwtSecretKey);
 		    return JWT.create()
 		        .withIssuer("auth0")
