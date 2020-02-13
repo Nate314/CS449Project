@@ -16,6 +16,7 @@ class ConfigDto {
 	public String dbUser;
 	public String dbPassword;
 	public String jwtSecretKey;
+	public Integer tokenLifespan;
 }
 
 @Component
@@ -25,6 +26,7 @@ public class Config extends WebMvcConfigurerAdapter {
 	public static String dbUser;
 	public static String dbPassword;
 	public static String jwtSecretKey;
+	public static Integer tokenLifespan;
 
 	@Autowired
 	JWTInterceptor jwtMiddleware;
@@ -40,6 +42,7 @@ public class Config extends WebMvcConfigurerAdapter {
 	    	Config.dbUser = config.dbUser;
 	    	Config.dbPassword = config.dbPassword;
 	    	Config.jwtSecretKey = config.jwtSecretKey;
+	    	Config.tokenLifespan = config.tokenLifespan;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -11,6 +11,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import com.nathangawith.umkc.Algorithms;
+import com.nathangawith.umkc.Queries;
 import com.nathangawith.umkc.database.IDatabase;
 import com.nathangawith.umkc.dtos.DBUser;
 import com.nathangawith.umkc.repositories.AccountRepository;
@@ -25,6 +27,12 @@ public class RepositoryAccountTest {
 	private AccountRepository mRepository = new AccountRepository();
 
 	@Test
+	public void doesUsernameExistTest() {
+		doesUsernameExistGenericTest(true);
+		doesUsernameExistGenericTest(false);
+	}
+
+	@Test
 	public void isValidLoginTest() {
 		isValidLoginGenericTest(true);
 		isValidLoginGenericTest(false);
@@ -36,10 +44,25 @@ public class RepositoryAccountTest {
 		insertNewUserGenericTest(false);
 	}
 	
+	private void doesUsernameExistGenericTest(boolean expectedResult) {
+		// Arrange
+		String sql = Queries.GET_USER;
+		List<String> params = Arrays.asList(new String[] {"u"});
+		DBUser user = new DBUser();
+		user.Username = "u";
+		Mockito.when(mDatabase.selectFirst(sql, params, DBUser.class)).thenReturn(expectedResult ? user : null);
+
+		// Act
+		boolean valid = mRepository.doesUsernameExist("u");
+		
+		// Assert
+		Assert.assertEquals(expectedResult, valid);
+	}
+	
 	private void isValidLoginGenericTest(boolean expectedResult) {
 		// Arrange
-		String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
-		String hashedPass = this.hashAndSalt("p");
+		String sql = Queries.GET_USER_PASSWORD;
+		String hashedPass = Algorithms.encryptPassword("u", "p");
 		List<String> params = Arrays.asList(new String[] {"u", hashedPass});
 		DBUser user = new DBUser();
 		user.Username = "u";
@@ -55,8 +78,8 @@ public class RepositoryAccountTest {
 
 	public void insertNewUserGenericTest(boolean expectedResult) {
 		// Arrange
-		String sql = "INSERT INTO users (username, password) VALUES (?, ?)";
-		String hashedPass = this.hashAndSalt("p");
+		String sql = Queries.INSERT_USER;
+		String hashedPass = Algorithms.encryptPassword("u", "p");
 		List<String> params = Arrays.asList(new String[] {"u", hashedPass});
 		Mockito.when(mDatabase.execute(sql, params)).thenReturn(expectedResult);
 		
@@ -65,19 +88,6 @@ public class RepositoryAccountTest {
 		
 		// Assert
 		Assert.assertEquals(expectedResult, success);
-	}
-
-	private String hashAndSalt(String password) {
-		System.out.println("Hashing and salting . . . ");
-		System.out.println(password);
-		String modifiedPassword = "";
-		for (char c : password.toCharArray()) modifiedPassword += c + "n";
-		System.out.println(modifiedPassword);
-		String result = "";
-		for (char c : modifiedPassword.toCharArray()) result += c + 15;
-		System.out.println(result);
-		System.out.println(" . . . Hashed and salted");
-		return result;
 	}
 
 }

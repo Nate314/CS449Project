@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.nathangawith.umkc.Config;
+import com.nathangawith.umkc.Messages;
 import com.nathangawith.umkc.repositories.IAccountRepository;
 
 @Component("account_service")
@@ -26,7 +27,7 @@ public class AccountService implements IAccountService {
 	public String getToken(String username, String password) {
 		if (mAccountRepository.isValidLogin(username, password)) {
 			int issued_at = (int) (System.currentTimeMillis() / 1000);
-			int expire_at = issued_at + (60 * 15); // token lasts for 15 minutes
+			int expire_at = issued_at + (60 * Config.tokenLifespan);
 		    Algorithm algorithm = Algorithm.HMAC256(Config.jwtSecretKey);
 		    return JWT.create()
 		        .withIssuer("auth0")
@@ -38,9 +39,13 @@ public class AccountService implements IAccountService {
 			return null;
 		}
 	}
-	
-	public boolean createAccount(String username, String password) {
-		return mAccountRepository.insertNewUser(username, password);
+
+	@Override
+	public boolean createAccount(String username, String password) throws Exception {
+		if (mAccountRepository.doesUsernameExist(username))
+			throw new Exception(Messages.ACCOUNT_USERNAME_ALREADY_EXISTS);
+		else
+			return mAccountRepository.insertNewUser(username, password);
 	}
 
 }

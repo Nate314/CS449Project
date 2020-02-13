@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nathangawith.umkc.Messages;
 import com.nathangawith.umkc.dtos.LoginRequest;
 import com.nathangawith.umkc.services.IAccountService;
 
@@ -42,10 +43,17 @@ public class AccountController {
     @RequestMapping(value = "/createaccount",
     		method = RequestMethod.POST
     )
-    public ResponseEntity<Boolean> postCreateLogin(
+    public ResponseEntity<String> postCreateLogin(
     		@RequestBody LoginRequest credentials
     	) throws Exception {
-    	boolean success = accountService.createAccount(credentials.username, credentials.password);
-	    return new ResponseEntity<Boolean>(success, HttpStatus.OK);
+    	try {
+        	if (accountService.createAccount(credentials.username, credentials.password)) {
+        	    return new ResponseEntity<String>(Messages.ACCOUNT_CREATED_SUCCESSFULLY, HttpStatus.OK);
+        	} else {
+        		throw new Exception(Messages.ACCOUNT_CREATION_FAILED);
+        	}
+    	} catch (Exception ex) {
+    		return new ResponseEntity<String>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    	}
     }
 }
