@@ -24,10 +24,14 @@ public class JWTInterceptor implements HandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
 			Object object) throws Exception {
+
 		
-		String authHeader = httpServletRequest.getHeader("Authorization");
+		System.out.println(httpServletRequest.getRequestURL());
+		System.out.println(httpServletRequest.getRequestURL().indexOf("/auth"));
 		
 		if (httpServletRequest.getRequestURL().indexOf("/auth") == -1) {
+			
+			String authHeader = httpServletRequest.getHeader("Authorization");
 
 			if (authHeader == null) {
 				throw new RuntimeException("Authorization header not present.");

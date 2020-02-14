@@ -37,7 +37,8 @@ public class AccountController {
     		@RequestBody LoginRequest credentials
     	) throws Exception {
     	String token = accountService.getToken(credentials.username, credentials.password);
-	    return new ResponseEntity<String>(token, HttpStatus.OK);
+    	String response = String.format("{\"token\":\"%s\"}", token);
+	    return new ResponseEntity<String>(response, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/createaccount",

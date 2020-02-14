@@ -37,7 +37,7 @@ public class ControllerAccountTest {
 			ResponseEntity<String> response = mController.postLogin(credentials);
 			
 			// Assert
-			Assert.assertEquals("token", response.getBody());
+			Assert.assertEquals("{\"token\":\"token\"}", response.getBody());
 		} catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail();

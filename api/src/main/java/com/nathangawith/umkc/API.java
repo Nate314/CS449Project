@@ -1,5 +1,7 @@
 package com.nathangawith.umkc;
 
+import java.util.Collections;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -7,6 +9,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class API {
    
 	public static void main(String[] args) {
-		SpringApplication.run(API.class, args);
+		SpringApplication app = new SpringApplication(API.class);
+        app.setDefaultProperties(Collections
+          .singletonMap("server.port", "9090"));
+        app.run(args);
 	}
 }
