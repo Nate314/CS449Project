@@ -15,14 +15,11 @@ import org.json.JSONObject;
 import java.util.function.Consumer;
 
 import cz.msebera.android.httpclient.Header;
-import cz.msebera.android.httpclient.HttpEntity;
 import cz.msebera.android.httpclient.entity.ByteArrayEntity;
 import cz.msebera.android.httpclient.message.BasicHeader;
 import cz.msebera.android.httpclient.protocol.HTTP;
 
 public class MyHttpClient {
-
-    private static final String BASE_URL = "http://10.0.0.26:9090";
 
     private static AsyncHttpClient client = new AsyncHttpClient();
 
@@ -33,10 +30,15 @@ public class MyHttpClient {
     }
 
     public static void post(Context context, String url, ByteArrayEntity entity, Consumer<JSONObject> obCallback, Consumer<JSONArray> arrCallback, Consumer<Throwable> errCallback) {
-        url = getAbsoluteUrl(url);
-        System.out.println("Sending request to: " + url);
-        entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-        client.post(context, url, entity, "application/json", getHandler(obCallback, arrCallback, errCallback));
+        client.setMaxRetriesAndTimeout(3, 10);
+        try {
+            url = getAbsoluteUrl(url);
+            System.out.println("Sending request to: " + url);
+            entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+            client.post(context, url, entity, "application/json", getHandler(obCallback, arrCallback, errCallback));
+        } catch (Exception ex) {
+            errCallback.accept(null);
+        }
     }
 
     public static void put(Context context, String url, ByteArrayEntity entity, AsyncHttpResponseHandler responseHandler) {
@@ -54,7 +56,7 @@ public class MyHttpClient {
     }
 
     private static String getAbsoluteUrl(String relativeUrl) {
-        return BASE_URL + relativeUrl;
+        return MyState.ROOT_API_URL + relativeUrl;
     }
 
     private static AsyncHttpResponseHandler getHandler(Consumer<JSONObject> obCallback, Consumer<JSONArray> arrCallback, Consumer<Throwable> errCallback) {
@@ -91,6 +93,11 @@ public class MyHttpClient {
                 System.out.println(msg);
                 System.out.println(throwable.getMessage());
                 System.out.println("-------- Failure --------");
+                errCallback.accept(throwable);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject obj) {
                 errCallback.accept(throwable);
             }
         };
