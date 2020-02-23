@@ -1,11 +1,27 @@
 # Finance App
 
 ### Nathan Gawith
-
 ### University of Missouri – Kansas City
-# **Vision Statement**
 
-Scroll down to view Original Mockup Drawings
+# Table of Contents
+- [Finance App](#finance-app)
+- [Table of Contents](#table-of-contents)
+- [Vision Statement](#vision-statement)
+- [Requirements](#requirements)
+- [Product Backlog](#product-backlog)
+- [Sprint 1](#sprint-1)
+    - [Review](#sprint-1-review)
+    - [Retrospective](#sprint-1-retrospective)
+    - [Screenshots](#sprint-1-screenshots)
+- [Sprint 2](#sprint-2)
+    - [Review](#sprint-2-review)
+    - [Retrospective](#sprint-2-retrospective)
+    - [Screenshots](#sprint-2-screenshots)
+- [Original Mockups](#original-mockups)
+
+# Vision Statement
+
+ [Original Mockups](#original-mockups)
 
 Finance App is inspired by my mother&#39;s small business needs for bookkeeping but could also be used as a personal finance tracker. The app&#39;s main functionality is to allow the user to input expenses and income, view reports over month/year timelines, and reconcile balances between bank accounts and what the user has input into the system. Every transaction will allow the user to associate a date, description, category, and amount so that later reports can be ran based on those amounts, dates, and categories.
 
@@ -30,7 +46,7 @@ Stretch Goals:
 9. Attach a photo of a receipt to each income/expense transaction
 10. Localization (allow for non-English languages throughout the application)
 
-# **Requirements**
+# Requirements
 
 | **Actor** | Goal |
 | --- | --- |
@@ -45,14 +61,14 @@ Stretch Goals:
 | User | Should be able to transfer money from one account to another with a specified Date, Description, From/To Account, and Amount from the Transfer screen. |
 | User | Should be able to easily generate a report over a specified date range by category or by account from the Reports screen. |
 
-### Product Backlog
+# Product Backlog
 
 | **Story ID** | **Story** | Story Points | Priority | Status |
 | --- | --- | --- | --- | --- |
-| 1 | Create Api Project, Android Project, and Database DDL scripts, and verify they can all talk to each other | 6 | 1.0 | Sprint1 |
-| 2 | Create Login screen, allow user to log in to the application securely, and configure API URL | 4 | 1.0 | Sprint1 |
-| 3 | Create Settings screen that allows for: - Creation of new accounts - Creation of new income categories - Creation of new expense categories | 6 | 1.1 | TODO |
-| 4 | Create the Income/Expense screen with: - Amount money field - Category dropdown - Date calendar input - Account dropdown - Description text field | 6 | 1.2 | TODO |
+| ~~1~~ | ~~Create Api Project, Android Project, and Database DDL scripts, and verify they can all talk to each other~~ | ~~6~~ | ~~1.0~~ | ~~Sprint1~~ |
+| ~~2~~ | ~~Create Login screen, allow user to log in to the application securely, and configure API URL~~ | ~~4~~ | ~~1.0~~ | ~~Sprint1~~ |
+| 3 | Create Settings screen that allows for: - Creation of new accounts - Creation of new income categories - Creation of new expense categories | 6 | 1.1 | Sprint2 |
+| 4 | Create the Income/Expense screen with: - Amount money field - Category dropdown - Date calendar input - Account dropdown - Description text field | 6 | 1.2 | Sprint2 |
 | 5 | Create the Register screen with: - Total balance at top - List of transactions - Buttons to link to income/expense/transfer screens | 8 | 1.3 | TODO |
 | 6 | Create Reports screen with: - Start/End date calendar inputs - Breakpoint selection (Month, Year) - Type selection (Category, Account) | 2 | 1.4 | TODO |
 | 7 | Create Report view screen with: - Table view of the report configured in the Reports screen | 6 | 1.5 | TODO |
@@ -68,13 +84,13 @@ Stretch Goals:
 | 16 | Attach a photo of a receipt to each income/expense transaction | 5 | 4.5 | TODO |
 | 17 | Localization | 10 | 4.6 | TODO |
 
-# Sprint #1
+# Sprint 1
 
 **Sprint Goal: Get project set up so that screens can easily be created in future sprints**
 
 Sprint Backlog
 
-| Story ID | Story / Task | EstimatedHours | ActualHours |
+| Story ID | Story / Task | Estimated Hours | Actual Hours |
 | --- | --- | --- | --- |
 | 1 | Create Api, App, and DB, verify they can all talk to each other |||
 | 1.1 | Create API Project | 1:00 | 3:54 |
@@ -88,7 +104,7 @@ Sprint Backlog
 | --- | --- | --- | --- |
 || Total | 10:00 | 13:02 |
 
-## Review
+## Sprint 1 Review
 
 Video showing that the login screen works and if you enter the wrong password, an error message is displayed: https://youtu.be/ewMNUNOdaCw
 
@@ -98,7 +114,7 @@ As you can see from the screenshots below, what I achieved this sprint was:
 - Text boxes and button is disabled during api call so that the user can’t spam the api with login requests.
 - If login is invalid, then an error message is displayed to the user.
 
-## Retrospective
+## Sprint 1 Retrospective
 
 What went well:
 - Completed all tasks that I brought into the sprint with unit tests
@@ -120,6 +136,33 @@ Changes for future sprints:
 - Although time estimates were low this sprint, I think that estimates will be better for the next sprint since I won’t have the overhead of learning unit tests.
 - I would like to finish my tasks in time so that I can implement customer feedback during the next sprint.
 
+# Sprint 2
+
+**Sprint Goal: Create Settings screen and Income/Expense Screen**
+
+Sprint Backlog
+
+| Story ID | Story / Task | Estimated Hours | Actual Hours |
+| --- | --- | --- | --- |
+| 3 | Create Settings screen |||
+| 3.1 | Settings screen - Creation of new Accounts | 3:00 |  |
+| 3.2 | Settings screen - Creation of new Income Categories | 2:00 |  |
+| 3.3 | Settings screen - Creation of new Expense Categories | 1:00 |  |
+| 4 | Create the Income/Expense screen |||
+| 4.1 | Income/Expense screen - Amount money field, Description Text | 2:00 |  |
+| 4.2 | Income/Expense screen - Category Dropdown, Account Dropdown | 2:00 |  |
+| 4.3 | Income/Expense screen - Date Calendar Input | 2:00 |  |
+| --- | --- | --- | --- |
+|  | Total | 12:00 |  |
+
+## Sprint 2 Review
+
+[TODO]
+
+## Sprint 2 Retrospective
+
+[TODO]
+
 # Sprint 1 Screenshots:
 
 ![iter1_login_blank](readme_assets/iter1_login_blank.png?raw=true)
@@ -127,8 +170,11 @@ Changes for future sprints:
 ![iter1_login_token_received](readme_assets/iter1_login_token_received.png?raw=true)
 ![iter1_login_invalid](readme_assets/iter1_login_invalid.png?raw=true)
 
+# Sprint 2 Screenshots:
 
-# Original Mockup Drawings
+[TODO]
+
+# Original Mockups
 
 ![login](readme_assets/login.jpg?raw=true)
 ![accounts](readme_assets/accounts.jpg?raw=true)
