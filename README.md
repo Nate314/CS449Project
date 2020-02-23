@@ -70,6 +70,8 @@ Stretch Goals:
 
 # Sprint #1
 
+**Sprint Goal: Get project set up so that screens can easily be created in future sprints**
+
 Sprint Backlog
 
 | Story ID | Story / Task | EstimatedHours | ActualHours |
