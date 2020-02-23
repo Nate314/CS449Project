@@ -5,7 +5,7 @@
 ### University of Missouri – Kansas City
 # **Vision Statement**
 
-[Scroll to end to look at original whiteboard mockups]
+Scroll down to view Original Mockup Drawings
 
 Finance App is inspired by my mother&#39;s small business needs for bookkeeping but could also be used as a personal finance tracker. The app&#39;s main functionality is to allow the user to input expenses and income, view reports over month/year timelines, and reconcile balances between bank accounts and what the user has input into the system. Every transaction will allow the user to associate a date, description, category, and amount so that later reports can be ran based on those amounts, dates, and categories.
 
@@ -72,28 +72,61 @@ Stretch Goals:
 
 Sprint Backlog
 
-| Story ID | **Story / Task** | EstimatedHours | ActualHours |
+| Story ID | Story / Task | EstimatedHours | ActualHours |
 | --- | --- | --- | --- |
-| 1.1 | Create API Project | 1 |   |
-| 1.2 | Create Android Project | 1 |   |
-| 1.3 | Create Database DDL scripts | 2 |   |
-| 1.4 | Verify API, App, and DB can talk with each other | 2 |   |
-| 2.1 | Create Login screen, add theming, logo, username/password text fields | 1.5 |   |
-| 2.2 | Allow the user to log in securely given the user has been set up by an admin in the database | 2 |   |
-| 2.3 | Allow the API URL to be configured from the Login screen | 0.5 |   |
-| | Total | 10 |   |
+| 1 | Create Api, App, and DB, verify they can all talk to each other |||
+| 1.1 | Create API Project | 1:00 | 3:54 |
+| 1.2 | Create Android Project | 1:00 | 1:21 |
+| 1.3 | Create Database DDL scripts | 2:00 | 0:21 |
+| 1.4 | Verify API, App, and DB can talk with each other | 2:00 | 1:36 |
+| 2 | Create Login screen, allow user to log in to the application securely |||
+| 2.1 | Create Login screen, add theming, logo, username/password text fields | 1:30 | 3:19 |
+| 2.2 | Allow the user to log in securely given the user has been set up by an admin in the database | 2:00 | 1:21 |
+| 2.3 | Allow the API URL to be configured from the Login screen | 0:30 | 1:10 |
+| --- | --- | --- | --- |
+|| Total | 10:00 | 13:02 |
 
 ## Review
 
-[TODO]
+Video showing that the login screen works and if you enter the wrong password, an error message is displayed: https://youtu.be/ewMNUNOdaCw
+
+As you can see from the screenshots below, what I achieved this sprint was:
+- Created API, DB, and APP projects.
+- Login works and a JWT is issued to the client if login is valid.
+- Text boxes and button is disabled during api call so that the user can’t spam the api with login requests.
+- If login is invalid, then an error message is displayed to the user.
 
 ## Retrospective
 
-[TODO]
+What went well:
+- Completed all tasks that I brought into the sprint with unit tests
+- Set up working API on my raspberry pi so I can use the API on http://pi.nathangawith.com/ 
+- Met with client (mother), showed progress, and got feedback
+    - Feedback:
+    - Button to view password
+    - Enter key should log in
+    - Update loading bar to cleaner looking loading bar
+    - Remove api url from login screen (this will probably stay during development)
+
+What didn’t go well:
+- Learning how to write unit tests with the spring framework in Java for the API took a few hours
+- Learning how to write unit tests for android took a few hours
+- Hopefully these hours were well spent and will help speed up unit testing for future sprints.
+- Estimates were a little bit low (estimated 10 hours, spent 13 hours)
+
+Changes for future sprints:
+- Although time estimates were low this sprint, I think that estimates will be better for the next sprint since I won’t have the overhead of learning unit tests.
+- I would like to finish my tasks in time so that I can implement customer feedback during the next sprint.
+
+# Sprint 1 Screenshots:
+
+![iter1_login_blank](readme_assets/iter1_login_blank.png?raw=true)
+![iter1_login_loading](readme_assets/iter1_login_loading.png?raw=true)
+![iter1_login_token_received](readme_assets/iter1_login_token_received.png?raw=true)
+![iter1_login_invalid](readme_assets/iter1_login_invalid.png?raw=true)
 
 
-
-# Original Mockup Drawings:
+# Original Mockup Drawings
 
 ![login](readme_assets/login.jpg?raw=true)
 ![accounts](readme_assets/accounts.jpg?raw=true)
