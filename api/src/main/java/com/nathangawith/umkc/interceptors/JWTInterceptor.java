@@ -16,21 +16,35 @@ import com.nathangawith.umkc.Config;
 
 @Component
 public class JWTInterceptor implements HandlerInterceptor {
-	
+
 	public JWTInterceptor() {
 		super();
+	}
+	
+	public static int getUserIDFromHeader(HttpServletRequest request) {
+		String authHeader = request.getHeader("Authorization");
+
+		if (authHeader == null) {
+			throw new RuntimeException("Authorization header not present.");
+		}
+		
+		String[] parts = authHeader.split("Bearer ");
+		if (parts.length == 2) {
+			String token = parts[1];
+			return JWT.decode(token).getClaim("user_id").asInt();
+		}
+		throw new RuntimeException("401");
 	}
 
 	@Override
 	public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
 			Object object) throws Exception {
 
-		
 		System.out.println(httpServletRequest.getRequestURL());
 		System.out.println(httpServletRequest.getRequestURL().indexOf("/auth"));
-		
+
 		if (httpServletRequest.getRequestURL().indexOf("/auth") == -1) {
-			
+
 			String authHeader = httpServletRequest.getHeader("Authorization");
 
 			if (authHeader == null) {
@@ -45,7 +59,7 @@ public class JWTInterceptor implements HandlerInterceptor {
 					int exp = JWT.decode(token).getClaim("exp").asInt();
 					int now = (int) (System.currentTimeMillis() / 1000);
 					if (iat <= now && now <= exp) {
-						
+
 					} else {
 						throw new Exception("Expired JWT");
 					}
@@ -55,13 +69,13 @@ public class JWTInterceptor implements HandlerInterceptor {
 						jwtVerifier.verify(token);
 					} catch (JWTVerificationException e) {
 						throw new Exception("Incorrectly Signed JWT");
-					}	
+					}
 				}
 			} catch (JWTDecodeException j) {
 				throw new RuntimeException("401");
 			}
 		}
-		
+
 		return true;
 	}
 

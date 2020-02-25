@@ -11,24 +11,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.nathangawith.umkc.Messages;
 import com.nathangawith.umkc.dtos.LoginRequest;
-import com.nathangawith.umkc.services.IAccountService;
+import com.nathangawith.umkc.services.IAuthenticationService;
 
 @RestController
 @RequestMapping("/auth")
-public class AccountController {
+public class AuthenticationController {
 
     @Autowired
     @Qualifier("account_service")
-    private IAccountService accountService;
-    
-//    IAccountService accountService;
-//	
-//	public AccountController(
-//	    @Qualifier("account_service")
-//	    IAccountService accountService
-//	) {
-//		this.accountService = accountService;
-//	}
+    private IAuthenticationService authenticationService;
 
     @RequestMapping(value = "/login",
     		method = RequestMethod.POST
@@ -36,7 +27,7 @@ public class AccountController {
     public ResponseEntity<String> postLogin(
     		@RequestBody LoginRequest credentials
     	) throws Exception {
-    	String token = accountService.getToken(credentials.username, credentials.password);
+    	String token = authenticationService.getToken(credentials.username, credentials.password);
     	String response = String.format("{\"token\":\"%s\"}", token);
 	    return new ResponseEntity<String>(response, HttpStatus.OK);
     }
@@ -48,10 +39,10 @@ public class AccountController {
     		@RequestBody LoginRequest credentials
     	) throws Exception {
     	try {
-        	if (accountService.createAccount(credentials.username, credentials.password)) {
-        	    return new ResponseEntity<String>(Messages.ACCOUNT_CREATED_SUCCESSFULLY, HttpStatus.OK);
+        	if (authenticationService.createUser(credentials.username, credentials.password)) {
+        	    return new ResponseEntity<String>(Messages.USER_CREATED_SUCCESSFULLY, HttpStatus.OK);
         	} else {
-        		throw new Exception(Messages.ACCOUNT_CREATION_FAILED);
+        		throw new Exception(Messages.USER_CREATION_FAILED);
         	}
     	} catch (Exception ex) {
     		return new ResponseEntity<String>(ex.getMessage(), HttpStatus.NOT_FOUND);

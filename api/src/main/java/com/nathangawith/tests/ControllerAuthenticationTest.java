@@ -10,18 +10,18 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.http.ResponseEntity;
 
 import com.nathangawith.umkc.Messages;
-import com.nathangawith.umkc.controllers.AccountController;
+import com.nathangawith.umkc.controllers.AuthenticationController;
 import com.nathangawith.umkc.dtos.LoginRequest;
-import com.nathangawith.umkc.services.AccountService;
+import com.nathangawith.umkc.services.AuthenticationService;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ControllerAccountTest {
+public class ControllerAuthenticationTest {
 
 	@Mock
-	private AccountService mService;
+	private AuthenticationService mService;
 	
 	@InjectMocks
-	private AccountController mController = new AccountController();
+	private AuthenticationController mController = new AuthenticationController();
 
 	@Test
 	public void postLoginTest() {
@@ -52,13 +52,13 @@ public class ControllerAccountTest {
 		credentials.password = "p";
 		
 		try {
-			Mockito.when(mService.createAccount("u", "p")).thenReturn(true);
+			Mockito.when(mService.createUser("u", "p")).thenReturn(true);
 
 			// Act
 			ResponseEntity<String> response = mController.postCreateLogin(credentials);
 			
 			// Assert
-			Assert.assertEquals(Messages.ACCOUNT_CREATED_SUCCESSFULLY, response.getBody());
+			Assert.assertEquals(Messages.USER_CREATED_SUCCESSFULLY, response.getBody());
 		} catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail();

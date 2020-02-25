@@ -1,7 +1,9 @@
 package com.nathangawith.umkc.repositories;
 
-public interface IAccountRepository {
+import com.nathangawith.umkc.dtos.DBUser;
+
+public interface IAuthenticationRepository {
 	boolean doesUsernameExist(String username);
-    boolean isValidLogin(String username, String password);
+    DBUser isValidLogin(String username, String password);
     boolean insertNewUser(String username, String password);
 }

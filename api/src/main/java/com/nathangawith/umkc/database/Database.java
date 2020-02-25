@@ -6,6 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -22,8 +25,8 @@ public class Database implements IDatabase {
 	}
 
 	@Override
-	public <T extends Object> T selectFirst(String sql, List<String> params, Class<T> type) {
-		T obj = null;
+	public <T extends Object> ArrayList<T> select(String sql, List<String> params, Class<T> type) {
+		ArrayList<T> objs = new ArrayList<T>();
 		try {
 			Connection conn = this.getConnection();
 			ResultSet rs = this.ex(conn, sql, params, false);
@@ -38,13 +41,23 @@ public class Database implements IDatabase {
 				}
 				json.put(jsonOBJ);
 			}
-			obj = json.length() == 0 ? null
-					: new Gson().fromJson(json.get(0).toString(), type);
+			for (int i = 0; i < json.length(); i++)
+				objs.add(new Gson().fromJson(json.get(0).toString(), type));
 			conn.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return obj;
+		return objs;
+	}
+
+	@Override
+	public <T extends Object> T selectFirst(String sql, List<String> params, Class<T> type) {
+		ArrayList<T> objs = this.select(sql, params, type);
+		if (objs.size() > 0) {
+			return objs.get(0);
+		} else {
+			return null;
+		}
 	}
 
 	@Override

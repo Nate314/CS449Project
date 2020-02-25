@@ -10,17 +10,18 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.nathangawith.umkc.Config;
 import com.nathangawith.umkc.Messages;
-import com.nathangawith.umkc.repositories.IAccountRepository;
-import com.nathangawith.umkc.services.AccountService;
+import com.nathangawith.umkc.dtos.DBUser;
+import com.nathangawith.umkc.repositories.IAuthenticationRepository;
+import com.nathangawith.umkc.services.AuthenticationService;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ServiceAccountTest {
+public class ServiceAuthenticationTest {
 
 	@Mock
-	private IAccountRepository mRepository;
+	private IAuthenticationRepository mRepository;
 	
 	@InjectMocks
-	private AccountService mService = new AccountService(mRepository);
+	private AuthenticationService mService = new AuthenticationService(mRepository);
 
 	@Test
 	public void getTokenTest() {
@@ -29,18 +30,21 @@ public class ServiceAccountTest {
 	}
 
 	@Test
-	public void createAccountTest() {
-		createAccountGenericTest(true, true, false);
-		createAccountGenericTest(true, false, false);
-		createAccountGenericTest(false, true, true);
-		createAccountGenericTest(false, false, false);
+	public void createUserTest() {
+		createUserGenericTest(true, true, false);
+		createUserGenericTest(true, false, false);
+		createUserGenericTest(false, true, true);
+		createUserGenericTest(false, false, false);
 	}
 	
 	private void getTokenGenericTest(boolean valid) {
 		// Arrange
+		DBUser user = new DBUser();
+		user.UserID = 1;
+		user.Username = "u";
 		Config.jwtSecretKey = "some_secret";
 		Config.tokenLifespan = 15;
-		Mockito.when(mRepository.isValidLogin("u", "p")).thenReturn(valid);		
+		Mockito.when(mRepository.isValidLogin("u", "p")).thenReturn(valid ? user : null);		
 		
 		// Act
 		String token = mService.getToken("u", "p");
@@ -54,20 +58,20 @@ public class ServiceAccountTest {
 		}
 	}
 
-	private void createAccountGenericTest(boolean userExists, boolean insertSuccessful, boolean expectedResult) {
+	private void createUserGenericTest(boolean userExists, boolean insertSuccessful, boolean expectedResult) {
 		// Arrange
 		Mockito.when(mRepository.doesUsernameExist("u")).thenReturn(userExists);
 		Mockito.when(mRepository.insertNewUser("u", "p")).thenReturn(insertSuccessful);		
 		
 		// Act
 		try {
-			boolean success = mService.createAccount("u", "p");
+			boolean success = mService.createUser("u", "p");
 			
 			// Assert
 			Assert.assertEquals(expectedResult, success);
 		} catch (Exception e) {
 			if (userExists) {
-				Assert.assertEquals(e.getMessage(), Messages.ACCOUNT_USERNAME_ALREADY_EXISTS);
+				Assert.assertEquals(e.getMessage(), Messages.USERNAME_ALREADY_EXISTS);
 			} else {
 				e.printStackTrace();
 				Assert.fail();

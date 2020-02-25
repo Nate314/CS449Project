@@ -13,7 +13,7 @@ import com.nathangawith.umkc.database.IDatabase;
 import com.nathangawith.umkc.dtos.DBUser;
 
 @Component("account_repository")
-public class AccountRepository implements IAccountRepository {
+public class AuthenticationRepository implements IAuthenticationRepository {
 
 	@Autowired
 	@Qualifier("my_database")
@@ -27,11 +27,11 @@ public class AccountRepository implements IAccountRepository {
 	}
 
 	@Override
-	public boolean isValidLogin(String username, String password) {
+	public DBUser isValidLogin(String username, String password) {
 		String hashedPass = Algorithms.encryptPassword(username, password);
 		List<String> params = Arrays.asList(new String[] { username, hashedPass });
 		DBUser user = DB.selectFirst(Queries.GET_USER_PASSWORD, params, DBUser.class);
-		return user != null;
+		return user;
 	}
 
 	@Override

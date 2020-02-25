@@ -15,16 +15,16 @@ import com.nathangawith.umkc.Algorithms;
 import com.nathangawith.umkc.Queries;
 import com.nathangawith.umkc.database.IDatabase;
 import com.nathangawith.umkc.dtos.DBUser;
-import com.nathangawith.umkc.repositories.AccountRepository;
+import com.nathangawith.umkc.repositories.AuthenticationRepository;
 
 @RunWith(MockitoJUnitRunner.class)
-public class RepositoryAccountTest {
+public class RepositoryAuthenticationTest {
 
 	@Mock
 	private IDatabase mDatabase;
 
 	@InjectMocks
-	private AccountRepository mRepository = new AccountRepository();
+	private AuthenticationRepository mRepository = new AuthenticationRepository();
 
 	@Test
 	public void doesUsernameExistTest() {
@@ -34,8 +34,11 @@ public class RepositoryAccountTest {
 
 	@Test
 	public void isValidLoginTest() {
-		isValidLoginGenericTest(true);
-		isValidLoginGenericTest(false);
+		DBUser user = new DBUser();
+		user.UserID = 1;
+		user.Username = "u";
+		isValidLoginGenericTest(user);
+		isValidLoginGenericTest(null);
 	}
 	
 	@Test
@@ -59,21 +62,23 @@ public class RepositoryAccountTest {
 		Assert.assertEquals(expectedResult, valid);
 	}
 	
-	private void isValidLoginGenericTest(boolean expectedResult) {
+	private void isValidLoginGenericTest(DBUser expectedResult) {
 		// Arrange
 		String sql = Queries.GET_USER_PASSWORD;
 		String hashedPass = Algorithms.encryptPassword("u", "p");
 		List<String> params = Arrays.asList(new String[] {"u", hashedPass});
-		DBUser user = new DBUser();
-		user.Username = "u";
-		user.Password = hashedPass;
-		Mockito.when(mDatabase.selectFirst(sql, params, DBUser.class)).thenReturn(expectedResult ? user : null);
+		Mockito.when(mDatabase.selectFirst(sql, params, DBUser.class)).thenReturn(expectedResult);
 
 		// Act
-		boolean valid = mRepository.isValidLogin("u", "p");
+		DBUser response = mRepository.isValidLogin("u", "p");
 		
 		// Assert
-		Assert.assertEquals(expectedResult, valid);
+		if (expectedResult == null) {
+			Assert.assertNull(response);
+		} else {
+			Assert.assertEquals(expectedResult.UserID, response.UserID);
+			Assert.assertEquals(expectedResult.Username, response.Username);
+		}
 	}
 
 	public void insertNewUserGenericTest(boolean expectedResult) {
