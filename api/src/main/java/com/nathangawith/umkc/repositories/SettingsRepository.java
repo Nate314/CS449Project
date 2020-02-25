@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import com.nathangawith.umkc.Queries;
 import com.nathangawith.umkc.database.IDatabase;
 import com.nathangawith.umkc.dtos.DBAccount;
+import com.nathangawith.umkc.dtos.DBCategory;
 
 @Component("settings_repository")
 public class SettingsRepository implements ISettingsRepository {
@@ -29,6 +30,20 @@ public class SettingsRepository implements ISettingsRepository {
 	public boolean insertAccount(int userID, String description) {
 		List<String> params = Arrays.asList(new String[] { userID + "", description });
 		boolean success = DB.execute(Queries.INSERT_ACCOUNT, params);
+		return success;
+	}
+	
+	@Override
+	public boolean doesCategoryExist(int userID, String categoryType, String description) {
+		List<String> params = Arrays.asList(new String[] { userID + "", categoryType, description });
+		DBCategory category = DB.selectFirst(Queries.GET_CATEGORY, params, DBCategory.class);
+		return category != null;
+	}
+	
+	@Override
+	public boolean insertCategory(int userID, String categoryType, String description) {
+		List<String> params = Arrays.asList(new String[] { userID + "", categoryType, description });
+		boolean success = DB.execute(Queries.INSERT_CATEGORY, params);
 		return success;
 	}
 }

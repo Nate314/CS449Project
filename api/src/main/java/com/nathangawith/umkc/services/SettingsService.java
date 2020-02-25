@@ -27,4 +27,12 @@ public class SettingsService implements ISettingsService {
 		else
 			return mSettingsRepository.insertAccount(userID, description);
 	}
+	
+	@Override
+	public boolean addCategory(int userID, String categoryType, String description) throws Exception {
+		if (mSettingsRepository.doesCategoryExist(userID, categoryType, description))
+			throw new Exception(Messages.CATEGORY_ALREADY_EXISTS);
+		else
+			return mSettingsRepository.insertCategory(userID, categoryType, description);
+	}
 }
