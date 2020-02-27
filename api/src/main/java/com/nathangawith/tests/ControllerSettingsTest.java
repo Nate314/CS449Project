@@ -68,7 +68,7 @@ public class ControllerSettingsTest {
 				Assert.assertEquals(response.getStatusCode(), HttpStatus.NOT_FOUND);
 				Assert.assertEquals(Messages.ACCOUNT_ALREADY_EXISTS, response.getBody());
 			} else {
-				Assert.assertEquals(response.getStatusCode(), HttpStatus.OK);
+				Assert.assertEquals(response.getStatusCode(), creationFailed ? HttpStatus.NOT_FOUND : HttpStatus.OK);
 				String msg = creationFailed ? Messages.ACCOUNT_CREATION_FAILED : Messages.ACCOUNT_CREATED_SUCCESSFULLY;
 				Assert.assertEquals(msg, response.getBody());
 			}
@@ -102,7 +102,7 @@ public class ControllerSettingsTest {
 					Assert.assertEquals(response.getStatusCode(), HttpStatus.NOT_FOUND);
 					Assert.assertEquals(Messages.CATEGORY_ALREADY_EXISTS, response.getBody());
 				} else {
-					Assert.assertEquals(response.getStatusCode(), HttpStatus.OK);
+					Assert.assertEquals(response.getStatusCode(), creationFailed ? HttpStatus.NOT_FOUND : HttpStatus.OK);
 					String msg = creationFailed ? Messages.CATEGORY_CREATION_FAILED : Messages.CATEGORY_CREATED_SUCCESSFULLY;
 					Assert.assertEquals(msg, response.getBody());
 				}

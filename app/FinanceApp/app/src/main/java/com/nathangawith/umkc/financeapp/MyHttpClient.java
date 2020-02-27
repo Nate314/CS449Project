@@ -26,16 +26,18 @@ public class MyHttpClient {
     public static void get(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
         url = getAbsoluteUrl(url);
         System.out.println("Sending request to: " + url);
+        client.addHeader("Authorization", String.format("Bearer %s", MyState.TOKEN));
         client.get(url, params, responseHandler);
     }
 
-    public static void post(Context context, String url, ByteArrayEntity entity, Consumer<JSONObject> obCallback, Consumer<JSONArray> arrCallback, Consumer<Throwable> errCallback) {
+    public static void post(Context context, String url, ByteArrayEntity entity, Consumer<JSONObject> obCallback, Consumer<JSONArray> arrCallback, Consumer<Throwable> errCallback, Consumer<JSONObject> errObCallback) {
         client.setMaxRetriesAndTimeout(3, 10);
         try {
             url = getAbsoluteUrl(url);
             System.out.println("Sending request to: " + url);
             entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-            client.post(context, url, entity, "application/json", getHandler(obCallback, arrCallback, errCallback));
+            client.addHeader("Authorization", String.format("Bearer %s", MyState.TOKEN));
+            client.post(context, url, entity, "application/json", getHandler(obCallback, arrCallback, errCallback, errObCallback));
         } catch (Exception ex) {
             errCallback.accept(null);
         }
@@ -45,6 +47,7 @@ public class MyHttpClient {
         url = getAbsoluteUrl(url);
         System.out.println("Sending request to: " + url);
         entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+        client.addHeader("Authorization", String.format("Bearer %s", MyState.TOKEN));
         client.put(context, url, entity, "application/json", responseHandler);
     }
 
@@ -52,6 +55,7 @@ public class MyHttpClient {
         url = getAbsoluteUrl(url);
         System.out.println("Sending request to: " + url);
         entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+        client.addHeader("Authorization", String.format("Bearer %s", MyState.TOKEN));
         client.delete(context, url, entity, "application/json", responseHandler);
     }
 
@@ -59,7 +63,7 @@ public class MyHttpClient {
         return MyState.ROOT_API_URL + relativeUrl;
     }
 
-    private static AsyncHttpResponseHandler getHandler(Consumer<JSONObject> obCallback, Consumer<JSONArray> arrCallback, Consumer<Throwable> errCallback) {
+    private static AsyncHttpResponseHandler getHandler(Consumer<JSONObject> obCallback, Consumer<JSONArray> arrCallback, Consumer<Throwable> errCallback, Consumer<JSONObject> errObCallback) {
         return new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -69,7 +73,6 @@ public class MyHttpClient {
                 try {
                     JSONObject serverResp = new JSONObject(response.toString());
                     System.out.println(serverResp.toString());
-                    System.out.println(serverResp.get("token"));
                     obCallback.accept(serverResp);
                 } catch (JSONException e) {
                     // TODO Auto-generated catch block
@@ -98,7 +101,15 @@ public class MyHttpClient {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject obj) {
-                errCallback.accept(throwable);
+                System.out.println("-------- obj Failure --------");
+                System.out.println(statusCode);
+                for (Header header : headers) {
+                    System.out.printf("%s: %s\n", header.getName(), header.getValue());
+                }
+                System.out.println(obj.toString());
+                System.out.println(throwable.getMessage());
+                System.out.println("-------- obj Failure --------");
+                errObCallback.accept(obj);
             }
         };
     }

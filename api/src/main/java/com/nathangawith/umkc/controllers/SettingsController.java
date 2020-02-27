@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nathangawith.umkc.Constants;
@@ -29,6 +28,10 @@ public class SettingsController {
     @Autowired
     @Qualifier("settings_service")
     private ISettingsService settingsService;
+    
+    private String toJSON(String response) {
+    	return String.format("{\"response\":\"%s\"}", response);
+    }
 
     @RequestMapping(value = "/account/add",
 		method = RequestMethod.POST
@@ -41,12 +44,12 @@ public class SettingsController {
         	int userID = JWTInterceptor.getUserIDFromHeader(request);
         	String description = body.Description;
         	if (settingsService.addAccount(userID, description)) {
-        	    return new ResponseEntity<String>(Messages.ACCOUNT_CREATED_SUCCESSFULLY, HttpStatus.OK);
+        	    return new ResponseEntity<String>(toJSON(Messages.ACCOUNT_CREATED_SUCCESSFULLY), HttpStatus.OK);
         	} else {
-        		return new ResponseEntity<String>(Messages.ACCOUNT_CREATION_FAILED, HttpStatus.OK);
+        		return new ResponseEntity<String>(toJSON(Messages.ACCOUNT_CREATION_FAILED), HttpStatus.NOT_FOUND);
         	}
     	} catch (Exception ex) {
-    		return new ResponseEntity<String>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    		return new ResponseEntity<String>(toJSON(ex.getMessage()), HttpStatus.NOT_FOUND);
     	}
     }
 
@@ -65,15 +68,15 @@ public class SettingsController {
         	if (Arrays.asList(new String[] { Constants.EXPENSE, Constants.INCOME }).contains(categoryType)) {
         		categoryType = categoryType.equals(Constants.INCOME) ? Constants.INCOME : Constants.EXPENSE; 
             	if (settingsService.addCategory(userID, categoryType, description)) {
-            	    return new ResponseEntity<String>(Messages.CATEGORY_CREATED_SUCCESSFULLY, HttpStatus.OK);
+            	    return new ResponseEntity<String>(toJSON(Messages.CATEGORY_CREATED_SUCCESSFULLY), HttpStatus.OK);
             	} else {
-            		return new ResponseEntity<String>(Messages.CATEGORY_CREATION_FAILED, HttpStatus.OK);
+            		return new ResponseEntity<String>(toJSON(Messages.CATEGORY_CREATION_FAILED), HttpStatus.NOT_FOUND);
             	}
         	} else {
-        		return new ResponseEntity<String>(Messages.INVALID_REQUEST_PARAMETER, HttpStatus.NOT_FOUND);
+        		return new ResponseEntity<String>(toJSON(Messages.INVALID_REQUEST_PARAMETER), HttpStatus.NOT_FOUND);
         	}
     	} catch (Exception ex) {
-    		return new ResponseEntity<String>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    		return new ResponseEntity<String>(toJSON(ex.getMessage()), HttpStatus.NOT_FOUND);
     	}
     }
 }

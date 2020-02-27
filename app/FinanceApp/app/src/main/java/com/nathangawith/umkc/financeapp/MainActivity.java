@@ -2,7 +2,9 @@ package com.nathangawith.umkc.financeapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -60,15 +62,33 @@ public class MainActivity extends AppCompatActivity {
         this.loading(true);
         MyApi.postLogin(getApplicationContext(), new TokenResponseDto(), username, password, resp -> {
             this.loading(false);
+            this.lblToken.setText(resp.token);
             if (resp.token.equals("null")) {
                 new MyDialog("Invalid login", "Please contact your system administrator")
                         .show(getSupportFragmentManager(), null);
+            } else {
+                MyState.TOKEN = resp.token;
+                this.getMoveToNextActivityThread().start();
             }
-            this.lblToken.setText(resp.token);
         }, data -> {
             this.loading(false);
             new MyDialog("Error, Please contact your system administrator", data.getMessage())
                     .show(getSupportFragmentManager(), null);
+        });
+    }
+
+    private Thread getMoveToNextActivityThread() {
+        AppCompatActivity me = this;
+        return new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(1000);
+                    startActivity(new Intent(me, SettingsActivity.class));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         });
     }
 }

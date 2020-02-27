@@ -33,7 +33,32 @@ public class MyApi {
             ByteArrayEntity entity = new ByteArrayEntity(jsonObjectString.getBytes("UTF-8"));
             resp.getClass().getFields();
 
-            MyHttpClient.post(context, "/auth/login", entity, parse(resp, func), x -> {}, errorFunc);
+            MyHttpClient.post(context, "/auth/login", entity, parse(resp, func), x -> {}, errorFunc, x -> {});
+        } catch (UnsupportedEncodingException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static <T extends Object> void postAddAccount(Context context, T resp, String accountDescription, Consumer<T> func, Consumer<T> errorFunc) {
+        try {
+            String jsonObjectString = String.format("{\"%s\":\"%s\"}", "Description", accountDescription);
+            ByteArrayEntity entity = new ByteArrayEntity(jsonObjectString.getBytes("UTF-8"));
+            resp.getClass().getFields();
+
+            MyHttpClient.post(context, "/settings/account/add", entity, parse(resp, func), x -> {}, x -> {}, parse(resp, errorFunc));
+        } catch (UnsupportedEncodingException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static <T extends Object> void postAddCategory(Context context, T resp, boolean income, String accountDescription, Consumer<T> func, Consumer<T> errorFunc) {
+        try {
+            String jsonObjectString = String.format("{\"%s\":\"%s\"}", "Description", accountDescription);
+            ByteArrayEntity entity = new ByteArrayEntity(jsonObjectString.getBytes("UTF-8"));
+            resp.getClass().getFields();
+
+            String type = income ? MyConstants.INCOME : MyConstants.EXPENSE;
+            MyHttpClient.post(context, "/settings/category/add?categoryType=" + type, entity, parse(resp, func), x -> {}, x -> {}, parse(resp, errorFunc));
         } catch (UnsupportedEncodingException ex) {
             ex.printStackTrace();
         }
