@@ -1,10 +1,14 @@
 package com.nathangawith.umkc.services;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import com.nathangawith.umkc.Messages;
+import com.nathangawith.umkc.dtos.DBAccount;
+import com.nathangawith.umkc.dtos.DBCategory;
 import com.nathangawith.umkc.repositories.ISettingsRepository;
 
 @Component("settings_service")
@@ -27,6 +31,11 @@ public class SettingsService implements ISettingsService {
 		else
 			return mSettingsRepository.insertAccount(userID, description);
 	}
+
+	@Override
+	public Collection<DBAccount> getAccounts(int userID) throws Exception {
+		return mSettingsRepository.selectAccounts(userID);
+	}
 	
 	@Override
 	public boolean addCategory(int userID, String categoryType, String description) throws Exception {
@@ -34,5 +43,10 @@ public class SettingsService implements ISettingsService {
 			throw new Exception(Messages.CATEGORY_ALREADY_EXISTS);
 		else
 			return mSettingsRepository.insertCategory(userID, categoryType, description);
+	}
+
+	@Override
+	public Collection<DBCategory> getCategories(int userID, String categoryType) throws Exception {
+		return mSettingsRepository.selectCategories(userID, categoryType);
 	}
 }

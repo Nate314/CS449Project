@@ -1,6 +1,8 @@
 package com.nathangawith.tests;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import org.junit.Assert;
@@ -34,9 +36,14 @@ public class RepositorySettingsTest {
 	}
 	
 	@Test
-	public void addAccountTest() {
-		addAccountGenericTest(true);
-		addAccountGenericTest(false);
+	public void insertAccountTest() {
+		insertAccountGenericTest(true);
+		insertAccountGenericTest(false);
+	}
+	
+	@Test
+	public void selectAccountsTest() {
+		selectAccountsGenericTest();
 	}
 
 	@Test
@@ -48,10 +55,18 @@ public class RepositorySettingsTest {
 	}
 	
 	@Test
-	public void addCategoryTest() {
+	public void insertCategoryTest() {
 		for (String categoryType : new String[] { Constants.INCOME, Constants.EXPENSE }) {
-			addCategoryGenericTest(categoryType, true);
-			addCategoryGenericTest(categoryType, false);
+			insertCategoryGenericTest(categoryType, true);
+			insertCategoryGenericTest(categoryType, false);
+		}
+	}
+	
+	@Test
+	public void selectCategoriesTest() {
+		for (String categoryType : new String[] { Constants.INCOME, Constants.EXPENSE }) {
+			selectCategoriesGenericTest(categoryType);
+			selectCategoriesGenericTest(categoryType);
 		}
 	}
 	
@@ -71,7 +86,7 @@ public class RepositorySettingsTest {
 		Assert.assertEquals(expectedResult, valid);
 	}
 
-	private void addAccountGenericTest(boolean expectedResult) {
+	private void insertAccountGenericTest(boolean expectedResult) {
 		// Arrange
 		String sql = Queries.INSERT_ACCOUNT;
 		List<String> params = Arrays.asList(new String[] { "1", "some_account" });
@@ -82,6 +97,25 @@ public class RepositorySettingsTest {
 		
 		// Assert
 		Assert.assertEquals(expectedResult, success);
+	}
+	
+	private void selectAccountsGenericTest() {
+		// Arrange
+		String sql = Queries.GET_ACCOUNTS;
+		ArrayList<DBAccount> accounts = new ArrayList<DBAccount>();
+		DBAccount account = new DBAccount();
+		account.UserID = 1;
+		account.AccountID = 1;
+		account.Description = "Account";
+		accounts.add(account);
+		List<String> params = Arrays.asList(new String[] { account.UserID + "" });
+		Mockito.when(mDatabase.select(sql, params, DBAccount.class)).thenReturn(accounts);
+
+		// Act
+		Collection<DBAccount> result = mRepository.selectAccounts(1);
+		
+		// Assert
+		Assert.assertEquals(result, accounts);
 	}
 	
 	private void doesCategoryExistGenericTest(String categoryType, boolean expectedResult) {
@@ -100,7 +134,7 @@ public class RepositorySettingsTest {
 		Assert.assertEquals(expectedResult, valid);
 	}
 
-	private void addCategoryGenericTest(String categoryType, boolean expectedResult) {
+	private void insertCategoryGenericTest(String categoryType, boolean expectedResult) {
 		// Arrange
 		String sql = Queries.INSERT_CATEGORY;
 		List<String> params = Arrays.asList(new String[] { "1", categoryType, "some_category" });
@@ -113,4 +147,22 @@ public class RepositorySettingsTest {
 		Assert.assertEquals(expectedResult, success);
 	}
 
+	private void selectCategoriesGenericTest(String categoryType) {
+		// Arrange
+		String sql = Queries.GET_CATEGORIES;
+		ArrayList<DBCategory> categories = new ArrayList<DBCategory>();
+		DBCategory category = new DBCategory();
+		category.UserID = 1;
+		category.CategoryID = 1;
+		category.Description = "some_category";
+		categories.add(category);
+		List<String> params = Arrays.asList(new String[] { category.UserID + "", categoryType });
+		Mockito.when(mDatabase.select(sql, params, DBCategory.class)).thenReturn(categories);
+
+		// Act
+		Collection<DBCategory> result = mRepository.selectCategories(1, categoryType);
+		
+		// Assert
+		Assert.assertEquals(result, categories);
+	}
 }

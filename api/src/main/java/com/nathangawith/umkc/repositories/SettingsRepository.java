@@ -1,6 +1,7 @@
 package com.nathangawith.umkc.repositories;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,13 @@ public class SettingsRepository implements ISettingsRepository {
 	}
 	
 	@Override
+	public Collection<DBAccount> selectAccounts(int userID) {
+		List<String> params = Arrays.asList(new String[] { userID + "" });
+		Collection<DBAccount> accounts = DB.select(Queries.GET_ACCOUNTS, params, DBAccount.class);
+		return accounts;
+	}
+	
+	@Override
 	public boolean doesCategoryExist(int userID, String categoryType, String description) {
 		List<String> params = Arrays.asList(new String[] { userID + "", categoryType, description });
 		DBCategory category = DB.selectFirst(Queries.GET_CATEGORY, params, DBCategory.class);
@@ -45,5 +53,12 @@ public class SettingsRepository implements ISettingsRepository {
 		List<String> params = Arrays.asList(new String[] { userID + "", categoryType, description });
 		boolean success = DB.execute(Queries.INSERT_CATEGORY, params);
 		return success;
+	}
+	
+	@Override
+	public Collection<DBCategory> selectCategories(int userID, String categoryType) {
+		List<String> params = Arrays.asList(new String[] { userID + "", categoryType });
+		Collection<DBCategory> categories = DB.select(Queries.GET_CATEGORIES, params, DBCategory.class);
+		return categories;
 	}
 }
