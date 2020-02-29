@@ -40,7 +40,7 @@ public class Database implements IDatabase {
 				json.put(jsonOBJ);
 			}
 			for (int i = 0; i < json.length(); i++)
-				objs.add(new Gson().fromJson(json.get(0).toString(), type));
+				objs.add(new Gson().fromJson(json.get(i).toString(), type));
 			conn.close();
 		} catch (Exception e) {
 			e.printStackTrace();

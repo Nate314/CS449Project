@@ -23,11 +23,11 @@ public class MyHttpClient {
 
     private static AsyncHttpClient client = new AsyncHttpClient();
 
-    public static void get(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
+    public static void get(Context context, String url, Consumer<JSONObject> obCallback, Consumer<JSONArray> arrCallback, Consumer<Throwable> errCallback, Consumer<JSONObject> errObCallback) {
         url = getAbsoluteUrl(url);
         System.out.println("Sending request to: " + url);
         client.addHeader("Authorization", String.format("Bearer %s", MyState.TOKEN));
-        client.get(url, params, responseHandler);
+        client.get(context, url, null, getHandler(obCallback, arrCallback, errCallback, errObCallback));
     }
 
     public static void post(Context context, String url, ByteArrayEntity entity, Consumer<JSONObject> obCallback, Consumer<JSONArray> arrCallback, Consumer<Throwable> errCallback, Consumer<JSONObject> errObCallback) {

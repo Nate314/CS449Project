@@ -1,5 +1,6 @@
 package com.nathangawith.umkc;
 
+import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 
@@ -19,15 +20,41 @@ public class Algorithms {
 		return new String(bcryptHashString);
 	}
 	
-	// https://www.codevoila.com/post/65/java-json-tutorial-and-example-json-java-orgjson
+	/**
+	 * uses reflection to convert java object to json string
+	 * @param object object to stringify
+	 * @return JSON.stringified object
+	 */
 	public static <T extends Object> String toJSONObject(T object) {
-    	JSONObject jsonArray = new JSONObject(object);
-    	return jsonArray.toString();
+		String result = "{";
+        for (Field field : object.getClass().getFields()) {
+            try {
+                Object o = field.get(object);
+                String value = field.getType().isPrimitive() ? "%s" : "\"%s\"";
+                result += String.format("\"%s\":%s,", field.getName(), String.format(value, o.toString()));
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+        if (object.getClass().getFields().length > 0)
+        	result = result.substring(0, result.length() - 1);
+		result += "}";
+		System.out.println(result);
+    	return result;
 	}
-	
-	// https://www.codevoila.com/post/65/java-json-tutorial-and-example-json-java-orgjson
+
+	/**
+	 * uses reflection to convert java collection of objects to json string
+	 * @param array collection to stringify
+	 * @return JSON.stringified array
+	 */
 	public static <T extends Object> String toJSONArray(Collection<T> array) {
-    	JSONArray jsonArray = new JSONArray(array);
-    	return jsonArray.toString();
+		String result = "[";
+		for (T object : array)
+			result += String.format("%s,", Algorithms.toJSONObject(object));
+		if (array.size() > 0)
+			result = result.substring(0, result.length() - 1);
+		result += "]";
+    	return result;
 	}
 }
