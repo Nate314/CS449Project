@@ -15,4 +15,7 @@ public class Messages {
 	public static final String CATEGORY_CREATED_SUCCESSFULLY = "Success";
 	public static final String CATEGORY_CREATION_FAILED = "Unable to create category";
 	public static final String CATEGORY_ALREADY_EXISTS = "Category with this name already exists";
+	// transaction
+	public static final String TRANSACTION_CREATED_SUCCESSFULLY = "Success";
+	public static final String TRANSACTION_CREATION_FAILED = "Unable to create transaction";
 }

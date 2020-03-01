@@ -10,4 +10,5 @@ public class Queries {
 	public static final String GET_CATEGORY = "SELECT * FROM categories WHERE userid = ? AND type = ? AND description = ?";
 	public static final String GET_CATEGORIES = "SELECT * FROM categories WHERE userid = ? AND type = ?";
 	public static final String INSERT_CATEGORY = "INSERT INTO categories (userid, type, description) VALUES (?, ?, ?)";
+	public static final String INSERT_TRANSACTION = "INSERT INTO transactions (UserID, AccountID, CategoryID, Description, Amount, Date) VALUES (?, ?, ?, ?, ?, ?)";
 }
