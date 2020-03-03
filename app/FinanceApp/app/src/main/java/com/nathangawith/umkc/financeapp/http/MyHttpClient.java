@@ -1,4 +1,4 @@
-package com.nathangawith.umkc.financeapp;
+package com.nathangawith.umkc.financeapp.http;
 
 import android.content.Context;
 import android.util.Log;
@@ -6,7 +6,7 @@ import android.util.Log;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
+import com.nathangawith.umkc.financeapp.constants.MyState;
 
 import org.json.JSONArray;
 import org.json.JSONException;

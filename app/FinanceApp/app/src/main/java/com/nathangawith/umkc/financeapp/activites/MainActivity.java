@@ -1,9 +1,10 @@
-package com.nathangawith.umkc.financeapp;
+package com.nathangawith.umkc.financeapp.activites;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -14,11 +15,13 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import com.nathangawith.umkc.financeapp.http.MyApi;
+import com.nathangawith.umkc.financeapp.dialogs.MyDialog;
+import com.nathangawith.umkc.financeapp.constants.MyState;
+import com.nathangawith.umkc.financeapp.R;
+import com.nathangawith.umkc.financeapp.dtos.TokenResponseDto;
 
-class TokenResponseDto {
-    public String token;
-}
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements OnItemSelectedListener {
 
@@ -125,8 +128,8 @@ public class MainActivity extends AppCompatActivity implements OnItemSelectedLis
             @Override
             public void run() {
                 try {
-                    Thread.sleep(2000);
-                    startActivity(new Intent(me, SettingsActivity.class));
+                    Thread.sleep(0);
+                    startActivity(new Intent(me, MenuActivity.class));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

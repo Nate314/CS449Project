@@ -1,4 +1,4 @@
-package com.nathangawith.umkc.financeapp;
+package com.nathangawith.umkc.financeapp.dtos;
 
 public class DBCategory {
     public int CategoryID;

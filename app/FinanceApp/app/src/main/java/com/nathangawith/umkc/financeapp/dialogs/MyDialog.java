@@ -1,4 +1,4 @@
-package com.nathangawith.umkc.financeapp;
+package com.nathangawith.umkc.financeapp.dialogs;
 
 import android.app.Dialog;
 import android.os.Bundle;

@@ -1,8 +1,9 @@
 package com.nathangawith.umkc.financeapp;
 
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
+
+import com.nathangawith.umkc.financeapp.activites.MainActivity;
 
 import org.junit.After;
 import org.junit.Before;

@@ -1,6 +1,12 @@
-package com.nathangawith.umkc.financeapp;
+package com.nathangawith.umkc.financeapp.http;
 
 import android.content.Context;
+
+import com.nathangawith.umkc.financeapp.constants.MyConstants;
+import com.nathangawith.umkc.financeapp.dtos.GenericResponse;
+import com.nathangawith.umkc.financeapp.dtos.TokenResponseDto;
+import com.nathangawith.umkc.financeapp.dtos.DBAccount;
+import com.nathangawith.umkc.financeapp.dtos.DBCategory;
 
 import org.json.JSONArray;
 import org.json.JSONException;

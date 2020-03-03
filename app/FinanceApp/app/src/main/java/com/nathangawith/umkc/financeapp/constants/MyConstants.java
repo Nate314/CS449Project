@@ -1,4 +1,4 @@
-package com.nathangawith.umkc.financeapp;
+package com.nathangawith.umkc.financeapp.constants;
 
 public class MyConstants {
     public static final String INCOME = "INCOME";

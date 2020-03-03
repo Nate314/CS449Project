@@ -1,25 +1,23 @@
-package com.nathangawith.umkc.financeapp;
+package com.nathangawith.umkc.financeapp.activites;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
+import com.nathangawith.umkc.financeapp.http.MyApi;
+import com.nathangawith.umkc.financeapp.dialogs.MyDialog;
+import com.nathangawith.umkc.financeapp.R;
+import com.nathangawith.umkc.financeapp.dtos.DBAccount;
+import com.nathangawith.umkc.financeapp.dtos.DBCategory;
+import com.nathangawith.umkc.financeapp.dtos.GenericResponse;
 
-class GenericResponse {
-    public String response;
-}
+import java.util.function.Consumer;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -172,6 +170,6 @@ public class SettingsActivity extends AppCompatActivity {
      * @param view button view
      */
     public void btnBackClick(View view) {
-        startActivity(new Intent(this, MainActivity.class));
+        startActivity(new Intent(this, MenuActivity.class));
     }
 }

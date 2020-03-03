@@ -10,8 +10,7 @@ public class API {
    
 	public static void main(String[] args) {
 		SpringApplication app = new SpringApplication(API.class);
-        app.setDefaultProperties(Collections
-          .singletonMap("server.port", "9090"));
+        app.setDefaultProperties(Collections.singletonMap("server.port", "9090"));
         app.run(args);
 	}
 }

@@ -1,19 +1,16 @@
 package com.nathangawith.umkc.financeapp;
 
-import android.content.Context;
-import android.view.View;
+import com.nathangawith.umkc.financeapp.activites.MainActivity;
+import com.nathangawith.umkc.financeapp.activites.TokenResponseDto;
+import com.nathangawith.umkc.financeapp.http.MyApi;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.util.function.Consumer;
-
-import static org.junit.Assert.*;
 
 public class MainActivityUnitTest {
 
