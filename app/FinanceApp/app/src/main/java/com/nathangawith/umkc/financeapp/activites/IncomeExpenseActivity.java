@@ -39,6 +39,7 @@ public class IncomeExpenseActivity extends AppCompatActivity {
     private EditText txtDescription;
     private Spinner spinnerAccount;
     private Spinner spinnerCategory;
+    private Button btnSelectDate;
     private TextView lblDate;
     private ProgressBar progressBar;
     private Button btnSubmit;
@@ -56,21 +57,34 @@ public class IncomeExpenseActivity extends AppCompatActivity {
         this.txtDescription = findViewById(R.id.txtDescription);
         this.spinnerAccount = findViewById(R.id.spinnerAccount);
         this.spinnerCategory = findViewById(R.id.spinnerCategory);
+        this.btnSelectDate = findViewById(R.id.btnSelectDate);
         this.lblDate = findViewById(R.id.lblDate);
         this.btnSubmit = findViewById(R.id.btnSubmit);
         this.progressBar = findViewById(R.id.progressBar);
         this.lblScreenName = findViewById(R.id.lblScreenName);
+        this.init();
+    }
+
+    public void init() {
         // initialize ui elements
         this.progressBar.setVisibility(View.INVISIBLE);
-        this.income = MyState.SCREEN.equals(MyConstants.INCOME);
+        this.income = MyState.SCREEN != null ? MyState.SCREEN.equals(MyConstants.INCOME) : false;
         this.lblScreenName.setText(this.income ? "Income" : "Expense");
         // get accounts categories from api
         MyApi.getAllAccounts(getApplicationContext(),
-            respCollection -> this.setSpinnerItems(this.spinnerAccount, DBAccount.class, respCollection, account -> this.selectedAccount = account),
-            x -> new MyDialog("Error", x.response).show(getSupportFragmentManager(), null));
+                respCollection -> this.setSpinnerItems(this.spinnerAccount, DBAccount.class, respCollection, account -> this.selectedAccount = account),
+                x -> new MyDialog("Error", x.response).show(getSupportFragmentManager(), null));
         MyApi.getAllCategories(getApplicationContext(), income,
-            respCollection -> this.setSpinnerItems(this.spinnerCategory, DBCategory.class, respCollection, category -> this.selectedCategory = category),
-            x -> new MyDialog("Error", x.response).show(getSupportFragmentManager(), null));
+                respCollection -> this.setSpinnerItems(this.spinnerCategory, DBCategory.class, respCollection, category -> this.selectedCategory = category),
+                x -> new MyDialog("Error", x.response).show(getSupportFragmentManager(), null));
+    }
+
+    public void clearFields() {
+        this.txtAmount.setText("");
+        this.txtDescription.setText("");
+        this.spinnerAccount.getOnItemSelectedListener().onItemSelected(null, null, 0, 0);
+        this.spinnerCategory.getOnItemSelectedListener().onItemSelected(null, null, 0, 0);
+        this.lblDate.setText("");
     }
 
     /**
@@ -106,6 +120,9 @@ public class IncomeExpenseActivity extends AppCompatActivity {
         boolean enabled = !loading;
         this.txtAmount.setEnabled(enabled);
         this.txtDescription.setEnabled(enabled);
+        this.spinnerAccount.setEnabled(enabled);
+        this.spinnerCategory.setEnabled(enabled);
+        this.btnSelectDate.setEnabled(enabled);
         this.btnSubmit.setEnabled(enabled);
         if (loading) {
             this.progressBar.setVisibility(View.VISIBLE);
@@ -145,12 +162,25 @@ public class IncomeExpenseActivity extends AppCompatActivity {
      * @param view button view
      */
     public void btnSubmitClick(View view) {
-        DBTransaction transaction = new DBTransaction();
-        transaction.AccountID = this.selectedAccount.AccountID;
-        transaction.CategoryID = this.selectedCategory.CategoryID;
-        transaction.Amount = Double.parseDouble(this.txtAmount.getText().toString());
-        transaction.Description = this.txtDescription.getText().toString();
-        transaction.Date = new Date(this.lblDate.getText().toString());
-        MyApi.postTransaction(getApplicationContext(), this.income, transaction, x -> {}, x -> {});
+        boolean allRequiredFields = true;
+        allRequiredFields = allRequiredFields && !this.txtAmount.getText().toString().equals("");
+        allRequiredFields = allRequiredFields && !this.txtDescription.getText().toString().equals("");
+        allRequiredFields = allRequiredFields && !this.lblDate.getText().toString().equals("");
+        if (allRequiredFields) {
+            DBTransaction transaction = new DBTransaction();
+            transaction.AccountID = this.selectedAccount.AccountID;
+            transaction.CategoryID = this.selectedCategory.CategoryID;
+            transaction.Amount = Double.parseDouble(this.txtAmount.getText().toString());
+            transaction.Description = this.txtDescription.getText().toString();
+            transaction.Date = new Date(this.lblDate.getText().toString());
+            this.loading(true);
+            MyApi.postTransaction(getApplicationContext(), this.income, transaction, x -> {
+                    this.loading(false);
+                    this.clearFields();
+                },
+                x -> new MyDialog("Error", x.response).show(getSupportFragmentManager(), null));
+        } else {
+            new MyDialog("Enter all required Fields", "").show(getSupportFragmentManager(), null);
+        }
     }
 }

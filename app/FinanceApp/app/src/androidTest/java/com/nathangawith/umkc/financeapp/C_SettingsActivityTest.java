@@ -26,7 +26,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
-public class SettingsActivityTest {
+public class C_SettingsActivityTest {
 
     @Rule
     public ActivityTestRule<SettingsActivity> mActivityActivityTestRule = new ActivityTestRule<SettingsActivity>(SettingsActivity.class);

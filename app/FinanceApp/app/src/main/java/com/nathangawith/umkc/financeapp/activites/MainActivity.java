@@ -23,7 +23,6 @@ import com.nathangawith.umkc.financeapp.constants.MyState;
 import com.nathangawith.umkc.financeapp.R;
 import com.nathangawith.umkc.financeapp.dtos.TokenResponseDto;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {

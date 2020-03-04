@@ -20,6 +20,7 @@ import com.nathangawith.umkc.Constants;
 import com.nathangawith.umkc.Messages;
 import com.nathangawith.umkc.dtos.DBTransaction;
 import com.nathangawith.umkc.dtos.GenericResponse;
+import com.nathangawith.umkc.interceptors.JWTInterceptor;
 import com.nathangawith.umkc.services.ITransactionsService;
 
 @RestController
@@ -38,7 +39,8 @@ public class TransactionsController {
 	) throws Exception {
 		GenericResponse response = new GenericResponse();
 		try {
-			int u = body.UserID, acc = body.AccountID, cat = body.CategoryID;
+			int u = JWTInterceptor.getUserIDFromHeader(request);
+			int acc = body.AccountID, cat = body.CategoryID;
 			String desc = body.Description;
 			double amt = body.Amount;
 			Date d = body.Date;
