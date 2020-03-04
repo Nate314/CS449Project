@@ -2,6 +2,7 @@ package com.nathangawith.umkc.financeapp.activites;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -15,15 +16,17 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.nathangawith.umkc.financeapp.constants.MyUtility;
 import com.nathangawith.umkc.financeapp.http.MyApi;
 import com.nathangawith.umkc.financeapp.dialogs.MyDialog;
 import com.nathangawith.umkc.financeapp.constants.MyState;
 import com.nathangawith.umkc.financeapp.R;
 import com.nathangawith.umkc.financeapp.dtos.TokenResponseDto;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements OnItemSelectedListener {
+public class MainActivity extends AppCompatActivity {
 
     private Spinner spinnerApiUrl;
     private EditText txtUsername;
@@ -51,28 +54,16 @@ public class MainActivity extends AppCompatActivity implements OnItemSelectedLis
         spinnerApiUrlOptions.add("http://pi.nathangawith.com:900/");
         spinnerApiUrlOptions.add("http://10.0.0.26:9090/");
         spinnerApiUrlOptions.add("http://nathang2018:9090/");
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-            this, android.R.layout.simple_spinner_item, this.spinnerApiUrlOptions);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerApiUrl.setAdapter(adapter);
-        spinnerApiUrl.setOnItemSelectedListener(this);
-        this.onItemSelected(null, null, 0, 0);
-    }
-
-    /**
-     * when an item is selected from the api dropdown, save to ROOT_API_URL
-     * @param parent
-     * @param view
-     * @param pos
-     * @param id id of the item selected
-     */
-    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-        MyState.ROOT_API_URL = this.spinnerApiUrlOptions.get((int) id);
-        System.out.println(MyState.ROOT_API_URL);
-    }
-
-    public void onNothingSelected(AdapterView<?> parent) {
-        // Another interface callback
+        MainActivity me = this;
+        MyUtility.initializeSpinner(this, this.spinnerApiUrl, this.spinnerApiUrlOptions, new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                MyState.ROOT_API_URL = me.spinnerApiUrlOptions.get((int) id);
+                System.out.println(MyState.ROOT_API_URL);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) { }
+        });
     }
 
     /**

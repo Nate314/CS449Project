@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.nathangawith.umkc.Algorithms;
+import com.nathangawith.umkc.Constants;
 import com.nathangawith.umkc.Messages;
 import com.nathangawith.umkc.controllers.TransactionsController;
 import com.nathangawith.umkc.dtos.DBTransaction;
@@ -53,7 +54,7 @@ public class ControllerTransactionsTest {
 			Mockito.when(mService.addNewTransaction(body.UserID, body.AccountID, body.CategoryID, body.Description, body.Amount, body.Date)).thenReturn(!creationFailed);
 			
 			// Act
-			ResponseEntity<String> response = mController.postAddAccount(request, body);
+			ResponseEntity<String> response = mController.postAddAccount(request, Constants.INCOME, body);
 			
 			// Assert
 			Assert.assertEquals(response.getStatusCode(), creationFailed ? HttpStatus.NOT_FOUND : HttpStatus.OK);

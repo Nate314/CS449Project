@@ -3,6 +3,7 @@ package com.nathangawith.umkc.financeapp.http;
 import android.content.Context;
 
 import com.nathangawith.umkc.financeapp.constants.MyConstants;
+import com.nathangawith.umkc.financeapp.dtos.DBTransaction;
 import com.nathangawith.umkc.financeapp.dtos.GenericResponse;
 import com.nathangawith.umkc.financeapp.dtos.TokenResponseDto;
 import com.nathangawith.umkc.financeapp.dtos.DBAccount;
@@ -15,12 +16,43 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 import java.util.function.Consumer;
 
 import cz.msebera.android.httpclient.entity.ByteArrayEntity;
 
 public class MyApi {
+
+    /**
+     * "Nathan", ' ', 10 -> "    Nathan"
+     * @param str string to right align
+     * @param c character to fill on the left
+     * @param length final length of the string
+     * @return string with padding on the left
+     */
+    private static String fillLeft(String str, char c, int length) {
+        String result = "";
+        int extra = length - str.length();
+        for (int i = 0; i < extra; i++) result += c;
+        return result + str;
+    }
+
+    /**
+     * @param date date to convert
+     * @return string representation of date in the form YYYY-MM-DD
+     */
+    public static String dateToString(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH) + 1;
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        return String.format("%s-%s-%s", year, fillLeft(month + "", '0', 2), fillLeft(day + "", '0', 2));
+    }
 
     private static <T extends Object> Consumer<JSONObject> parse(T resp, Consumer<T> func) {
         return json -> {
@@ -108,5 +140,24 @@ public class MyApi {
     public static void getAllCategories(Context context, boolean income, Consumer<Collection<DBCategory>> func, Consumer<GenericResponse> errorFunc) {
         String type = income ? MyConstants.INCOME : MyConstants.EXPENSE;
         MyHttpClient.get(context, "/settings/categories/all?categoryType=" + type, x -> {}, parseCollection(DBCategory.class, func), x -> {}, parse(new GenericResponse(), errorFunc));
+    }
+
+    public static void postTransaction(Context context, boolean income, DBTransaction transaction, Consumer<GenericResponse> func, Consumer<GenericResponse> errorFunc) {
+        try {
+            String jsonObjectString = String.format("{\"%s\":%s,\"%s\":%s,\"%s\":\"%s\",\"%s\":%s,\"%s\":\"%s\"}",
+                    "AccountID", transaction.AccountID,
+                    "CategoryID", transaction.CategoryID,
+                    "Description", transaction.Description,
+                    "Amount", transaction.Amount,
+                    "Date", dateToString(transaction.Date));
+            ByteArrayEntity entity = new ByteArrayEntity(jsonObjectString.getBytes("UTF-8"));
+            GenericResponse resp = new GenericResponse();
+            String type = income ? MyConstants.INCOME : MyConstants.EXPENSE;
+            System.out.println("-------- Request: --------");
+            System.out.println(jsonObjectString);
+            MyHttpClient.post(context, "/transactions/add?transactionType=" + type, entity, parse(resp, func), x -> {}, x -> {}, parse(resp, errorFunc));
+        } catch (UnsupportedEncodingException ex) {
+            ex.printStackTrace();
+        }
     }
 }
