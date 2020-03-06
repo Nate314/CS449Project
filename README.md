@@ -108,7 +108,7 @@ Sprint Backlog
 
 Video showing that the login screen works and if you enter the wrong password, an error message is displayed: https://youtu.be/ewMNUNOdaCw
 
-As you can see from the screenshots below, what I achieved this sprint was:
+As you can see from the [screenshots below](#sprint-1-screenshots), what I achieved this sprint was:
 - Created API, DB, and APP projects.
 - Login works and a JWT is issued to the client if login is valid.
 - Text boxes and button is disabled during api call so that the user can’t spam the api with login requests.
@@ -118,7 +118,7 @@ As you can see from the screenshots below, what I achieved this sprint was:
 
 What went well:
 - Completed all tasks that I brought into the sprint with unit tests
-- Set up working API on my raspberry pi so I can use the API on http://pi.nathangawith.com/ 
+- Set up working API on my raspberry pi so I can use the API on http://pi.nathangawith.com:900/
 - Met with client (mother), showed progress, and got feedback
     - Feedback:
     - Button to view password
@@ -145,45 +145,77 @@ Sprint Backlog
 | Story ID | Story / Task | Estimated Hours | Actual Hours |
 | --- | --- | --- | --- |
 | 3 | Create Settings screen |||
-| 3.1 | Settings screen - Creation of new Accounts | 3:00 |  |
-| 3.2 | Settings screen - Creation of new Income Categories | 2:00 |  |
-| 3.3 | Settings screen - Creation of new Expense Categories | 1:00 |  |
+| 3.1 | Settings screen - Creation of new Accounts | 3:00 | 3:28 |
+| 3.2 | Settings screen - Creation of new Income Categories | 2:00 | 2:13 |
+| 3.3 | Settings screen - Creation of new Expense Categories | 1:00 | 2:13 |
 | 4 | Create the Income/Expense screen |||
-| 4.1 | Income/Expense screen - Amount money field, Description Text | 2:00 |  |
-| 4.2 | Income/Expense screen - Category Dropdown, Account Dropdown | 2:00 |  |
-| 4.3 | Income/Expense screen - Date Calendar Input | 2:00 |  |
+| 4.1 | Income/Expense screen - Amount money field, Description Text | 2:00 | 1:51 |
+| 4.2 | Income/Expense screen - Category Dropdown, Account Dropdown | 2:00 | 1:49 |
+| 4.3 | Income/Expense screen - Date Calendar Input | 2:00 | 1:47 |
 | --- | --- | --- | --- |
-|  | Total | 12:00 |  |
+|  | Total | 12:00 | 13:23 |
 
 ## Sprint 2 Review
 
-[TODO]
+Video showing that the menu, settings, and income/expense screens work with error messages: https://youtu.be/2ErMOpIAIXg
+
+As you can see from the [screenshots below](#sprint-2-screenshots), what I achieved this sprint was:
+- Created a Menu screen to navigate to
+  - Settings screen
+  - Income screen
+  - Expense screen
+- Created Settings screen, which allows for
+  - creation of accounts
+  - creation of income categories
+  - creation of expense categories
+- Created Income/Expense screen
+  - creation of transaction record with
+    - Amount
+    - Description
+    - From/To Account
+    - From/To Category
+    - Date of Transaction
+- Unit Tests for the API
+- Android Instrumentation Tests for the UI
 
 ## Sprint 2 Retrospective
 
-[TODO]
+What went well:
+- Although my estimates were still low for the second sprint, I wasn't as far off as I was for the first sprint. For the first sprint, the actual time spent was about 30% above the estimate, but for this second sprint the actual time spent was about 11% above the estimate.
+- I think this is due to the fact that this sprint I was able to build on top of code I had already written in the previous sprint, and I the new things I had to learn were not as challenging as the previous sprint's challenges which included integrating the API, UI, and DB as well as learning how to write unit tests for a Java Spring Framework project as well as for Android.
+
+What didn't go well:
+- Overall, this sprint went well. The new components I had to learn for the UI (Calendar and Spinner inputs) were not as challenging as the previous sprint's technical challenges.
+
+Changes for future sprints:
+- The work load this sprint was a lot with other responsibilities including other classes and work, So I will try to limit my estimates to about 10 hours for future sprints.
 
 # Sprint 1 Screenshots:
 
-![iter1_login_blank](readme_assets/iter1_login_blank.png?raw=true)
-![iter1_login_loading](readme_assets/iter1_login_loading.png?raw=true)
-![iter1_login_token_received](readme_assets/iter1_login_token_received.png?raw=true)
-![iter1_login_invalid](readme_assets/iter1_login_invalid.png?raw=true)
+.|.
+:----:|:----:
+![iter1_login_blank](readme_assets/iter1_login_blank.png?raw=true)|![iter1_login_loading](readme_assets/iter1_login_loading.png?raw=true)
+![iter1_login_loading](readme_assets/iter1_login_loading.png?raw=true)|![iter1_login_token_received](readme_assets/iter1_login_token_received.png?raw=true)
+![iter1_login_invalid](readme_assets/iter1_login_invalid.png?raw=true)|
 
 # Sprint 2 Screenshots:
 
-[TODO]
+.|.
+:----:|:----:
+![iter2_menu.png](readme_assets/iter2_menu.png?raw=true)|![iter2_settings.png](readme_assets/iter2_settings.png?raw=true)
+![iter2_settings_typed.png](readme_assets/iter2_settings_typed.png?raw=true)|![iter2_settings_added.png](readme_assets/iter2_settings_added.png?raw=true)
+![iter2_incomeexpense.png](readme_assets/iter2_incomeexpense.png?raw=true)|![iter2_incomeexpense_amount.png](readme_assets/iter2_incomeexpense_amount.png?raw=true)
+![iter2_incomeexpense_description.png](readme_assets/iter2_incomeexpense_description.png?raw=true)|![iter2_incomeexpense_account.png](readme_assets/iter2_incomeexpense_account.png?raw=true)
+![iter2_incomeexpense_category.png](readme_assets/iter2_incomeexpense_category.png?raw=true)|![iter2_incomeexpense_calendar.png](readme_assets/iter2_incomeexpense_calendar.png?raw=true)
+![iter2_incomeexpense_filledin.png](readme_assets/iter2_incomeexpense_filledin.png?raw=true)|![iter2_db.png](readme_assets/iter2_db.png?raw=true)
 
 # Original Mockups
 
-![login](readme_assets/login.jpg?raw=true)
-![accounts](readme_assets/accounts.jpg?raw=true)
-![dev_settings](readme_assets/dev_settings.jpg?raw=true)
-![home](readme_assets/home.jpg?raw=true)
-![income_expense](readme_assets/income_expense.jpg?raw=true)
-![register](readme_assets/register.jpg?raw=true)
-![report_view](readme_assets/report_view.jpg?raw=true)
-![reports](readme_assets/reports.jpg?raw=true)
-![settings](readme_assets/settings.jpg?raw=true)
-![transfer](readme_assets/transfer.jpg?raw=true)
-![login](readme_assets/login.jpg?raw=true)
+.|.
+:----:|:----:
+![login](readme_assets/login.jpg?raw=true)|![accounts](readme_assets/accounts.jpg?raw=true)
+![dev_settings](readme_assets/dev_settings.jpg?raw=true)|![home](readme_assets/home.jpg?raw=true)
+![income_expense](readme_assets/income_expense.jpg?raw=true)|![register](readme_assets/register.jpg?raw=true)
+![report_view](readme_assets/report_view.jpg?raw=true)|![reports](readme_assets/reports.jpg?raw=true)
+![settings](readme_assets/settings.jpg?raw=true)|![transfer](readme_assets/transfer.jpg?raw=true)
+![login](readme_assets/login.jpg?raw=true)|

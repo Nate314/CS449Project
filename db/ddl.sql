@@ -42,3 +42,17 @@ CREATE TABLE Transactions (
     FOREIGN KEY (AccountID) REFERENCES Accounts(AccountID),
     FOREIGN KEY (CategoryID) REFERENCES Categories(CategoryID)
 );
+
+-- Type column added to Categories table in Sprint2
+ALTER TABLE Categories ADD Type VARCHAR(20);
+
+-- These views allow mariadb to work with lowercase table names
+CREATE VIEW users AS SELECT * FROM Users;
+CREATE VIEW categories AS SELECT * FROM Categories;
+CREATE VIEW accounts AS SELECT * FROM Accounts;
+CREATE VIEW transactions AS SELECT * FROM Transactions;
+
+-- delete statements to remove android instrumentation test data
+DELETE FROM accounts WHERE Description LIKE '@%';
+DELETE FROM categories WHERE Description LIKE '@%';
+DELETE FROM transactions WHERE Description LIKE '@%';
