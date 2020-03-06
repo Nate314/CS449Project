@@ -128,13 +128,17 @@ public class SettingsActivity extends AppCompatActivity {
      * @param view button view
      */
     public void btnAddAccountClick(View view) {
-        this.labelToClear = this.txtAddAccount;
-        String accountDescription = this.txtAddAccount.getText().toString();
-        this.loading(true);
-        MyApi.postAddAccount(getApplicationContext(), new GenericResponse(), accountDescription, resp -> {
-            okFunc.accept(resp);
-            this.getAllAccounts();
-        }, errFunc);
+        if (!this.txtAddExpenseCategory.getText().toString().equals("")) {
+            this.labelToClear = this.txtAddAccount;
+            String accountDescription = this.txtAddAccount.getText().toString();
+            this.loading(true);
+            MyApi.postAddAccount(getApplicationContext(), new GenericResponse(), accountDescription, resp -> {
+                okFunc.accept(resp);
+                this.getAllAccounts();
+            }, errFunc);
+        } else {
+            new MyDialog("Please enter an Account", "").show(getSupportFragmentManager(), null);
+        }
     }
 
     /**
@@ -142,13 +146,17 @@ public class SettingsActivity extends AppCompatActivity {
      * @param view button view
      */
     public void btnAddIncomeCategoryClick(View view) {
-        this.labelToClear = this.txtAddIncomeCategory;
-        String incomeCategoryDescription = this.txtAddIncomeCategory.getText().toString();
-        this.loading(true);
-        MyApi.postAddCategory(getApplicationContext(), new GenericResponse(), true, incomeCategoryDescription, resp -> {
-            okFunc.accept(resp);
-            this.getAllCategories(true);
-        }, errFunc);
+        if (!this.txtAddExpenseCategory.getText().toString().equals("")) {
+            this.labelToClear = this.txtAddIncomeCategory;
+            String incomeCategoryDescription = this.txtAddIncomeCategory.getText().toString();
+            this.loading(true);
+            MyApi.postAddCategory(getApplicationContext(), new GenericResponse(), true, incomeCategoryDescription, resp -> {
+                okFunc.accept(resp);
+                this.getAllCategories(true);
+            }, errFunc);
+        } else {
+            new MyDialog("Please enter an Income Category", "").show(getSupportFragmentManager(), null);
+        }
     }
 
     /**
@@ -156,13 +164,17 @@ public class SettingsActivity extends AppCompatActivity {
      * @param view button view
      */
     public void btnAddExpenseCategoryClick(View view) {
-        this.labelToClear = this.txtAddExpenseCategory;
-        String expenseCategoryDescription = this.txtAddExpenseCategory.getText().toString();
-        this.loading(true);
-        MyApi.postAddCategory(getApplicationContext(), new GenericResponse(), false, expenseCategoryDescription, resp -> {
-            okFunc.accept(resp);
-            this.getAllCategories(false);
-        }, errFunc);
+        if (!this.txtAddExpenseCategory.getText().toString().equals("")) {
+            this.labelToClear = this.txtAddExpenseCategory;
+            String expenseCategoryDescription = this.txtAddExpenseCategory.getText().toString();
+            this.loading(true);
+            MyApi.postAddCategory(getApplicationContext(), new GenericResponse(), false, expenseCategoryDescription, resp -> {
+                okFunc.accept(resp);
+                this.getAllCategories(false);
+            }, errFunc);
+        } else {
+            new MyDialog("Please enter an Expense Category", "").show(getSupportFragmentManager(), null);
+        }
     }
 
     /**
