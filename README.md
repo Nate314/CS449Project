@@ -9,19 +9,24 @@
 - [Vision Statement](#vision-statement)
 - [Requirements](#requirements)
 - [Product Backlog](#product-backlog)
-- [Sprint 1](#sprint-1)
-    - [Review](#sprint-1-review)
-    - [Retrospective](#sprint-1-retrospective)
-    - [Screenshots](#sprint-1-screenshots)
-- [Sprint 2](#sprint-2)
-    - [Review](#sprint-2-review)
-    - [Retrospective](#sprint-2-retrospective)
-    - [Screenshots](#sprint-2-screenshots)
-- [Sprint 3](#sprint-3)
-    - [Review](#sprint-3-review)
-    - [Retrospective](#sprint-3-retrospective)
-    - [Screenshots](#sprint-3-screenshots)
 - [Original Mockups](#original-mockups)
+
+| Sprints 1-3 | Sprints 4-6 |
+| --- | --- |
+| - [Sprint 1](#sprint-1) - [Review](#sprint-1-review) - [Retrospective](#sprint-1-retrospective) - [Screenshots](#sprint-1-screenshots) | - [Sprint 4](#sprint-4) - [Review](#sprint-4-review) - [Retrospective](#sprint-4-retrospective) - [Screenshots](#sprint-4-screenshots)  |
+| - [Sprint 2](#sprint-2) - [Review](#sprint-2-review) - [Retrospective](#sprint-2-retrospective) - [Screenshots](#sprint-2-screenshots) | - [Sprint 5](#sprint-5) - [Review](#sprint-5-review) - [Retrospective](#sprint-5-retrospective) - [Screenshots](#sprint-5-screenshots)  |
+| - [Sprint 3](#sprint-3) - [Review](#sprint-3-review) - [Retrospective](#sprint-3-retrospective) - [Screenshots](#sprint-3-screenshots) | - [Sprint 6](#sprint-6) - [Review](#sprint-6-review) - [Retrospective](#sprint-6-retrospective) - [Screenshots](#sprint-6-screenshots)  |
+<!--
+console.log(Array(3).fill(null).map((v, index) => {
+    let result = '';
+    let i;
+    i = index + 1;
+    result += `| - [Sprint ${i}](#sprint-${i}) - [Review](#sprint-${i}-review) - [Retrospective](#sprint-${i}-retrospective) - [Screenshots](#sprint-${i}-screenshots) `;
+    i = index + 4;
+    result += `| - [Sprint ${i}](#sprint-${i}) - [Review](#sprint-${i}-review) - [Retrospective](#sprint-${i}-retrospective) - [Screenshots](#sprint-${i}-screenshots) `;
+    return result + ' |';
+}).join('\n'));
+-->
 
 # Vision Statement
 
@@ -194,7 +199,6 @@ What didn't go well:
 Changes for future sprints:
 - The work load this sprint was a lot with other responsibilities including other classes and work, So I will try to limit my estimates to about 10 hours for future sprints.
 
-
 # Sprint 3
 
 **Sprint Goal: Create Register Screen and allow all screens to scroll for smaller screens**
@@ -218,6 +222,43 @@ Sprint Backlog
 
 [TODO]
 
+# Sprint 4
+[TODO]
+
+[TODO]
+
+## Sprint 4 Review
+
+[TODO]
+
+## Sprint 4 Retrospective
+
+[TODO]
+
+# Sprint 5
+
+[TODO]
+
+## Sprint 5 Review
+
+[TODO]
+
+## Sprint 5 Retrospective
+
+[TODO]
+
+# Sprint 6
+
+[TODO]
+
+## Sprint 6 Review
+
+[TODO]
+
+## Sprint 6 Retrospective
+
+[TODO]
+
 # Sprint 1 Screenshots:
 
 .|.
@@ -238,6 +279,24 @@ Sprint Backlog
 ![iter2_incomeexpense_filledin.png](readme_assets/iter2_incomeexpense_filledin.png?raw=true)|![iter2_db.png](readme_assets/iter2_db.png?raw=true)
 
 # Sprint 3 Screenshots:
+
+.|.
+:----:|:----:
+[TODO]|[TODO]
+
+# Sprint 4 Screenshots:
+
+.|.
+:----:|:----:
+[TODO]|[TODO]
+
+# Sprint 5 Screenshots:
+
+.|.
+:----:|:----:
+[TODO]|[TODO]
+
+# Sprint 6 Screenshots:
 
 .|.
 :----:|:----:
