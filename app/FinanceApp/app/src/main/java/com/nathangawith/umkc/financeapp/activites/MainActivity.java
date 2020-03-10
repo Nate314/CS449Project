@@ -46,8 +46,8 @@ public class MainActivity extends AppCompatActivity {
         this.progressBar.setVisibility(View.INVISIBLE);
         // initialize spinner
         this.spinnerApiUrlOptions = new ArrayList<String>();
-        spinnerApiUrlOptions.add("http://10.0.0.26:9090/");
         spinnerApiUrlOptions.add("http://pi.nathangawith.com:900/");
+        spinnerApiUrlOptions.add("http://10.0.0.26:9090/");
         spinnerApiUrlOptions.add("http://nathang2018:9090/");
         MainActivity me = this;
         MyUtility.initializeSpinner(this, this.spinnerApiUrl, this.spinnerApiUrlOptions, new OnItemSelectedListener() {
