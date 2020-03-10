@@ -8,6 +8,7 @@ import com.nathangawith.umkc.financeapp.dtos.GenericResponse;
 import com.nathangawith.umkc.financeapp.dtos.TokenResponseDto;
 import com.nathangawith.umkc.financeapp.dtos.DBAccount;
 import com.nathangawith.umkc.financeapp.dtos.DBCategory;
+import com.nathangawith.umkc.financeapp.dtos.TransactionDto;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -159,5 +160,13 @@ public class MyApi {
         } catch (UnsupportedEncodingException ex) {
             ex.printStackTrace();
         }
+    }
+
+    public static void getTotal(Context context, Consumer<GenericResponse> func, Consumer<GenericResponse> errorFunc) {
+        MyHttpClient.get(context, "/register/total", parse(new GenericResponse(), func), x -> {}, x -> {}, parse(new GenericResponse(), errorFunc));
+    }
+
+    public static void getTransactions(Context context, Consumer<Collection<TransactionDto>> func, Consumer<GenericResponse> errorFunc) {
+        MyHttpClient.get(context, "/register/transactions", x -> {}, parseCollection(TransactionDto.class, func), x -> {}, parse(new GenericResponse(), errorFunc));
     }
 }

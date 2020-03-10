@@ -56,3 +56,6 @@ CREATE VIEW transactions AS SELECT * FROM Transactions;
 DELETE FROM accounts WHERE Description LIKE '@%';
 DELETE FROM categories WHERE Description LIKE '@%';
 DELETE FROM transactions WHERE Description LIKE '@%';
+
+-- change amount column type
+ALTER TABLE Transactions MODIFY amount DECIMAL(15,2);

@@ -34,8 +34,10 @@ public class Algorithms {
         for (Field field : object.getClass().getFields()) {
             try {
                 Object o = field.get(object);
-                String value = field.getType().isPrimitive() ? "%s" : "\"%s\"";
-                result += String.format("\"%s\":%s,", field.getName(), String.format(value, o.toString()));
+                if (o != null) {
+                    String value = field.getType().isPrimitive() ? "%s" : "\"%s\"";
+                    result += String.format("\"%s\":%s,", field.getName(), String.format(value, o.toString()));
+                }
             } catch (Exception ex) {
                 ex.printStackTrace();
             }

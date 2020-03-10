@@ -19,7 +19,6 @@ import com.nathangawith.umkc.financeapp.R;
 import com.nathangawith.umkc.financeapp.constants.MyConstants;
 import com.nathangawith.umkc.financeapp.constants.MyState;
 import com.nathangawith.umkc.financeapp.constants.MyUtility;
-import com.nathangawith.umkc.financeapp.dialogs.MyDialog;
 import com.nathangawith.umkc.financeapp.dtos.DBAccount;
 import com.nathangawith.umkc.financeapp.dtos.DBCategory;
 import com.nathangawith.umkc.financeapp.dtos.DBTransaction;
@@ -73,10 +72,10 @@ public class IncomeExpenseActivity extends AppCompatActivity {
         // get accounts categories from api
         MyApi.getAllAccounts(getApplicationContext(),
                 respCollection -> this.setSpinnerItems(this.spinnerAccount, DBAccount.class, respCollection, account -> this.selectedAccount = account),
-                x -> new MyDialog("Error", x.response).show(getSupportFragmentManager(), null));
+                x -> MyUtility.okDialog(getSupportFragmentManager(), "Error", x.response));
         MyApi.getAllCategories(getApplicationContext(), income,
                 respCollection -> this.setSpinnerItems(this.spinnerCategory, DBCategory.class, respCollection, category -> this.selectedCategory = category),
-                x -> new MyDialog("Error", x.response).show(getSupportFragmentManager(), null));
+                x -> MyUtility.okDialog(getSupportFragmentManager(), "Error", x.response));
     }
 
     public void clearFields() {
@@ -178,9 +177,9 @@ public class IncomeExpenseActivity extends AppCompatActivity {
                     this.loading(false);
                     this.clearFields();
                 },
-                x -> new MyDialog("Error", x.response).show(getSupportFragmentManager(), null));
+                x -> MyUtility.okDialog(getSupportFragmentManager(), "Error", x.response));
         } else {
-            new MyDialog("Enter all required Fields", "").show(getSupportFragmentManager(), null);
+            MyUtility.okDialog(getSupportFragmentManager(), "Enter all required Fields", "");
         }
     }
 }

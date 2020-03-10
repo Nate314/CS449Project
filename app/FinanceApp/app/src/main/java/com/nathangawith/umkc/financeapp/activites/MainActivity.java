@@ -2,14 +2,11 @@ package com.nathangawith.umkc.financeapp.activites;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -18,7 +15,6 @@ import android.widget.TextView;
 
 import com.nathangawith.umkc.financeapp.constants.MyUtility;
 import com.nathangawith.umkc.financeapp.http.MyApi;
-import com.nathangawith.umkc.financeapp.dialogs.MyDialog;
 import com.nathangawith.umkc.financeapp.constants.MyState;
 import com.nathangawith.umkc.financeapp.R;
 import com.nathangawith.umkc.financeapp.dtos.TokenResponseDto;
@@ -50,8 +46,8 @@ public class MainActivity extends AppCompatActivity {
         this.progressBar.setVisibility(View.INVISIBLE);
         // initialize spinner
         this.spinnerApiUrlOptions = new ArrayList<String>();
-        spinnerApiUrlOptions.add("http://pi.nathangawith.com:900/");
         spinnerApiUrlOptions.add("http://10.0.0.26:9090/");
+        spinnerApiUrlOptions.add("http://pi.nathangawith.com:900/");
         spinnerApiUrlOptions.add("http://nathang2018:9090/");
         MainActivity me = this;
         MyUtility.initializeSpinner(this, this.spinnerApiUrl, this.spinnerApiUrlOptions, new OnItemSelectedListener() {
@@ -96,16 +92,14 @@ public class MainActivity extends AppCompatActivity {
             this.loading(false);
             this.lblToken.setText(resp.token);
             if (resp.token.equals("null")) {
-                new MyDialog("Invalid login", "Please contact your system administrator")
-                        .show(getSupportFragmentManager(), null);
+                MyUtility.okDialog(getSupportFragmentManager(), "Invalid login", "Please contact your system administrator");
             } else {
                 MyState.TOKEN = resp.token;
                 this.getMoveToNextActivityThread().start();
             }
         }, data -> {
             this.loading(false);
-            new MyDialog("Error, Please contact your system administrator", data.getMessage())
-                    .show(getSupportFragmentManager(), null);
+            MyUtility.okDialog(getSupportFragmentManager(), "Error, Please contact your system administrator", data.getMessage());
         });
     }
 

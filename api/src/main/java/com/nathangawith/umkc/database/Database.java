@@ -75,6 +75,9 @@ public class Database implements IDatabase {
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		for (String param : params)
 			prepStmt.setString(++paramIndex, param);
+		System.out.println("----------------");
+		System.out.println(prepStmt);
+		System.out.println("----------------");
 		if (dml) {
 			prepStmt.execute();
 			return null;

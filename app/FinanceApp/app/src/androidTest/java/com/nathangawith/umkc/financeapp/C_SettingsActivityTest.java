@@ -26,7 +26,11 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
-public class C_SettingsActivityTest {
+public class C_SettingsActivityTest extends TestBase {
+
+    public C_SettingsActivityTest() {
+        super();
+    }
 
     @Rule
     public ActivityTestRule<SettingsActivity> mActivityActivityTestRule = new ActivityTestRule<SettingsActivity>(SettingsActivity.class);

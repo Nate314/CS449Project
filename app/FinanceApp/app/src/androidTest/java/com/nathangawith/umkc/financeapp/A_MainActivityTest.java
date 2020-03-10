@@ -22,12 +22,15 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.*;
 
 @RunWith(AndroidJUnit4.class)
-public class A_MainActivityTest {
+public class A_MainActivityTest extends TestBase {
+
+    public A_MainActivityTest() {
+        super();
+    }
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityActivityTestRule = new ActivityTestRule<MainActivity>(MainActivity.class);
     private MainActivity mActivity = null;
-//    private Instrumentation.ActivityMonitor monitor = getInstrumentation().addMonitor(SecondActivity.class.getName(), null, false);
 
     @Before
     public void setUp() throws Exception {

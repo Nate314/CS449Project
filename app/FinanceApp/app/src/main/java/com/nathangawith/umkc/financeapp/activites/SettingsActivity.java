@@ -10,8 +10,8 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.nathangawith.umkc.financeapp.constants.MyUtility;
 import com.nathangawith.umkc.financeapp.http.MyApi;
-import com.nathangawith.umkc.financeapp.dialogs.MyDialog;
 import com.nathangawith.umkc.financeapp.R;
 import com.nathangawith.umkc.financeapp.dtos.DBAccount;
 import com.nathangawith.umkc.financeapp.dtos.DBCategory;
@@ -110,7 +110,6 @@ public class SettingsActivity extends AppCompatActivity {
      */
     private Consumer<GenericResponse> okFunc = resp -> {
         this.loading(false);
-        // new MyDialog("Ok Response", resp.response).show(getSupportFragmentManager(), null);
         this.labelToClear.setText("");
     };
 
@@ -120,7 +119,7 @@ public class SettingsActivity extends AppCompatActivity {
      */
     private Consumer<GenericResponse> errFunc = data -> {
         this.loading(false);
-        new MyDialog("Error Response", data.response).show(getSupportFragmentManager(), null);
+        MyUtility.okDialog(getSupportFragmentManager(), "Error Response", data.response);
     };
 
     /**
@@ -128,7 +127,7 @@ public class SettingsActivity extends AppCompatActivity {
      * @param view button view
      */
     public void btnAddAccountClick(View view) {
-        if (!this.txtAddExpenseCategory.getText().toString().equals("")) {
+        if (!this.txtAddAccount.getText().toString().equals("")) {
             this.labelToClear = this.txtAddAccount;
             String accountDescription = this.txtAddAccount.getText().toString();
             this.loading(true);
@@ -137,7 +136,7 @@ public class SettingsActivity extends AppCompatActivity {
                 this.getAllAccounts();
             }, errFunc);
         } else {
-            new MyDialog("Please enter an Account", "").show(getSupportFragmentManager(), null);
+            MyUtility.okDialog(getSupportFragmentManager(), "Please enter an Account", "");
         }
     }
 
@@ -146,7 +145,7 @@ public class SettingsActivity extends AppCompatActivity {
      * @param view button view
      */
     public void btnAddIncomeCategoryClick(View view) {
-        if (!this.txtAddExpenseCategory.getText().toString().equals("")) {
+        if (!this.txtAddIncomeCategory.getText().toString().equals("")) {
             this.labelToClear = this.txtAddIncomeCategory;
             String incomeCategoryDescription = this.txtAddIncomeCategory.getText().toString();
             this.loading(true);
@@ -155,7 +154,7 @@ public class SettingsActivity extends AppCompatActivity {
                 this.getAllCategories(true);
             }, errFunc);
         } else {
-            new MyDialog("Please enter an Income Category", "").show(getSupportFragmentManager(), null);
+            MyUtility.okDialog(getSupportFragmentManager(), "Please enter an Income Category", "");
         }
     }
 
@@ -173,7 +172,7 @@ public class SettingsActivity extends AppCompatActivity {
                 this.getAllCategories(false);
             }, errFunc);
         } else {
-            new MyDialog("Please enter an Expense Category", "").show(getSupportFragmentManager(), null);
+            MyUtility.okDialog(getSupportFragmentManager(), "Please enter an Expense Category", "");
         }
     }
 

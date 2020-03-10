@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activites.IncomeExpenseActivity"></activity>
+        <activity android:name=".activites.RegisterActivity"></activity>
+        <activity android:name=".activites.IncomeExpenseActivity" />
         <activity android:name=".activites.MenuActivity" />
         <activity android:name=".activites.SettingsActivity" />
         <activity android:name=".activites.MainActivity">

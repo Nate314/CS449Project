@@ -5,7 +5,6 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 
 import com.nathangawith.umkc.financeapp.activites.IncomeExpenseActivity;
-import com.nathangawith.umkc.financeapp.activites.SettingsActivity;
 import com.nathangawith.umkc.financeapp.constants.MyConstants;
 import com.nathangawith.umkc.financeapp.constants.MyState;
 
@@ -37,7 +36,11 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
-public class B_IncomeExpenseActivityTest {
+public class B_IncomeExpenseActivityTest extends TestBase {
+
+    public B_IncomeExpenseActivityTest() {
+        super();
+    }
 
     @Rule
     public ActivityTestRule<IncomeExpenseActivity> mActivityActivityTestRule = new ActivityTestRule<IncomeExpenseActivity>(IncomeExpenseActivity.class);
