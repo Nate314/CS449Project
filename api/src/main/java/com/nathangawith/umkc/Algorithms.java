@@ -36,7 +36,11 @@ public class Algorithms {
                 Object o = field.get(object);
                 if (o != null) {
                     String value = field.getType().isPrimitive() ? "%s" : "\"%s\"";
-                    result += String.format("\"%s\":%s,", field.getName(), String.format(value, o.toString()));
+                    if (field.getName().toUpperCase().contains("DATE")) {
+                        result += String.format("\"%s\":%s,", field.getName(), String.format(value, Algorithms.dateToString((Date) o)));
+                    } else {
+                        result += String.format("\"%s\":%s,", field.getName(), String.format(value, o.toString()));
+                    }
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();

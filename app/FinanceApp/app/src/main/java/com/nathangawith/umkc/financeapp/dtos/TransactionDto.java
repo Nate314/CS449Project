@@ -11,5 +11,5 @@ public class TransactionDto {
     public String CategoryDescription;
     public String Description;
     public double Amount;
-    public Date Date;
+    public String Date;
 }

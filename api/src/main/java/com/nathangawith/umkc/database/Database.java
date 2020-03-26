@@ -7,7 +7,9 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -20,6 +22,12 @@ import com.nathangawith.umkc.Config;
 public class Database implements IDatabase {
 
 	public Database() {
+	}
+	
+	private <T extends Object> String getMatchingFieldName(Class<T> type, String column) {
+		List<String> typeFieldNames = Arrays.asList(type.getFields()).stream().map(field -> field.getName()).collect(Collectors.toList());
+		List<String> results = typeFieldNames.stream().filter(x -> x.toUpperCase().equals(column.toUpperCase())).collect(Collectors.toList());
+		return results.size() > 0 ? results.get(0) : null;
 	}
 
 	@Override
@@ -35,7 +43,9 @@ public class Database implements IDatabase {
 				JSONObject jsonOBJ = new JSONObject();
 				for (int i = 1; i <= numColumns; i++) {
 					String column_name = rsmd.getColumnName(i);
-					jsonOBJ.put(column_name, rs.getObject(column_name));
+					String column_label = rsmd.getColumnLabel(i);
+					String field_name = this.getMatchingFieldName(type, column_label);
+					jsonOBJ.put(field_name, rs.getObject(column_name));
 				}
 				json.put(jsonOBJ);
 			}

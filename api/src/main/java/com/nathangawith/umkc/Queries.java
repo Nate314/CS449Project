@@ -13,10 +13,11 @@ public class Queries {
 	public static final String INSERT_TRANSACTION = "INSERT INTO transactions (UserID, AccountID, CategoryID, Description, Amount, Date) VALUES (?, ?, ?, ?, ?, ?)";
 	public static final String GET_REGISTER_TOTAL = "SELECT SUM(amount) AS DOUBLE_RESPONSE FROM transactions WHERE userid = ?";
 	public static final String GET_TRANSACTIONS   = 
-		"SELECT t.transactionid, t.userid, t.accountid, t.description, t.amount, t.date,"
-		+ "\n\t" + "a.description AS accountdescription, c.description AS categorydescription" 
-		+ "\n" + "FROM transactions t" 
-		+ "\n\t" + "JOIN accounts a ON t.AccountID = a.AccountID" 
-		+ "\n\t" + "JOIN categories c ON t.CategoryID = c.CategoryID" 
-		+ "\n" + "WHERE t.userid = ?";
+		"SELECT transactions.transactionid, transactions.userid, transactions.accountid,"
+		+ "\n\t" + "transactions.description, transactions.amount, transactions.date,"
+		+ "\n\t" + "accounts.description AS accountdescription, categories.description AS categorydescription" 
+		+ "\n" + "FROM transactions" 
+		+ "\n\t" + "JOIN accounts ON transactions.AccountID = accounts.AccountID" 
+		+ "\n\t" + "JOIN categories ON transactions.CategoryID = categories.CategoryID" 
+		+ "\n" + "WHERE transactions.userid = ?";
 }

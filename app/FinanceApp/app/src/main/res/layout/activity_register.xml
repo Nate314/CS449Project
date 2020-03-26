@@ -1,54 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:fillViewport="false">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activites.RegisterActivity">
 
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <TextView
+        android:id="@+id/lblScreenName"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".activites.RegisterActivity">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="Register"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="36sp" />
 
-        <TextView
-            android:id="@+id/lblScreenName"
-            android:layout_marginRight="10dp"
-            android:text="Register"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="36sp"
+    <TextView
+        android:id="@+id/lblTotal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="70dp"
+        android:gravity="center"
+        android:text="Total: $"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="24sp" />
+
+<!--    <ScrollView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="120dp"-->
+<!--        android:fillViewport="false">-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/lblTempTransactions"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:gravity="center"-->
+<!--            android:text=""-->
+<!--            android:textColor="@color/colorPrimaryDark"-->
+<!--            android:textSize="18sp" />-->
+
+<!--    </ScrollView>-->
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="120dp"
+        android:fillViewport="true">
+
+        <ListView
+            android:id="@+id/listTransactions"
+            android:layout_width="wrap_content"
+            android:layout_height="1000dp">
+        </ListView>
+
+    </ScrollView>
+
+    <!--
+        Tutorial used to make floating action menu
+        https://www.youtube.com/watch?v=XsdG_6i5YIk
+    -->
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="150dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        app:fab_addButtonColorNormal="@color/colorPrimaryDark"
+        app:fab_addButtonColorPressed="@color/colorPrimary"
+        app:fab_addButtonPlusIconColor="@color/cardview_light_background"
+        app:fab_expandDirection="up">
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnFloatingIncome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:layout_gravity="center"
-            android:gravity="center" />
+            android:onClick="btnFloatingIncomeClick"
+            app:fab_colorNormal="@color/colorPrimary"
+            app:fab_colorPressed="@color/colorPrimary"
+            app:fab_icon="@drawable/income_white"
+            app:fab_size="mini"
+            app:fab_title="Income" />
 
-        <TextView
-            android:id="@+id/lblTotal"
-            android:layout_marginRight="10dp"
-            android:text="Total: $"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="24sp"
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnFloatingExpense"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_gravity="center"
-            android:gravity="center" />
+            android:onClick="btnFloatingExpenseClick"
+            app:fab_colorNormal="@color/colorPrimary"
+            app:fab_colorPressed="@color/colorPrimary"
+            app:fab_icon="@drawable/expense_white"
+            app:fab_size="mini"
+            app:fab_title="Expense" />
 
-        <TextView
-            android:id="@+id/lblTempTransactions"
-            android:layout_marginRight="10dp"
-            android:text=""
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="18sp"
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnFloatingTransfer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:layout_gravity="center"
-            android:gravity="center" />
+            android:onClick="btnFloatingTransferClick"
+            app:fab_colorNormal="@color/colorPrimary"
+            app:fab_colorPressed="@color/colorPrimary"
+            app:fab_icon="@drawable/income_white"
+            app:fab_size="mini"
+            app:fab_title="transfer" />
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
-    </LinearLayout>
+</RelativeLayout>
 
-</ScrollView>

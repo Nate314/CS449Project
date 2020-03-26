@@ -103,8 +103,10 @@ public class MyHttpClient {
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject obj) {
                 System.out.println("-------- obj Failure --------");
                 System.out.println(statusCode);
-                for (Header header : headers) {
-                    System.out.printf("%s: %s\n", header.getName(), header.getValue());
+                if (headers != null && headers.length > 0) {
+                    for (Header header : headers) {
+                        System.out.printf("%s: %s\n", header.getName(), header.getValue());
+                    }
                 }
                 System.out.println(obj.toString());
                 System.out.println(throwable.getMessage());
