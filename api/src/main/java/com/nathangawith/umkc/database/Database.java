@@ -45,7 +45,11 @@ public class Database implements IDatabase {
 					String column_name = rsmd.getColumnName(i);
 					String column_label = rsmd.getColumnLabel(i);
 					String field_name = this.getMatchingFieldName(type, column_label);
-					jsonOBJ.put(field_name, rs.getObject(column_name));
+					if (field_name == null) {
+						System.out.println("ERR");
+					} else {
+						jsonOBJ.put(field_name, rs.getObject(column_label));	
+					}
 				}
 				json.put(jsonOBJ);
 			}

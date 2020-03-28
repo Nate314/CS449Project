@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".activites.MainActivity">
+        tools:context=".activites.LoginActivity">
 
         <TextView
             android:id="@+id/lblAppName"
@@ -70,7 +70,8 @@
                 android:imeActionLabel="hl"
                 android:inputType="textPassword"
                 android:maxLength="20"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:imeOptions="actionSend" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button

@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
@@ -21,7 +23,7 @@ import com.nathangawith.umkc.financeapp.dtos.TokenResponseDto;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     private Spinner spinnerApiUrl;
     private EditText txtUsername;
@@ -35,8 +37,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         // create layout
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
         // initialize fields to ui elements
+        LoginActivity me = this;
         this.spinnerApiUrl = findViewById(R.id.spinnerApiUrl);
         this.txtUsername = findViewById(R.id.txtUsername);
         this.txtPassword = findViewById(R.id.txtPassword);
@@ -44,12 +47,22 @@ public class MainActivity extends AppCompatActivity {
         this.btnLogin = findViewById(R.id.btnLogin);
         this.progressBar = findViewById(R.id.progressBar);
         this.progressBar.setVisibility(View.INVISIBLE);
+        this.txtPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView exampleView, int actionId, KeyEvent event) {
+                // If the event is a key-down event on the "enter" button
+                if (actionId == EditorInfo.IME_NULL && event.getAction() == KeyEvent.ACTION_DOWN) {
+                    // Perform action on key press
+                    me.btnLoginClick(null);
+                    return true;
+                }
+                return false;
+            }
+        });
         // initialize spinner
         this.spinnerApiUrlOptions = new ArrayList<String>();
         spinnerApiUrlOptions.add("http://pi.nathangawith.com:900/");
         spinnerApiUrlOptions.add("http://10.0.0.26:9090/");
         spinnerApiUrlOptions.add("http://nathang2018:9090/");
-        MainActivity me = this;
         MyUtility.initializeSpinner(this, this.spinnerApiUrl, this.spinnerApiUrlOptions, new OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -87,20 +100,25 @@ public class MainActivity extends AppCompatActivity {
     public void btnLoginClick(View view) {
         String username = this.txtUsername.getText().toString();
         String password = this.txtPassword.getText().toString();
-        this.loading(true);
-        MyApi.postLogin(getApplicationContext(), new TokenResponseDto(), username, password, resp -> {
-            this.loading(false);
-            this.lblToken.setText(resp.token);
-            if (resp.token.equals("null")) {
-                MyUtility.okDialog(getSupportFragmentManager(), "Invalid login", "Please contact your system administrator");
-            } else {
-                MyState.TOKEN = resp.token;
-                this.getMoveToNextActivityThread().start();
-            }
-        }, data -> {
-            this.loading(false);
-            MyUtility.okDialog(getSupportFragmentManager(), "Error, Please contact your system administrator", data.getMessage());
-        });
+        if (username != null && password != null) {
+            username = username.toLowerCase();
+            this.loading(true);
+            MyApi.postLogin(getApplicationContext(), new TokenResponseDto(), username, password, resp -> {
+                this.loading(false);
+                this.lblToken.setText(resp.token);
+                if (resp.token.equals("null")) {
+                    MyUtility.okDialog(getSupportFragmentManager(), "Invalid login", "Please contact your system administrator");
+                } else {
+                    MyState.TOKEN = resp.token;
+                    this.getMoveToNextActivityThread().start();
+                }
+            }, data -> {
+                this.loading(false);
+                MyUtility.okDialog(getSupportFragmentManager(), "Error, Please contact your system administrator", data.getMessage());
+            });
+        } else {
+            MyUtility.okDialog(getSupportFragmentManager(), "Error", "Please enter a username and password");
+        }
     }
 
     /**

@@ -15,7 +15,7 @@
         <activity android:name=".activites.IncomeExpenseActivity" />
         <activity android:name=".activites.MenuActivity" />
         <activity android:name=".activites.SettingsActivity" />
-        <activity android:name=".activites.MainActivity">
+        <activity android:name=".activites.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

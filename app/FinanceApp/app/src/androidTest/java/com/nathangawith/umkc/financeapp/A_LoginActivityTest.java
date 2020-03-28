@@ -1,9 +1,8 @@
 package com.nathangawith.umkc.financeapp;
 
-import android.view.View;
 import android.widget.TextView;
 
-import com.nathangawith.umkc.financeapp.activites.MainActivity;
+import com.nathangawith.umkc.financeapp.activites.LoginActivity;
 
 import org.junit.After;
 import org.junit.Before;
@@ -22,15 +21,15 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.*;
 
 @RunWith(AndroidJUnit4.class)
-public class A_MainActivityTest extends TestBase {
+public class A_LoginActivityTest extends TestBase {
 
-    public A_MainActivityTest() {
+    public A_LoginActivityTest() {
         super();
     }
 
     @Rule
-    public ActivityTestRule<MainActivity> mActivityActivityTestRule = new ActivityTestRule<MainActivity>(MainActivity.class);
-    private MainActivity mActivity = null;
+    public ActivityTestRule<LoginActivity> mActivityActivityTestRule = new ActivityTestRule<LoginActivity>(LoginActivity.class);
+    private LoginActivity mActivity = null;
 
     @Before
     public void setUp() throws Exception {

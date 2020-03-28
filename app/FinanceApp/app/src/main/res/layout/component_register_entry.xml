@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    https://www.youtube.com/watch?v=B3_YztWhn44
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="90dp"
+    android:minHeight="90dp"
+    android:background="@drawable/border" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp" >
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imgTransaction"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@mipmap/ic_launcher" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/lblTransactionDescription"
+                android:text="Transaction Description"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:textColor="@color/black" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:orientation="horizontal"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/lblTransactionAmount"
+                    android:text="$ Amount"
+                    android:textStyle="normal"
+                    android:textSize="16dp"
+                    android:textColor="@color/almostblack" />
+
+                <TextView
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/lblTransactionDate"
+                    android:text="YYYY-MM-DD"
+                    android:textStyle="normal"
+                    android:textSize="16dp"
+                    android:textColor="@color/almostblack" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:id="@+id/lblTransactionAccount"
+            android:text="Account"
+            android:textStyle="normal"
+            android:textSize="20dp"
+            android:textColor="@color/almostblack" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:id="@+id/lblTransactionCategory"
+            android:text="Category"
+            android:textStyle="normal"
+            android:gravity="right"
+            android:textAlignment="gravity"
+            android:textSize="20dp"
+            android:textColor="@color/almostblack" />
+
+    </LinearLayout>
+
+</LinearLayout>

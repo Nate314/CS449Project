@@ -1,7 +1,7 @@
 package com.nathangawith.umkc.financeapp;
 
-import com.nathangawith.umkc.financeapp.activites.MainActivity;
-import com.nathangawith.umkc.financeapp.activites.TokenResponseDto;
+import com.nathangawith.umkc.financeapp.activites.LoginActivity;
+import com.nathangawith.umkc.financeapp.dtos.TokenResponseDto;
 import com.nathangawith.umkc.financeapp.http.MyApi;
 
 import org.junit.After;
@@ -12,9 +12,9 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.function.Consumer;
 
-public class MainActivityUnitTest {
+public class LoginActivityUnitTest {
 
-    private MainActivity mActivity;
+    private LoginActivity mActivity;
 
     @Mock
     private MyApi api;
@@ -22,7 +22,7 @@ public class MainActivityUnitTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        mActivity = new MainActivity();
+        mActivity = new LoginActivity();
     }
 
     @After

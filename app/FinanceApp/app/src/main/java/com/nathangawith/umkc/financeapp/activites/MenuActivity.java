@@ -40,6 +40,7 @@ public class MenuActivity extends AppCompatActivity {
      */
     public void btnIncomeClick(View view) {
         MyState.SCREEN = MyConstants.INCOME;
+        MyState.LAST_SCREEN = MyConstants.MENU;
         startActivity(new Intent(this, IncomeExpenseActivity.class));
     }
 
@@ -49,6 +50,7 @@ public class MenuActivity extends AppCompatActivity {
      */
     public void btnExpenseClick(View view) {
         MyState.SCREEN = MyConstants.EXPENSE;
+        MyState.LAST_SCREEN = MyConstants.MENU;
         startActivity(new Intent(this, IncomeExpenseActivity.class));
     }
 
@@ -73,6 +75,6 @@ public class MenuActivity extends AppCompatActivity {
      * @param view button view
      */
     public void btnLogOutClick(View view) {
-        startActivity(new Intent(this, MainActivity.class));
+        startActivity(new Intent(this, LoginActivity.class));
     }
 }

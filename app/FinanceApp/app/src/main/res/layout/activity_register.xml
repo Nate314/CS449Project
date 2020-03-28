@@ -8,12 +8,21 @@
     android:orientation="vertical"
     tools:context=".activites.RegisterActivity">
 
+    <Button
+        android:id="@+id/btnBack"
+        android:onClick="btnBackClick"
+        android:text="Back"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center" />
+
     <TextView
         android:id="@+id/lblScreenName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="45dp"
         android:gravity="center"
         android:text="Register"
         android:textColor="@color/colorPrimaryDark"
@@ -24,48 +33,42 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="95dp"
         android:gravity="center"
         android:text="Total: $"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="24sp" />
 
-<!--    <ScrollView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="120dp"-->
-<!--        android:fillViewport="false">-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/lblTempTransactions"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_gravity="center"-->
-<!--            android:gravity="center"-->
-<!--            android:text=""-->
-<!--            android:textColor="@color/colorPrimaryDark"-->
-<!--            android:textSize="18sp" />-->
-
-<!--    </ScrollView>-->
-
-    <ScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:layout_marginTop="120dp"
-        android:fillViewport="true">
-
-        <ListView
-            android:id="@+id/listTransactions"
-            android:layout_width="wrap_content"
-            android:layout_height="1000dp">
-        </ListView>
-
-    </ScrollView>
-
     <!--
         Tutorial used to make floating action menu
         https://www.youtube.com/watch?v=XsdG_6i5YIk
     -->
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="125dp"
+        android:fillViewport="true">
+
+        <!--
+            Tutorial used to make SwipeRefreshLayout
+            https://www.youtube.com/watch?v=rGTy8sjcuG8
+        -->
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ListView
+                android:id="@+id/listTransactions"
+                android:layout_width="wrap_content"
+                android:layout_height="1000dp"></ListView>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    </ScrollView>
+
+
+
     <com.getbase.floatingactionbutton.FloatingActionsMenu
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

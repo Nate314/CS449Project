@@ -3,6 +3,7 @@ package com.nathangawith.umkc.financeapp.activites;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -156,6 +157,14 @@ public class IncomeExpenseActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    private void sendToLastActivity() {
+        if (MyState.LAST_SCREEN == MyConstants.MENU) {
+            startActivity(new Intent(this, MenuActivity.class));
+        } else if (MyState.LAST_SCREEN == MyConstants.REGISTER) {
+            startActivity(new Intent(this, RegisterActivity.class));
+        }
+    }
+
     /**
      * submit transaction
      * @param view button view
@@ -176,6 +185,7 @@ public class IncomeExpenseActivity extends AppCompatActivity {
             MyApi.postTransaction(getApplicationContext(), this.income, transaction, x -> {
                     this.loading(false);
                     this.clearFields();
+                    this.sendToLastActivity();
                 },
                 x -> MyUtility.okDialog(getSupportFragmentManager(), "Error", x.response));
         } else {

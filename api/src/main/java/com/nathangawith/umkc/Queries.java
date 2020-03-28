@@ -19,5 +19,6 @@ public class Queries {
 		+ "\n" + "FROM transactions" 
 		+ "\n\t" + "JOIN accounts ON transactions.AccountID = accounts.AccountID" 
 		+ "\n\t" + "JOIN categories ON transactions.CategoryID = categories.CategoryID" 
-		+ "\n" + "WHERE transactions.userid = ?";
+		+ "\n" + "WHERE transactions.userid = ?"
+		+ "\n" + "ORDER BY date DESC";
 }
