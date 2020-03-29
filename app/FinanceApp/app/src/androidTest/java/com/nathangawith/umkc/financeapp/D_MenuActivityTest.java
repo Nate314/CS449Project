@@ -54,33 +54,14 @@ public class D_MenuActivityTest extends TestBase {
     }
 
     @Test
-    public void testLaunch() {
-        View[] views = new View[] {
+    public void a_testLaunch() {
+        testLaunch(new View[] {
             mActivity.findViewById(R.id.btnSettings),
             mActivity.findViewById(R.id.btnLogOut),
             mActivity.findViewById(R.id.btnIncome),
             mActivity.findViewById(R.id.btnExpense),
             mActivity.findViewById(R.id.btnRegister)
-        };
-
-        System.out.println("----------------VIEW----------------");
-        for (View view : views) {
-            System.out.println(view.toString());
-        }
-        System.out.println("----------------VIEW----------------");
-
-        for (View view : views) {
-            assertNotNull(view);
-        }
-    }
-
-    private void safeSleep(long millis) {
-        try {
-            Thread.sleep(millis);
-        }
-        catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        });
     }
 
     private void btnClickTest(int id, Instrumentation.ActivityMonitor monitor, String title) {
@@ -95,22 +76,25 @@ public class D_MenuActivityTest extends TestBase {
     }
 
     @Test
-    public void btnIncome(){
+    public void b_btnIncome(){
         btnClickTest(R.id.btnIncome, incomeexpenseMonitor, "Income");
     }
 
     @Test
-    public void btnExpense(){
+    public void c_btnExpense(){
         btnClickTest(R.id.btnExpense, incomeexpenseMonitor, "Expense");
     }
 
     @Test
-    public void btnRegister(){
+    public void d_btnRegister(){
         btnClickTest(R.id.btnRegister, registerMonitor, "Register");
     }
 
     @Test
-    public void btnSettings(){
+    public void e_btnSettings(){
         btnClickTest(R.id.btnSettings, settingsMonitor, "Settings");
     }
+
+    @Test
+    public void z_finish(){ mActivity.finish(); }
 }

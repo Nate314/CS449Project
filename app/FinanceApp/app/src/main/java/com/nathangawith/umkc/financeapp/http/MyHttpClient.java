@@ -108,7 +108,9 @@ public class MyHttpClient {
                         System.out.printf("%s: %s\n", header.getName(), header.getValue());
                     }
                 }
-                System.out.println(obj.toString());
+                if (obj != null) {
+                    System.out.println(obj.toString());
+                }
                 System.out.println(throwable.getMessage());
                 System.out.println("-------- obj Failure --------");
                 errObCallback.accept(obj);

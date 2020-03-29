@@ -13,6 +13,8 @@ import androidx.fragment.app.FragmentManager;
 
 public class MyUtility {
 
+    public static boolean isRunningTest = false;
+
     public static void initializeSpinner(Context context, Spinner spinner, ArrayList<String> options, AdapterView.OnItemSelectedListener listener) {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, options);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

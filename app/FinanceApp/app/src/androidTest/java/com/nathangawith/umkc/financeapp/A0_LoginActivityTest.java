@@ -1,5 +1,6 @@
 package com.nathangawith.umkc.financeapp;
 
+import android.view.View;
 import android.widget.TextView;
 
 import com.nathangawith.umkc.financeapp.activites.LoginActivity;
@@ -21,9 +22,9 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.*;
 
 @RunWith(AndroidJUnit4.class)
-public class A_LoginActivityTest extends TestBase {
+public class A0_LoginActivityTest extends TestBase {
 
-    public A_LoginActivityTest() {
+    public A0_LoginActivityTest() {
         super();
     }
 
@@ -41,36 +42,17 @@ public class A_LoginActivityTest extends TestBase {
         mActivity = null;
     }
 
-//    @Test
-//    public void testLaunch() {
-//        View[] views = new View[] {
-//            mActivity.findViewById(R.id.lblAppName),
-//            mActivity.findViewById(R.id.spinnerApiUrl),
-//            mActivity.findViewById(R.id.txtUsername),
-//            mActivity.findViewById(R.id.txtPassword),
-//            mActivity.findViewById(R.id.btnLogin),
-//            mActivity.findViewById(R.id.progressBar),
-//            mActivity.findViewById(R.id.lblToken)
-//        };
-//
-//        System.out.println("----------------VIEW----------------");
-//        for (View view : views) {
-//            System.out.println(view.toString());
-//        }
-//        System.out.println("----------------VIEW----------------");
-//
-//        for (View view : views) {
-//            assertNotNull(view);
-//        }
-//    }
-
-    private void safeSleep(long millis) {
-        try {
-            Thread.sleep(millis);
-        }
-        catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    @Test
+    public void a_testLaunch() {
+        testLaunch(new View[] {
+            mActivity.findViewById(R.id.lblAppName),
+            mActivity.findViewById(R.id.spinnerApiUrl),
+            mActivity.findViewById(R.id.txtUsername),
+            mActivity.findViewById(R.id.txtPassword),
+            mActivity.findViewById(R.id.btnLogin),
+            mActivity.findViewById(R.id.progressBar),
+            mActivity.findViewById(R.id.lblToken)
+        });
     }
 
     private void enterUsernameAndPassword(String username, String password) {
@@ -79,16 +61,8 @@ public class A_LoginActivityTest extends TestBase {
         closeSoftKeyboard();
     }
 
-//    @Test
-//    public void txtFieldsEditable(){
-//        enterUsernameAndPassword("nathan", "password");
-//
-//        assertEquals(((EditText) mActivity.findViewById(R.id.txtUsername)).getText().toString(), "nathan");
-//        assertEquals(((EditText) mActivity.findViewById(R.id.txtPassword)).getText().toString(), "password");
-//    }
-
     @Test
-    public void btnLogin(){
+    public void b_btnLogin() {
         // https://www.youtube.com/watch?v=dyyTr-zl5v0
         enterUsernameAndPassword("nathan", "password");
         onView(withId(R.id.btnLogin)).perform(click());
@@ -97,4 +71,7 @@ public class A_LoginActivityTest extends TestBase {
         assertNotNull(token);
         assertTrue(token.startsWith("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9"));
     }
+
+    @Test
+    public void z_finish(){ mActivity.finish(); }
 }

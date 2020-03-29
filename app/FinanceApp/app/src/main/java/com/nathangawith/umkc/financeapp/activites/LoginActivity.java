@@ -2,6 +2,7 @@ package com.nathangawith.umkc.financeapp.activites;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -60,9 +61,15 @@ public class LoginActivity extends AppCompatActivity {
         });
         // initialize spinner
         this.spinnerApiUrlOptions = new ArrayList<String>();
-        spinnerApiUrlOptions.add("http://pi.nathangawith.com:900/");
-        spinnerApiUrlOptions.add("http://10.0.0.26:9090/");
-        spinnerApiUrlOptions.add("http://nathang2018:9090/");
+        if (MyUtility.isRunningTest) {
+            spinnerApiUrlOptions.add("http://10.0.0.26:9090/");
+            spinnerApiUrlOptions.add("http://pi.nathangawith.com:900/");
+            spinnerApiUrlOptions.add("http://nathang2018:9090/");
+        } else {
+            spinnerApiUrlOptions.add("http://pi.nathangawith.com:900/");
+            spinnerApiUrlOptions.add("http://10.0.0.26:9090/");
+            spinnerApiUrlOptions.add("http://nathang2018:9090/");
+        }
         MyUtility.initializeSpinner(this, this.spinnerApiUrl, this.spinnerApiUrlOptions, new OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -130,7 +137,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(0);
+                    Thread.sleep(MyUtility.isRunningTest ? 5000 : 0);
                     startActivity(new Intent(me, MenuActivity.class));
                 } catch (Exception e) {
                     e.printStackTrace();

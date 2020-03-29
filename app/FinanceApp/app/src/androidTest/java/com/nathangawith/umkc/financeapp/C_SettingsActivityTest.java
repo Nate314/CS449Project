@@ -14,15 +14,9 @@ import org.junit.runner.RunWith;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
-import static androidx.test.espresso.Espresso.closeSoftKeyboard;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
@@ -47,8 +41,8 @@ public class C_SettingsActivityTest extends TestBase {
     }
 
     @Test
-    public void testLaunch() {
-        View[] views = new View[] {
+    public void a_testLaunch() {
+        testLaunch(new View[] {
             mActivity.findViewById(R.id.txtAddAccount),
             mActivity.findViewById(R.id.btnAddAccount),
             mActivity.findViewById(R.id.lblAccounts),
@@ -58,31 +52,7 @@ public class C_SettingsActivityTest extends TestBase {
             mActivity.findViewById(R.id.txtAddExpenseCategory),
             mActivity.findViewById(R.id.btnAddExpenseCategory),
             mActivity.findViewById(R.id.lblExpenseCategories)
-        };
-
-        System.out.println("----------------VIEW----------------");
-        for (View view : views) {
-            System.out.println(view.toString());
-        }
-        System.out.println("----------------VIEW----------------");
-
-        for (View view : views) {
-            assertNotNull(view);
-        }
-    }
-
-    private void safeSleep(long millis) {
-        try {
-            Thread.sleep(millis);
-        }
-        catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void typeKeys(int id, String textToType) {
-        onView(withId(id)).perform(typeText(textToType));
-        closeSoftKeyboard();
+        });
     }
 
     private void lblUpdatesGeneric(int txtID, int btnID, int lblID) {
@@ -91,22 +61,27 @@ public class C_SettingsActivityTest extends TestBase {
         onView(withId(btnID)).perform(click());
         safeSleep(2000);
         String lblString = ((TextView) mActivity.findViewById(lblID)).getText().toString();
+        System.out.println("--------lblString--------");
+        System.out.println(lblString);
+        System.out.println("--------lblString--------");
         assertTrue(lblString.indexOf(", " + newDescription) != -1);
     }
 
     @Test
-    public void lblAccountsUpdates() {
+    public void b_lblAccountsUpdates() {
         this.lblUpdatesGeneric(R.id.txtAddAccount, R.id.btnAddAccount, R.id.lblAccounts);
     }
 
     @Test
-    public void lblIncomeCategoriesUpdates() {
+    public void c_lblIncomeCategoriesUpdates() {
         this.lblUpdatesGeneric(R.id.txtAddIncomeCategory, R.id.btnAddIncomeCategory, R.id.lblIncomeCategories);
     }
 
     @Test
-    public void lblExpenseCategoriesUpdates() {
+    public void d_lblExpenseCategoriesUpdates() {
         this.lblUpdatesGeneric(R.id.txtAddExpenseCategory, R.id.btnAddExpenseCategory, R.id.lblExpenseCategories);
     }
 
+    @Test
+    public void z_finish(){ mActivity.finish(); }
 }

@@ -24,7 +24,6 @@ import androidx.test.rule.ActivityTestRule;
 import static androidx.test.espresso.Espresso.closeSoftKeyboard;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
@@ -32,13 +31,11 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
-public class B_IncomeExpenseActivityTest extends TestBase {
+public class B0_IncomeExpenseActivityTest extends TestBase {
 
-    public B_IncomeExpenseActivityTest() {
+    public B0_IncomeExpenseActivityTest() {
         super();
     }
 
@@ -59,7 +56,7 @@ public class B_IncomeExpenseActivityTest extends TestBase {
 
     @Test
     public void a_testLaunch() {
-        View[] views = new View[] {
+        testLaunch(new View[] {
             mActivity.findViewById(R.id.lblScreenName),
             mActivity.findViewById(R.id.txtAmount),
             mActivity.findViewById(R.id.txtDescription),
@@ -68,36 +65,7 @@ public class B_IncomeExpenseActivityTest extends TestBase {
             mActivity.findViewById(R.id.btnSelectDate),
             mActivity.findViewById(R.id.lblDate),
             mActivity.findViewById(R.id.btnSubmit)
-        };
-
-        System.out.println("----------------VIEW----------------");
-        for (View view : views) {
-            System.out.println(view.toString());
-        }
-        System.out.println("----------------VIEW----------------");
-
-        safeSleep(2500);
-        for (View view : views) {
-            assertNotNull(view);
-        }
-    }
-
-    private void safeSleep(long millis) {
-        try {
-            Thread.sleep(millis);
-        }
-        catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void typeKeys(int id, String textToType) {
-        onView(withId(id)).perform(typeText(textToType));
-        closeSoftKeyboard();
-    }
-
-    private String getTextFromTextView(int id) {
-        return ((TextView) mActivity.findViewById(id)).getText().toString();
+        });
     }
 
     @Test
@@ -123,6 +91,7 @@ public class B_IncomeExpenseActivityTest extends TestBase {
 
     @Test
     public void c_fieldsRequired() {
+        MyState.LAST_SCREEN = MyConstants.INCOME;
         String newDescription = "@" + System.currentTimeMillis();
         Consumer<Boolean> clickSubmitAndCheckForRequiredMessage = requiredDisplayed -> {
             onView(withId(R.id.btnSubmit)).perform(click());
@@ -142,20 +111,5 @@ public class B_IncomeExpenseActivityTest extends TestBase {
     }
 
     @Test
-    public void d_enterInfo() {
-        String newDescription = "@" + (System.currentTimeMillis() + "") + (System.currentTimeMillis() + "") + (System.currentTimeMillis() + "");
-        typeKeys(R.id.txtAmount, "asdf3asdf.asdf1asdf4asdf");
-        assertEquals("3.14", getTextFromTextView(R.id.txtAmount));
-        typeKeys(R.id.txtDescription, newDescription);
-        assertEquals(newDescription.substring(0, 20), getTextFromTextView(R.id.txtDescription));
-        onView(withId(R.id.btnSelectDate)).perform(click());
-        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2019, 12, 10));
-        onView(withText("OK")).perform(click());
-        onView(withId(R.id.btnSubmit)).perform(click());
-        safeSleep(2500);
-        assertTrue(getTextFromTextView(R.id.txtAmount).equals(""));
-        assertTrue(getTextFromTextView(R.id.txtDescription).equals(""));
-        assertTrue(getTextFromTextView(R.id.lblDate).equals(""));
-    }
-
+    public void z_finish(){ mActivity.finish(); }
 }
