@@ -109,7 +109,7 @@
             android:onClick="btnFloatingTransferClick"
             app:fab_colorNormal="@color/colorPrimary"
             app:fab_colorPressed="@color/colorPrimary"
-            app:fab_icon="@drawable/income_white"
+            app:fab_icon="@drawable/transfer_white"
             app:fab_size="mini"
             app:fab_title="transfer" />
     </com.getbase.floatingactionbutton.FloatingActionsMenu>

@@ -208,22 +208,50 @@ Sprint Backlog
 | Story ID | Story / Task | Estimated Hours | Actual Hours |
 | --- | --- | --- | --- |
 | 5 | Create the Register screen |||
-| 5.1 | Register Screen - Total balance at top | 1:30 |  |
-| 5.2 | Register Screen - List of transactions | 7:00 |  |
-| 5.3 | Register Screen - Buttons to link to income/expense/transfer screens | 1:30 |  |
+| 5.1 | Register Screen - Total balance at top | 1:30 | 2:07 |
+| 5.2 | Register Screen - List of transactions | 7:00 | 6:22 |
+| 5.3 | Register Screen - Buttons to link to income/expense/transfer screens | 1:30 | 2:04 |
 | --- | --- | --- | --- |
-|  | Total | 10:00 |  |
+|  | Total | 10:00 | 10:33 |
 
 ## Sprint 3 Review
 
-[TODO]
+Video showing that the register screen works and links to the income/expense screens: https://youtu.be/wF2EpcTHk8U
+
+As you can see from the [screenshots below](#sprint-3-screenshots), what I achieved this sprint was:
+- Created Register screen
+  - Total displays at the top
+  - Each transaction is displayed in descending date order with:
+    - description
+    - amount
+    - date
+    - income/expense icon
+    - from/to category
+    - from/to account
+  - Register can be refreshed by swiping down
+  - 
+- Added Functionality to other screens
+  - Added register total to main menu
+  - Converted all text field inputs to material inputs with floating labels
+  - Login works with enter keypress
+  - Username is case insensitive
+  - All inputs can scroll up and down
+- Unit Tests for the API
+- Android Instrumentation Tests for the UI
 
 ## Sprint 3 Retrospective
 
-[TODO]
+What went well:
+- Estimates were close overall to the amount of time spent.
+- Total time spent was only 33 minutes over estimate of 10 hours.
+
+What didn't go well:
+- I thought I would be able to add more functionallity than I did to the Registration screen like sorting and filtering, but that will have to wait until a future task.
+
+Changes for future sprints:
+- None, this sprint was good overall.
 
 # Sprint 4
-[TODO]
 
 [TODO]
 
@@ -282,7 +310,8 @@ Sprint Backlog
 
 .|.
 :----:|:----:
-[TODO]|[TODO]
+![iter3_material_inputs.png](readme_assets/iter3_material_inputs.png?raw=true)|![iter3_menu_with_total.png](readme_assets/iter3_menu_with_total.png?raw=true)
+![iter3_register_actions.png](readme_assets/iter3_register_actions.png?raw=true)|![iter3_register_refreshing.png](readme_assets/iter3_register_refreshing.png?raw=true)
 
 # Sprint 4 Screenshots:
 
@@ -311,4 +340,3 @@ Sprint Backlog
 ![income_expense](readme_assets/income_expense.jpg?raw=true)|![register](readme_assets/register.jpg?raw=true)
 ![report_view](readme_assets/report_view.jpg?raw=true)|![reports](readme_assets/reports.jpg?raw=true)
 ![settings](readme_assets/settings.jpg?raw=true)|![transfer](readme_assets/transfer.jpg?raw=true)
-![login](readme_assets/login.jpg?raw=true)|
