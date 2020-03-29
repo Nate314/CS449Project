@@ -78,9 +78,9 @@ Stretch Goals:
 | ~~2~~ | ~~Create Login screen, allow user to log in to the application securely, and configure API URL~~ | ~~4~~ | ~~1.0~~ | ~~Sprint1~~ |
 | ~~3~~ | ~~Create Settings screen that allows for: - Creation of new accounts - Creation of new income categories - Creation of new expense categories~~ | ~~6~~ | ~~1.1~~ | ~~Sprint2~~ |
 | ~~4~~ | ~~Create the Income/Expense screen with: - Amount money field - Category dropdown - Date calendar input - Account dropdown - Description text field~~ | ~~6~~ | ~~1.2~~ | ~~Sprint2~~ |
-| 5 | Create the Register screen with: - Total balance at top - List of transactions - Buttons to link to income/expense/transfer screens | 10 | 1.3 | TODO |
-| 6 | Create Reports screen with: - Start/End date calendar inputs - Breakpoint selection (Month, Year) - Type selection (Category, Account) | 2 | 1.4 | TODO |
-| 7 | Create Report view screen with: - Table view of the report configured in the Reports screen | 6 | 1.5 | TODO |
+| ~~5~~ | ~~Create the Register screen with: - Total balance at top - List of transactions - Buttons to link to income/expense/transfer screens~~ | ~~10~~ | ~~1.3~~ | ~~Sprint3~~ |
+| 6 | Create Reports screen with: - Start/End date calendar inputs - Breakpoint selection (Month, Year) - Type selection (Category, Account) | 3 | 1.4 | Sprint4 |
+| 7 | Create Report view screen with: - Table view of the report configured in the Reports screen | 7 | 1.5 | Sprint4 |
 | 8 | Allow the user to edit/delete an account name, income/expense category or first/last name from the Settings screen | 2 | 2.0 | TODO |
 | 9 | Create Transfer screen with: - Same fields as Income/Expense screen - And To/From account dropdowns | 4 | 2.1 | TODO |
 | 10 | Integrate Google authentication | 3 | 3.0 | TODO |
@@ -253,7 +253,20 @@ Changes for future sprints:
 
 # Sprint 4
 
-[TODO]
+**Sprint Goal: Create "Report" and "Report View" screens**
+
+Sprint Backlog
+
+| Story ID | Story / Task | Estimated Hours | Actual Hours |
+| --- | --- | --- | --- |
+| 6 | Create Reports screen |  |  |
+| 6.1 | Reports screen: Start/End date calendar inputs | 1:00 |  |
+| 6.2 | Reports screen: Breakpoint selection (Month, Year) | 1:00 |  |
+| 6.3 | Reports screen: Type selection (Category, Account) | 1:00 |  |
+| 7 | Create Report View screen |  |  |
+| 7.1 | Report View screen: Table view of the report configured in the Reports screen | 7:00 |  |
+| --- | --- | --- | --- |
+|  | Total | 10:00 |  |
 
 ## Sprint 4 Review
 
