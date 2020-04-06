@@ -2,7 +2,6 @@ package com.nathangawith.umkc.financeapp.activites;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -31,7 +30,13 @@ public class MenuActivity extends AppCompatActivity {
     private void init() {
         MyApi.getTotal(getApplicationContext(), resp -> {
             this.lblTotal.setText(String.format("Total: %s", resp.response));
-        }, data -> MyUtility.okDialog(getSupportFragmentManager(), "Error", data.response));
+        }, data -> MyUtility.okDialog(this, "Error", data.response));
+    }
+
+    private <T> void goToActivity(Class<T> activity, String screen) {
+        MyState.SCREEN = screen;
+        MyState.LAST_SCREEN = MyConstants.MENU;
+        MyUtility.goToActivity(this, activity);
     }
 
     /**
@@ -39,9 +44,7 @@ public class MenuActivity extends AppCompatActivity {
      * @param view button view
      */
     public void btnIncomeClick(View view) {
-        MyState.SCREEN = MyConstants.INCOME;
-        MyState.LAST_SCREEN = MyConstants.MENU;
-        startActivity(new Intent(this, IncomeExpenseActivity.class));
+        this.goToActivity(IncomeExpenseActivity.class, MyConstants.INCOME);
     }
 
     /**
@@ -49,9 +52,7 @@ public class MenuActivity extends AppCompatActivity {
      * @param view button view
      */
     public void btnExpenseClick(View view) {
-        MyState.SCREEN = MyConstants.EXPENSE;
-        MyState.LAST_SCREEN = MyConstants.MENU;
-        startActivity(new Intent(this, IncomeExpenseActivity.class));
+        this.goToActivity(IncomeExpenseActivity.class, MyConstants.EXPENSE);
     }
 
     /**
@@ -59,7 +60,7 @@ public class MenuActivity extends AppCompatActivity {
      * @param view button view
      */
     public void btnSettingsClick(View view) {
-        startActivity(new Intent(this, SettingsActivity.class));
+        this.goToActivity(SettingsActivity.class, MyConstants.SETTINGS);
     }
 
     /**
@@ -67,7 +68,15 @@ public class MenuActivity extends AppCompatActivity {
      * @param view button view
      */
     public void btnRegisterClick(View view) {
-        startActivity(new Intent(this, RegisterActivity.class));
+        this.goToActivity(RegisterActivity.class, MyConstants.REGISTER);
+    }
+
+    /**
+     * sends user to the Report screen
+     * @param view button view
+     */
+    public void btnReportClick(View view) {
+        this.goToActivity(ReportActivity.class, MyConstants.REPORT);
     }
 
     /**
@@ -75,6 +84,6 @@ public class MenuActivity extends AppCompatActivity {
      * @param view button view
      */
     public void btnLogOutClick(View view) {
-        startActivity(new Intent(this, LoginActivity.class));
+        this.goToActivity(LoginActivity.class, MyConstants.LOGIN);
     }
 }

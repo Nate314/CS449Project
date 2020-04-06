@@ -6,5 +6,6 @@ public class MyConstants {
     public static final String LOGIN = "LOGIN";
     public static final String MENU = "MENU";
     public static final String REGISTER = "REGISTER";
+    public static final String REPORT = "REPORT";
     public static final String SETTINGS = "SETTINGS";
 }

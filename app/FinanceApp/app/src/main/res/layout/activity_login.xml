@@ -14,15 +14,36 @@
         android:orientation="vertical"
         tools:context=".activites.LoginActivity">
 
-        <TextView
-            android:id="@+id/lblAppName"
-            android:text="FinanceApp"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="36sp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+<!--        <TextView-->
+<!--            android:id="@+id/lblAppName"-->
+<!--            android:text="FinanceApp"-->
+<!--            android:textColor="@color/colorPrimaryDark"-->
+<!--            android:textSize="36sp"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="50dp"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:gravity="center" />-->
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imgTransaction"
             android:layout_marginTop="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:src="@mipmap/ic_launcher_round"
             android:layout_gravity="center"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/lblLabel1"
+            android:text="API URL:"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="14sp"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
             android:gravity="center" />
 
         <Spinner
@@ -30,7 +51,7 @@
             android:hint="Api Url"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="0dp"
             android:layout_gravity="center"
             android:gravity="center" />
 

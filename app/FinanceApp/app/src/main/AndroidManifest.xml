@@ -12,13 +12,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activites.RegisterActivity"></activity>
+        <activity android:name=".activites.ReportActivity"></activity>
+        <activity android:name=".activites.RegisterActivity" />
         <activity android:name=".activites.IncomeExpenseActivity" />
         <activity android:name=".activites.MenuActivity" />
         <activity android:name=".activites.SettingsActivity" />
         <activity android:name=".activites.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

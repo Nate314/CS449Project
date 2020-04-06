@@ -17,17 +17,15 @@ import com.nathangawith.umkc.financeapp.dtos.DBAccount;
 import com.nathangawith.umkc.financeapp.dtos.DBCategory;
 import com.nathangawith.umkc.financeapp.dtos.GenericResponse;
 
+import java.util.ArrayList;
 import java.util.function.Consumer;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private EditText labelToClear;
     private EditText txtAddAccount;
-    private Button btnAddAccount;
     private EditText txtAddIncomeCategory;
-    private Button btnAddIncomeCategory;
     private EditText txtAddExpenseCategory;
-    private Button btnAddExpenseCategory;
+    private Button btnAdd;
     private Button btnBack;
     private TextView lblAccounts;
     private TextView lblIncomeCategories;
@@ -41,13 +39,11 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
         // initialize fields to ui elements
         this.txtAddAccount = findViewById(R.id.txtAddAccount);
-        this.btnAddAccount = findViewById(R.id.btnAddAccount);
+        this.btnAdd = findViewById(R.id.btnAdd);
         this.lblAccounts = findViewById(R.id.lblAccounts);
         this.txtAddIncomeCategory = findViewById(R.id.txtAddIncomeCategory);
-        this.btnAddIncomeCategory = findViewById(R.id.btnAddIncomeCategory);
         this.lblIncomeCategories = findViewById(R.id.lblIncomeCategories);
         this.txtAddExpenseCategory = findViewById(R.id.txtAddExpenseCategory);
-        this.btnAddExpenseCategory = findViewById(R.id.btnAddExpenseCategory);
         this.lblExpenseCategories = findViewById(R.id.lblExpenseCategories);
         this.btnBack = findViewById(R.id.btnBack);
         this.progressBar = findViewById(R.id.progressBar);
@@ -65,11 +61,9 @@ public class SettingsActivity extends AppCompatActivity {
     private void loading(boolean loading) {
         boolean enabled = !loading;
         this.txtAddAccount.setEnabled(enabled);
-        this.btnAddAccount.setEnabled(enabled);
         this.txtAddIncomeCategory.setEnabled(enabled);
-        this.btnAddIncomeCategory.setEnabled(enabled);
         this.txtAddExpenseCategory.setEnabled(enabled);
-        this.btnAddExpenseCategory.setEnabled(enabled);
+        this.btnAdd.setEnabled(enabled);
         if (loading) {
             this.progressBar.setVisibility(View.VISIBLE);
             this.progressBar.setIndeterminate(true);
@@ -105,74 +99,73 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     /**
-     * function used when an ok response is received from the api.
-     * Stops loading and clears text input.
-     */
-    private Consumer<GenericResponse> okFunc = resp -> {
-        this.loading(false);
-        this.labelToClear.setText("");
-    };
-
-    /**
      * function used when an error response is received from the api.
      * Displays error message in dialog.
      */
     private Consumer<GenericResponse> errFunc = data -> {
         this.loading(false);
-        MyUtility.okDialog(getSupportFragmentManager(), "Error Response", data.response);
+        MyUtility.okDialog(this, "Error Response", data.response);
     };
 
     /**
      * adds account via api call, and then re-retrieves accounts
-     * @param view button view
      */
-    public void btnAddAccountClick(View view) {
-        if (!this.txtAddAccount.getText().toString().equals("")) {
-            this.labelToClear = this.txtAddAccount;
-            String accountDescription = this.txtAddAccount.getText().toString();
-            this.loading(true);
-            MyApi.postAddAccount(getApplicationContext(), new GenericResponse(), accountDescription, resp -> {
-                okFunc.accept(resp);
-                this.getAllAccounts();
-            }, errFunc);
-        } else {
-            MyUtility.okDialog(getSupportFragmentManager(), "Please enter an Account", "");
-        }
+    public void addAccount() {
+        String accountDescription = this.txtAddAccount.getText().toString();
+        this.loading(true);
+        MyApi.postAddAccount(getApplicationContext(), new GenericResponse(), accountDescription, resp -> {
+            this.loading(false);
+            this.txtAddAccount.setText("");
+            this.getAllAccounts();
+        }, errFunc);
     }
 
     /**
      * adds income category via api call, and then re-retrieves income categories
-     * @param view button view
      */
-    public void btnAddIncomeCategoryClick(View view) {
-        if (!this.txtAddIncomeCategory.getText().toString().equals("")) {
-            this.labelToClear = this.txtAddIncomeCategory;
-            String incomeCategoryDescription = this.txtAddIncomeCategory.getText().toString();
-            this.loading(true);
-            MyApi.postAddCategory(getApplicationContext(), new GenericResponse(), true, incomeCategoryDescription, resp -> {
-                okFunc.accept(resp);
-                this.getAllCategories(true);
-            }, errFunc);
-        } else {
-            MyUtility.okDialog(getSupportFragmentManager(), "Please enter an Income Category", "");
-        }
+    public void addIncomeCategory() {
+        String incomeCategoryDescription = this.txtAddIncomeCategory.getText().toString();
+        this.loading(true);
+        MyApi.postAddCategory(getApplicationContext(), new GenericResponse(), true, incomeCategoryDescription, resp -> {
+            this.loading(false);
+            this.txtAddIncomeCategory.setText("");
+            this.getAllCategories(true);
+        }, errFunc);
+    }
+
+    /**
+     * adds expense category via api call, and then re-retrieves expense categories
+     */
+    public void addExpenseCategory() {
+        String expenseCategoryDescription = this.txtAddExpenseCategory.getText().toString();
+        this.loading(true);
+        MyApi.postAddCategory(getApplicationContext(), new GenericResponse(), false, expenseCategoryDescription, resp -> {
+            this.loading(false);
+            this.txtAddExpenseCategory.setText("");
+            this.getAllCategories(false);
+        }, errFunc);
     }
 
     /**
      * adds expense category via api call, and then re-retrieves expense categories
      * @param view button view
      */
-    public void btnAddExpenseCategoryClick(View view) {
+    public void btnAddClick(View view) {
+        boolean noneAdded = true;
+        if (!this.txtAddAccount.getText().toString().equals("")) {
+            this.addAccount();
+            noneAdded = false;
+        }
+        if (!this.txtAddIncomeCategory.getText().toString().equals("")) {
+            this.addIncomeCategory();
+            noneAdded = false;
+        }
         if (!this.txtAddExpenseCategory.getText().toString().equals("")) {
-            this.labelToClear = this.txtAddExpenseCategory;
-            String expenseCategoryDescription = this.txtAddExpenseCategory.getText().toString();
-            this.loading(true);
-            MyApi.postAddCategory(getApplicationContext(), new GenericResponse(), false, expenseCategoryDescription, resp -> {
-                okFunc.accept(resp);
-                this.getAllCategories(false);
-            }, errFunc);
-        } else {
-            MyUtility.okDialog(getSupportFragmentManager(), "Please enter an Expense Category", "");
+            this.addExpenseCategory();
+            noneAdded = false;
+        }
+        if (noneAdded){
+            MyUtility.okDialog(this, "Please enter:", "an Account, an Income Category, or an Expense Category");
         }
     }
 

@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.nathangawith.umkc.financeapp.activites.IncomeExpenseActivity;
 import com.nathangawith.umkc.financeapp.activites.MenuActivity;
 import com.nathangawith.umkc.financeapp.activites.RegisterActivity;
+import com.nathangawith.umkc.financeapp.activites.ReportActivity;
 import com.nathangawith.umkc.financeapp.activites.SettingsActivity;
 import com.nathangawith.umkc.financeapp.constants.MyState;
 
@@ -26,7 +27,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class D_MenuActivityTest extends TestBase {
@@ -38,8 +38,9 @@ public class D_MenuActivityTest extends TestBase {
     @Rule
     public ActivityTestRule<MenuActivity> mActivityActivityTestRule = new ActivityTestRule<MenuActivity>(MenuActivity.class);
     private MenuActivity mActivity = null;
-    private Instrumentation.ActivityMonitor incomeexpenseMonitor = getInstrumentation().addMonitor(IncomeExpenseActivity.class.getName(), null, false);
+    private Instrumentation.ActivityMonitor incomeExpenseMonitor = getInstrumentation().addMonitor(IncomeExpenseActivity.class.getName(), null, false);
     private Instrumentation.ActivityMonitor registerMonitor = getInstrumentation().addMonitor(RegisterActivity.class.getName(), null, false);
+    private Instrumentation.ActivityMonitor reportMonitor = getInstrumentation().addMonitor(ReportActivity.class.getName(), null, false);
     private Instrumentation.ActivityMonitor settingsMonitor = getInstrumentation().addMonitor(SettingsActivity.class.getName(), null, false);
 
     @Before
@@ -77,12 +78,12 @@ public class D_MenuActivityTest extends TestBase {
 
     @Test
     public void b_btnIncome(){
-        btnClickTest(R.id.btnIncome, incomeexpenseMonitor, "Income");
+        btnClickTest(R.id.btnIncome, incomeExpenseMonitor, "Income");
     }
 
     @Test
     public void c_btnExpense(){
-        btnClickTest(R.id.btnExpense, incomeexpenseMonitor, "Expense");
+        btnClickTest(R.id.btnExpense, incomeExpenseMonitor, "Expense");
     }
 
     @Test
@@ -91,7 +92,12 @@ public class D_MenuActivityTest extends TestBase {
     }
 
     @Test
-    public void e_btnSettings(){
+    public void e_btnReport(){
+        btnClickTest(R.id.btnReport, reportMonitor, "Report");
+    }
+
+    @Test
+    public void f_btnSettings(){
         btnClickTest(R.id.btnSettings, settingsMonitor, "Settings");
     }
 

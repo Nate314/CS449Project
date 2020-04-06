@@ -62,6 +62,7 @@ public class IncomeExpenseActivity extends AppCompatActivity {
         this.btnSubmit = findViewById(R.id.btnSubmit);
         this.progressBar = findViewById(R.id.progressBar);
         this.lblScreenName = findViewById(R.id.lblScreenName);
+        this.btnSelectDate.setOnClickListener(v -> MyUtility.btnDateClick(this, this.lblDate));
         this.init();
     }
 
@@ -73,10 +74,10 @@ public class IncomeExpenseActivity extends AppCompatActivity {
         // get accounts categories from api
         MyApi.getAllAccounts(getApplicationContext(),
                 respCollection -> this.setSpinnerItems(this.spinnerAccount, DBAccount.class, respCollection, account -> this.selectedAccount = account),
-                x -> MyUtility.okDialog(getSupportFragmentManager(), "Error", x.response));
+                x -> MyUtility.okDialog(this, "Error", x.response));
         MyApi.getAllCategories(getApplicationContext(), income,
                 respCollection -> this.setSpinnerItems(this.spinnerCategory, DBCategory.class, respCollection, category -> this.selectedCategory = category),
-                x -> MyUtility.okDialog(getSupportFragmentManager(), "Error", x.response));
+                x -> MyUtility.okDialog(this, "Error", x.response));
     }
 
     public void clearFields() {
@@ -133,30 +134,6 @@ public class IncomeExpenseActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * code inspired from https://youtu.be/hwe1abDO2Ag
-     * @param view button view
-     */
-    public void btnSelectDateClick(View view) {
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH);
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-        DatePickerDialog dialog = new DatePickerDialog(
-            IncomeExpenseActivity.this,
-            R.style.Theme_AppCompat_Dialog,
-            new DatePickerDialog.OnDateSetListener() {
-                @Override
-                public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                    String date = String.format("%d/%d/%d", month + 1, dayOfMonth, year);
-                    IncomeExpenseActivity.this.lblDate.setText(date);
-                }
-            },
-            year, month, day);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.BLACK));
-        dialog.show();
-    }
-
     private void sendToLastActivity() {
         if (MyState.LAST_SCREEN == MyConstants.MENU) {
             startActivity(new Intent(this, MenuActivity.class));
@@ -187,9 +164,9 @@ public class IncomeExpenseActivity extends AppCompatActivity {
                     this.clearFields();
                     this.sendToLastActivity();
                 },
-                x -> MyUtility.okDialog(getSupportFragmentManager(), "Error", x.response));
+                x -> MyUtility.okDialog(this, "Error", x.response));
         } else {
-            MyUtility.okDialog(getSupportFragmentManager(), "Enter all required Fields", "");
+            MyUtility.okDialog(this, "Enter all required Fields", "");
         }
     }
 }

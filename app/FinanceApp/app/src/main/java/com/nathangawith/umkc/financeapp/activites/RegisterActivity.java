@@ -51,7 +51,7 @@ public class RegisterActivity extends AppCompatActivity {
     private void init() {
         MyApi.getTotal(getApplicationContext(), resp -> {
             this.lblTotal.setText(String.format("Total: %s", resp.response));
-        }, data -> MyUtility.okDialog(getSupportFragmentManager(), "Error", data.response));
+        }, data -> MyUtility.okDialog(this, "Error", data.response));
         MyApi.getTransactions(getApplicationContext(), respCollection -> {
             ArrayList<RegisterEntry> transactionsList = new ArrayList<RegisterEntry>();
             for (TransactionDto transaction : respCollection) {
@@ -60,7 +60,7 @@ public class RegisterActivity extends AppCompatActivity {
             RegisterEntryArrayAdapter arrayAdapter = new RegisterEntryArrayAdapter(this, 0, transactionsList);
             listTransactions.setAdapter(arrayAdapter);
             this.swipeRefresh.setRefreshing(false);
-        }, data -> MyUtility.okDialog(getSupportFragmentManager(), "Error", data.response));
+        }, data -> MyUtility.okDialog(this, "Error", data.response));
     }
 
     /**
@@ -88,7 +88,7 @@ public class RegisterActivity extends AppCompatActivity {
      * @param view button view
      */
     public void btnFloatingTransferClick(View view) {
-        MyUtility.okDialog(getSupportFragmentManager(), "Not Yet Implemented!", "This functionality will be added in a later version");
+        MyUtility.okDialog(this, "Not Yet Implemented!", "This functionality will be added in a later version");
     }
 
     public void btnBackClick(View view) {

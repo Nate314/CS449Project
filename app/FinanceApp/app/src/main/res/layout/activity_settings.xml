@@ -14,6 +14,17 @@
         android:orientation="vertical"
         tools:context=".activites.SettingsActivity">
 
+        <Button
+            android:id="@+id/btnBack"
+            android:width="10000dp"
+            android:onClick="btnBackClick"
+            android:text="Back"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center"
+            android:gravity="center" />
+
         <TextView
             android:id="@+id/lblScreenName"
             android:layout_marginRight="10dp"
@@ -22,7 +33,7 @@
             android:textSize="36sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="20dp"
             android:layout_gravity="center"
             android:gravity="center" />
 
@@ -30,7 +41,7 @@
             android:textColorHint="@color/colorPrimaryDark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="0dp"
             android:layout_gravity="center"
             android:gravity="center" >
             <com.google.android.material.textfield.TextInputEditText
@@ -44,16 +55,6 @@
                 android:maxLength="20"
                 android:textSize="20sp" />
         </com.google.android.material.textfield.TextInputLayout>
-
-        <Button
-            android:id="@+id/btnAddAccount"
-            android:onClick="btnAddAccountClick"
-            android:text="+"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="0dp"
-            android:layout_gravity="center"
-            android:gravity="center" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:textColorHint="@color/colorPrimaryDark"
@@ -73,16 +74,6 @@
                 android:maxLength="20"
                 android:textSize="20sp" />
         </com.google.android.material.textfield.TextInputLayout>
-
-        <Button
-            android:id="@+id/btnAddIncomeCategory"
-            android:onClick="btnAddIncomeCategoryClick"
-            android:text="+"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="0dp"
-            android:layout_gravity="center"
-            android:gravity="center"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:textColorHint="@color/colorPrimaryDark"
@@ -104,9 +95,9 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
-            android:id="@+id/btnAddExpenseCategory"
+            android:id="@+id/btnAdd"
             android:width="10dp"
-            android:onClick="btnAddExpenseCategoryClick"
+            android:onClick="btnAddClick"
             android:text="+"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -122,17 +113,6 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="0dp"
-            android:layout_gravity="center"
-            android:gravity="center" />
-
-        <Button
-            android:id="@+id/btnBack"
-            android:width="10000dp"
-            android:onClick="btnBackClick"
-            android:text="Back"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="-30dp"
             android:layout_gravity="center"
             android:gravity="center" />
 

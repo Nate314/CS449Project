@@ -2,8 +2,6 @@ package com.nathangawith.umkc.financeapp.activites;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -114,17 +112,17 @@ public class LoginActivity extends AppCompatActivity {
                 this.loading(false);
                 this.lblToken.setText(resp.token);
                 if (resp.token.equals("null")) {
-                    MyUtility.okDialog(getSupportFragmentManager(), "Invalid login", "Please contact your system administrator");
+                    MyUtility.okDialog(this, "Invalid login", "Please contact your system administrator");
                 } else {
                     MyState.TOKEN = resp.token;
                     this.getMoveToNextActivityThread().start();
                 }
             }, data -> {
                 this.loading(false);
-                MyUtility.okDialog(getSupportFragmentManager(), "Error, Please contact your system administrator", data.getMessage());
+                MyUtility.okDialog(this, "Error, Please contact your system administrator", data.getMessage());
             });
         } else {
-            MyUtility.okDialog(getSupportFragmentManager(), "Error", "Please enter a username and password");
+            MyUtility.okDialog(this, "Error", "Please enter a username and password");
         }
     }
 
@@ -138,7 +136,7 @@ public class LoginActivity extends AppCompatActivity {
             public void run() {
                 try {
                     Thread.sleep(MyUtility.isRunningTest ? 5000 : 0);
-                    startActivity(new Intent(me, MenuActivity.class));
+                    MyUtility.goToActivity(me, MenuActivity.class);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

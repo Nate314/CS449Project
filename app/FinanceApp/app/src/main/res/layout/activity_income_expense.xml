@@ -14,113 +14,135 @@
         android:orientation="vertical"
         tools:context=".activites.IncomeExpenseActivity">
 
-    <TextView
-        android:id="@+id/lblScreenName"
-        android:text="TEMP"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="36sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:layout_gravity="center"
-        android:gravity="center" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:textColorHint="@color/colorPrimaryDark"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:layout_gravity="center"
-        android:gravity="center" >
-        <com.google.android.material.textfield.TextInputEditText
+        <TextView
+            android:id="@+id/lblScreenName"
+            android:text="TEMP"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="36sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/txtAmount"
-            android:ems="15"
-            android:hint="Amount"
-            android:imeActionLabel="hl"
-            android:inputType="numberDecimal"
-            android:maxLength="20"
-            android:textSize="20sp" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_marginTop="50dp"
+            android:layout_gravity="center"
+            android:gravity="center" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:textColorHint="@color/colorPrimaryDark"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:layout_gravity="center"
-        android:gravity="center" >
-        <com.google.android.material.textfield.TextInputEditText
+        <com.google.android.material.textfield.TextInputLayout
+            android:textColorHint="@color/colorPrimaryDark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/txtDescription"
-            android:ems="15"
-            android:hint="Description"
-            android:imeActionLabel="hl"
-            android:inputType="text"
-            android:maxLength="20"
-            android:textSize="20sp" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_marginTop="50dp"
+            android:layout_gravity="center"
+            android:gravity="center" >
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtAmount"
+                android:ems="15"
+                android:hint="Amount"
+                android:imeActionLabel="hl"
+                android:inputType="numberDecimal"
+                android:maxLength="20"
+                android:textSize="20sp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <Spinner
-        android:id="@+id/spinnerAccount"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:layout_gravity="center"
-        android:gravity="center" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:textColorHint="@color/colorPrimaryDark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_gravity="center"
+            android:gravity="center" >
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtDescription"
+                android:ems="15"
+                android:hint="Description"
+                android:imeActionLabel="hl"
+                android:inputType="text"
+                android:maxLength="20"
+                android:textSize="20sp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <Spinner
-        android:id="@+id/spinnerCategory"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:layout_gravity="center"
-        android:gravity="center"  />
+        <TextView
+            android:id="@+id/lblLabel1"
+            android:text="Account:"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="14sp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:gravity="center" />
 
+        <Spinner
+            android:id="@+id/spinnerAccount"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:layout_gravity="center"
+            android:gravity="center" />
 
-    <Button
-        android:id="@+id/btnSelectDate"
-        android:width="200dp"
-        android:onClick="btnSelectDateClick"
-        android:text="Select Date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:layout_gravity="center"
-        android:gravity="center" />
+        <TextView
+            android:id="@+id/lblLabel2"
+            android:text="Category:"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="14sp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:gravity="center" />
 
-    <TextView
-        android:id="@+id/lblDate"
-        android:text=""
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="14sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center" />
+        <Spinner
+            android:id="@+id/spinnerCategory"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:layout_gravity="center"
+            android:gravity="center"  />
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="@android:style/Widget.Holo.ProgressBar.Horizontal"
-        android:layout_marginBottom="0dp"
-        android:progress="25"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:layout_gravity="center"
-        android:gravity="center" />
+        <Button
+            android:id="@+id/btnSelectDate"
+            android:width="200dp"
+            android:text="Select Date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_gravity="center"
+            android:gravity="center" />
 
-    <Button
-        android:id="@+id/btnSubmit"
-        android:onClick="btnSubmitClick"
-        android:text="Submit"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
-        android:layout_gravity="center"
-        android:gravity="center" />
+        <TextView
+            android:id="@+id/lblDate"
+            android:text=""
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="14sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="@android:style/Widget.Holo.ProgressBar.Horizontal"
+            android:layout_marginBottom="0dp"
+            android:progress="25"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:layout_gravity="center"
+            android:gravity="center" />
+
+        <Button
+            android:id="@+id/btnSubmit"
+            android:onClick="btnSubmitClick"
+            android:text="Submit"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:layout_gravity="center"
+            android:gravity="center" />
 
     </LinearLayout>
 
