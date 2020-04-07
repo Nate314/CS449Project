@@ -11,15 +11,21 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nathangawith.umkc.financeapp.R;
 import com.nathangawith.umkc.financeapp.constants.MyState;
 import com.nathangawith.umkc.financeapp.constants.MyUtility;
+import com.nathangawith.umkc.financeapp.dtos.ReportRequest;
+import com.nathangawith.umkc.financeapp.http.MyApi;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 public class ReportActivity extends AppCompatActivity {
 
@@ -27,8 +33,12 @@ public class ReportActivity extends AppCompatActivity {
     private TextView lblStartDate;
     private Button btnSelectEndDate;
     private TextView lblEndDate;
-    private Spinner spinnerBreakpoint;
-    private Spinner spinnerType;
+    private RadioGroup radioGrpBreakpoint;
+    private RadioGroup radioGrpType;
+    private RadioButton radioBtnMonth;
+    private RadioButton radioBtnYear;
+    private RadioButton radioBtnCategory;
+    private RadioButton radioBtnAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +49,12 @@ public class ReportActivity extends AppCompatActivity {
         this.lblStartDate = findViewById(R.id.lblStartDate);
         this.btnSelectEndDate = findViewById(R.id.btnSelectEndDate);
         this.lblEndDate = findViewById(R.id.lblEndDate);
-        this.spinnerBreakpoint = findViewById(R.id.spinnerBreakpoint);
-        this.spinnerType = findViewById(R.id.spinnerType);
+        this.radioGrpBreakpoint = findViewById(R.id.radioGrpBreakpoint);
+        this.radioGrpType = findViewById(R.id.radioGrpType);
+        this.radioBtnMonth = findViewById(R.id.radioBtnMonth);
+        this.radioBtnYear = findViewById(R.id.radioBtnYear);
+        this.radioBtnCategory = findViewById(R.id.radioBtnCategory);
+        this.radioBtnAccount = findViewById(R.id.radioBtnAccount);
         // initialize component
         this.init();
     }
@@ -54,17 +68,17 @@ public class ReportActivity extends AppCompatActivity {
         // initialize on click listeners
         this.btnSelectStartDate.setOnClickListener(v -> MyUtility.btnDateClick(this, this.lblStartDate));
         this.btnSelectEndDate.setOnClickListener(v -> MyUtility.btnDateClick(this, this.lblEndDate));
-        // initialize spinners
-        ArrayList<String> breakpointOptions = new ArrayList<String>();
-        breakpointOptions.add("Month");
-        breakpointOptions.add("Year");
-        MyUtility.initializeSpinner(this, this.spinnerBreakpoint, breakpointOptions,
-                id -> MyState.REPORT_SELECTED_BREAKPOINT = breakpointOptions.get((int) (long) id));
-        ArrayList<String> typeOptions = new ArrayList<String>();
-        typeOptions.add("Category");
-        typeOptions.add("Account");
-        MyUtility.initializeSpinner(this, this.spinnerType, typeOptions,
-                id -> MyState.REPORT_SELECTED_TYPE = typeOptions.get((int) (long) id));
+    }
+
+    /**
+     * When a radio button is clicked
+     * @param view radio button that was clicked
+     */
+    public void radioBtnClick(View view) {
+        RadioButton radioBtnBreakpoint = findViewById(this.radioGrpBreakpoint.getCheckedRadioButtonId());
+        RadioButton radioBtnType = findViewById(this.radioGrpType.getCheckedRadioButtonId());
+        MyState.REPORT_SELECTED_BREAKPOINT = radioBtnBreakpoint == null ? null : radioBtnBreakpoint.getText().toString();
+        MyState.REPORT_SELECTED_TYPE = radioBtnType == null ? null : radioBtnType.getText().toString();
     }
 
     public void btnSubmitClick(View view) {
@@ -79,7 +93,13 @@ public class ReportActivity extends AppCompatActivity {
                 MyState.REPORT_SELECTED_END_DATE, MyState.REPORT_SELECTED_BREAKPOINT, MyState.REPORT_SELECTED_TYPE);
         System.out.println(values);
         if (allRequiredFields) {
-            MyUtility.okDialog(this, "NOT YET IMPLEMENTED", values);
+            MyApi.postReport(this,
+                new Date(MyState.REPORT_SELECTED_START_DATE),
+                new Date(MyState.REPORT_SELECTED_END_DATE),
+                MyState.REPORT_SELECTED_BREAKPOINT,
+                MyState.REPORT_SELECTED_TYPE, x -> {
+                    MyUtility.okDialog(this, "SUCCESS", String.format("\"%s\", \"%s\", \"%s\", \"%s\"", x.StartDate, x.EndDate, x.Breakpoint, x.Type));
+                }, x -> MyUtility.okDialog(this, "ERROR", x.response));
         } else {
             MyUtility.okDialog(this, "Not all required fields have been entered", values);
         }

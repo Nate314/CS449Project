@@ -5,6 +5,7 @@ import android.content.Context;
 import com.nathangawith.umkc.financeapp.constants.MyConstants;
 import com.nathangawith.umkc.financeapp.dtos.DBTransaction;
 import com.nathangawith.umkc.financeapp.dtos.GenericResponse;
+import com.nathangawith.umkc.financeapp.dtos.ReportRequest;
 import com.nathangawith.umkc.financeapp.dtos.TokenResponseDto;
 import com.nathangawith.umkc.financeapp.dtos.DBAccount;
 import com.nathangawith.umkc.financeapp.dtos.DBCategory;
@@ -168,5 +169,23 @@ public class MyApi {
 
     public static void getTransactions(Context context, Consumer<Collection<TransactionDto>> func, Consumer<GenericResponse> errorFunc) {
         MyHttpClient.get(context, "/register/transactions", x -> {}, parseCollection(TransactionDto.class, func), x -> {}, parse(new GenericResponse(), errorFunc));
+    }
+
+    public static void postReport(Context context, Date StartDate, Date EndDate, String Breakpoint, String Type, Consumer<ReportRequest> func, Consumer<GenericResponse> errorFunc) {
+        try {
+            String jsonObjectString = String.format("{\"%s\":\"%s\",\"%s\":\"%s\",\"%s\":\"%s\",\"%s\":\"%s\"}",
+                    "StartDate", dateToString(StartDate),
+                    "EndDate", dateToString(EndDate),
+                    "Breakpoint", Breakpoint,
+                    "Type", Type);
+            ByteArrayEntity entity = new ByteArrayEntity(jsonObjectString.getBytes("UTF-8"));
+            ReportRequest resp = new ReportRequest();
+            GenericResponse errResp = new GenericResponse();
+            System.out.println("-------- Request: --------");
+            System.out.println(jsonObjectString);
+            MyHttpClient.post(context, "/report/report", entity, parse(resp, func), x -> {}, x -> {}, parse(errResp, errorFunc));
+        } catch (UnsupportedEncodingException ex) {
+            ex.printStackTrace();
+        }
     }
 }

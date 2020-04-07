@@ -106,51 +106,111 @@
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/lblLabel1"
-            android:text="Breakpoint:"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="14sp"
-            android:layout_marginTop="50dp"
-            android:layout_marginLeft="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:gravity="center" />
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:weightSum="2"
+            android:orientation="horizontal">
 
-        <Spinner
-            android:id="@+id/spinnerBreakpoint"
-            android:hint="Breakpoint"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="0dp"
-            android:layout_gravity="center"
-            android:gravity="center" />
+            <LinearLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/lblLabel2"
-            android:text="Type:"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="14sp"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:gravity="center" />
+                <TextView
+                    android:id="@+id/lblLabel1"
+                    android:text="Breakpoint:"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="14sp"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:gravity="center" />
 
-        <Spinner
-            android:id="@+id/spinnerType"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="0dp"
-            android:layout_gravity="center"
-            android:gravity="center" />
+                <RadioGroup
+                    android:id="@+id/radioGrpBreakpoint"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <RadioButton
+                        android:id="@+id/radioBtnMonth"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:text="Month"
+                        android:onClick="radioBtnClick">
+                    </RadioButton>
+
+                    <RadioButton
+                        android:id="@+id/radioBtnYear"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:text="Year"
+                        android:onClick="radioBtnClick">
+                    </RadioButton>
+
+                </RadioGroup>
+
+            </LinearLayout>
+
+            <LinearLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/lblLabel2"
+                    android:text="Type:"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="14sp"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:gravity="center" />
+
+                <RadioGroup
+                    android:id="@+id/radioGrpType"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <RadioButton
+                        android:id="@+id/radioBtnCategory"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:text="Category"
+                        android:onClick="radioBtnClick">
+                    </RadioButton>
+
+                    <RadioButton
+                        android:id="@+id/radioBtnAccount"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:text="Account"
+                        android:onClick="radioBtnClick">
+                    </RadioButton>
+
+                </RadioGroup>
+
+            </LinearLayout>
+
+        </LinearLayout>
 
         <Button
             android:id="@+id/btnSubmit"
             android:onClick="btnSubmitClick"
             android:text="Submit"
+            android:layout_marginTop="50dp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
