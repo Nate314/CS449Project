@@ -1,6 +1,6 @@
 package com.nathangawith.umkc.controllers;
 
-import java.util.Date;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nathangawith.umkc.Algorithms;
 import com.nathangawith.umkc.dtos.GenericResponse;
 import com.nathangawith.umkc.dtos.ReportRequest;
+import com.nathangawith.umkc.dtos.ReportResponse;
+import com.nathangawith.umkc.interceptors.JWTInterceptor;
 import com.nathangawith.umkc.services.IReportService;
 
 @RestController
@@ -28,12 +30,12 @@ public class ReportController {
     		method = RequestMethod.POST
     )
     public ResponseEntity<String> postReport(
-    		@RequestBody ReportRequest request
+    		HttpServletRequest request,
+    		@RequestBody ReportRequest body
     	) throws Exception {
 		try {
-			Date sd = request.StartDate, ed = request.EndDate;
-			String bp = request.Breakpoint, type = request.Type;
-	    	ReportRequest result = reportService.getReport(sd, ed, bp, type);
+			int userID = JWTInterceptor.getUserIDFromHeader(request);
+			ReportResponse result = reportService.getReport(userID, body);
 	    	String response = Algorithms.toJSONObject(result);
 		    return new ResponseEntity<String>(response, HttpStatus.OK);
 		} catch (Exception ex) {

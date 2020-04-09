@@ -1,10 +1,10 @@
 package com.nathangawith.umkc.repositories;
 
+import java.util.Collection;
 import java.util.Date;
 
-import com.nathangawith.umkc.dtos.ReportRequest;
+import com.nathangawith.umkc.dtos.Transaction;
 
 public interface IReportRepository {
-	public ReportRequest selectCategoryReport(Date startDate, Date endDate, String breakpoint) throws Exception;
-	public ReportRequest selectAccountReport(Date startDate, Date endDate, String breakpoint) throws Exception;
+	public Collection<Transaction> selectBreakpointCategoryReport(int userID, Date startDate, Date endDate, String breakpoint, String type) throws Exception;
 }

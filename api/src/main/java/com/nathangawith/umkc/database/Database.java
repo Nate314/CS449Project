@@ -42,7 +42,7 @@ public class Database implements IDatabase {
 				int numColumns = rsmd.getColumnCount();
 				JSONObject jsonOBJ = new JSONObject();
 				for (int i = 1; i <= numColumns; i++) {
-					String column_name = rsmd.getColumnName(i);
+					// String column_name = rsmd.getColumnName(i);
 					String column_label = rsmd.getColumnLabel(i);
 					String field_name = this.getMatchingFieldName(type, column_label);
 					if (field_name == null) {

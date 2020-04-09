@@ -1,5 +1,6 @@
 package com.nathangawith.umkc.repositories;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -8,8 +9,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import com.nathangawith.umkc.Algorithms;
+import com.nathangawith.umkc.Queries;
 import com.nathangawith.umkc.database.IDatabase;
-import com.nathangawith.umkc.dtos.ReportRequest;
+import com.nathangawith.umkc.dtos.Transaction;
 
 @Component("report_repository")
 public class ReportRepository implements IReportRepository {
@@ -17,22 +19,30 @@ public class ReportRepository implements IReportRepository {
 	@Autowired
 	@Qualifier("my_database")
 	IDatabase DB;
-	
-	public static String dummySQL = "SELECT ? AS StartDate, ? AS EndDate, ? AS Breakpoint, ? AS Type";
 
 	@Override
-	public ReportRequest selectCategoryReport(Date startDate, Date endDate, String breakpoint) {
+	public Collection<Transaction> selectBreakpointCategoryReport(int userID, Date startDate, Date endDate, String breakpoint, String type) {
+		String year = "Year", month = "Month", category = "Category", account = "Account";
+		System.out.println(breakpoint);
+		System.out.println(type);
+		String group_by =
+			breakpoint.equals(year)
+			? (type.equals(category)
+				? Queries.GET_REPORT_GROUP_BY_YEAR_CATEGORY
+				: (type == account
+					? Queries.GET_REPORT_GROUP_BY_YEAR_ACCOUNT
+					: null))
+			: (breakpoint.equals(month)
+				? (type == category
+					? Queries.GET_REPORT_GROUP_BY_MONTH_CATEGORY
+					: (type.equals(account)
+						? Queries.GET_REPORT_GROUP_BY_MONTH_ACCOUNT
+						: null))
+				: null);
+		String sql = Queries.GET_REPORT_SELECT_FROM_WHERE + group_by;
 		String sd = Algorithms.dateToString(startDate), ed = Algorithms.dateToString(endDate);
-		List<String> params = Algorithms.params(sd, ed, breakpoint, "Category");
-		ReportRequest result = DB.selectFirst(dummySQL, params, ReportRequest.class);
-		return result;
-	}
-	
-	@Override
-	public ReportRequest selectAccountReport(Date startDate, Date endDate, String breakpoint) {
-		String sd = Algorithms.dateToString(startDate), ed = Algorithms.dateToString(endDate);
-		List<String> params = Algorithms.params(sd, ed, breakpoint, "Account");
-		ReportRequest result = DB.selectFirst(dummySQL, params, ReportRequest.class);
+		List<String> params = Algorithms.params(userID, sd, ed);
+		Collection<Transaction> result = DB.select(sql, params, Transaction.class);
 		return result;
 	}
 

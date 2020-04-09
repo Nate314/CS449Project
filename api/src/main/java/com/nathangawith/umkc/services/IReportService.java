@@ -1,9 +1,8 @@
 package com.nathangawith.umkc.services;
 
-import java.util.Date;
-
 import com.nathangawith.umkc.dtos.ReportRequest;
+import com.nathangawith.umkc.dtos.ReportResponse;
 
 public interface IReportService {
-	public ReportRequest getReport(Date startDate, Date endDate, String breakpoint, String type) throws Exception;
+	public ReportResponse getReport(int userID, ReportRequest request) throws Exception;
 }

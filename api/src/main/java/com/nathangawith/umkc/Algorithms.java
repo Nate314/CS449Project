@@ -29,18 +29,21 @@ public class Algorithms {
 	 * @param object object to stringify
 	 * @return JSON.stringified object
 	 */
+	@SuppressWarnings("unchecked")
 	public static <T extends Object> String toJSONObject(T object) {
 		String result = "{";
         for (Field field : object.getClass().getFields()) {
             try {
                 Object o = field.get(object);
                 if (o != null) {
-                    String value = field.getType().isPrimitive() ? "%s" : "\"%s\"";
-                    if (field.getName().toUpperCase().contains("DATE")) {
-                        result += String.format("\"%s\":%s,", field.getName(), String.format(value, Algorithms.dateToString((Date) o)));
-                    } else {
-                        result += String.format("\"%s\":%s,", field.getName(), String.format(value, o.toString()));
-                    }
+                	if (field.getType().getName().equals("java.util.List")) {
+                		result += String.format("\"%s\":%s,", field.getName(), toJSONArray((Collection<Object>) o));
+                	} else {
+                        String format = field.getType().isPrimitive() ? "%s" : "\"%s\"";
+                        String value = field.getName().toUpperCase().contains("DATE")
+                        	? String.format(format, Algorithms.dateToString((Date) o)) : String.format(format, o.toString());
+                    	result += String.format("\"%s\":%s,", field.getName(), value);
+                	}
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();

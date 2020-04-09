@@ -13,7 +13,7 @@ public class Queries {
 	public static final String INSERT_TRANSACTION = "INSERT INTO transactions (UserID, AccountID, CategoryID, Description, Amount, Date) VALUES (?, ?, ?, ?, ?, ?)";
 	public static final String GET_REGISTER_TOTAL = "SELECT SUM(amount) AS DOUBLE_RESPONSE FROM transactions WHERE userid = ?";
 	public static final String GET_TRANSACTIONS   = 
-		"SELECT transactions.transactionid, transactions.userid, transactions.accountid,"
+				 "SELECT transactions.transactionid, transactions.userid, transactions.accountid,"
 		+ "\n\t" + "transactions.description, transactions.amount, transactions.date,"
 		+ "\n\t" + "accounts.description AS accountdescription, categories.description AS categorydescription" 
 		+ "\n" + "FROM transactions" 
@@ -21,4 +21,17 @@ public class Queries {
 		+ "\n\t" + "JOIN categories ON transactions.CategoryID = categories.CategoryID" 
 		+ "\n" + "WHERE transactions.userid = ?"
 		+ "\n" + "ORDER BY date DESC";
+	public static final String GET_REPORT_SELECT_FROM_WHERE =
+				 "SELECT SUM(transactions.Amount) AS Amount, transactions.Date,"
+		+ "\n\t" + "accounts.Description AS AccountDescription, categories.Description AS CategoryDescription," 
+	 	+ "\n\t" + "YEAR(Date) AS Year, CONCAT(YEAR(Date), '-', MONTH(Date)) AS Month"
+		+ "\n" + "FROM transactions"
+		+ "\n\t" + "JOIN accounts ON transactions.AccountID = accounts.AccountID" 
+		+ "\n\t" + "JOIN categories ON transactions.CategoryID = categories.CategoryID" 
+		+ "\n" + "WHERE transactions.UserID = ?"
+		+ "\n\t" + "AND transactions.Date BETWEEN STR_TO_DATE(?, '%Y-%m-%d') AND STR_TO_DATE(?, '%Y-%m-%d')";
+	public static final String GET_REPORT_GROUP_BY_YEAR_ACCOUNT   = "\nGROUP BY Year, AccountDescription";
+	public static final String GET_REPORT_GROUP_BY_YEAR_CATEGORY  = "\nGROUP BY Year, CategoryDescription";
+	public static final String GET_REPORT_GROUP_BY_MONTH_ACCOUNT  = "\nGROUP BY Month, AccountDescription";
+	public static final String GET_REPORT_GROUP_BY_MONTH_CATEGORY = "\nGROUP BY Month, CategoryDescription";
 }
