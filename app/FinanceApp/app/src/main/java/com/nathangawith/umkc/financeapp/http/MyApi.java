@@ -6,6 +6,7 @@ import com.nathangawith.umkc.financeapp.constants.MyConstants;
 import com.nathangawith.umkc.financeapp.dtos.DBTransaction;
 import com.nathangawith.umkc.financeapp.dtos.GenericResponse;
 import com.nathangawith.umkc.financeapp.dtos.ReportRequest;
+import com.nathangawith.umkc.financeapp.dtos.ReportResponseDto;
 import com.nathangawith.umkc.financeapp.dtos.TokenResponseDto;
 import com.nathangawith.umkc.financeapp.dtos.DBAccount;
 import com.nathangawith.umkc.financeapp.dtos.DBCategory;
@@ -17,11 +18,13 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.TimeZone;
 import java.util.function.Consumer;
 
@@ -58,14 +61,36 @@ public class MyApi {
 
     private static <T extends Object> Consumer<JSONObject> parse(T resp, Consumer<T> func) {
         return json -> {
+            System.out.println("-------- Parsing --------");
             for (Field field : resp.getClass().getFields()) {
                 try {
                     Object o = json.get(field.getName());
-                    field.set(resp, o);
+                    System.out.println(o.toString());
+                    System.out.println(o.getClass());
+//                    System.out.println(o.getClass().equals("org.json.JSONArray"));
+                    if (o.toString().charAt(0) == '[') {
+//                        System.out.println("true");
+//                        System.out.println(field.getType());
+//                        System.out.println(field.getGenericType().getTypeName());
+                        Class<T> collectionClass = (Class<T>) ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0];
+//                        System.out.println(collectionClass);
+//                        System.out.println(collectionClass.getClass().getName());
+//                        System.out.println(collectionClass.getName());
+                        parseCollection(collectionClass, x -> {
+                            try {
+                                field.set(resp, (List) x);
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                        }).accept((JSONArray) o);
+                    } else {
+                        field.set(resp, o);
+                    }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
+            System.out.println("-------- Parsing --------");
             func.accept(resp);
         };
     }
@@ -171,7 +196,7 @@ public class MyApi {
         MyHttpClient.get(context, "/register/transactions", x -> {}, parseCollection(TransactionDto.class, func), x -> {}, parse(new GenericResponse(), errorFunc));
     }
 
-    public static void postReport(Context context, Date StartDate, Date EndDate, String Breakpoint, String Type, Consumer<ReportRequest> func, Consumer<GenericResponse> errorFunc) {
+    public static void postReport(Context context, Date StartDate, Date EndDate, String Breakpoint, String Type, Consumer<ReportResponseDto> func, Consumer<GenericResponse> errorFunc) {
         try {
             String jsonObjectString = String.format("{\"%s\":\"%s\",\"%s\":\"%s\",\"%s\":\"%s\",\"%s\":\"%s\"}",
                     "StartDate", dateToString(StartDate),
@@ -179,7 +204,7 @@ public class MyApi {
                     "Breakpoint", Breakpoint,
                     "Type", Type);
             ByteArrayEntity entity = new ByteArrayEntity(jsonObjectString.getBytes("UTF-8"));
-            ReportRequest resp = new ReportRequest();
+            ReportResponseDto resp = new ReportResponseDto();
             GenericResponse errResp = new GenericResponse();
             System.out.println("-------- Request: --------");
             System.out.println(jsonObjectString);
