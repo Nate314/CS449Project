@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import com.nathangawith.umkc.Algorithms;
 import com.nathangawith.umkc.dtos.Transaction;
 import com.nathangawith.umkc.repositories.IRegisterRepository;
 
@@ -34,8 +35,6 @@ public class RegisterService implements IRegisterService {
 	@Override
 	public String getTotal(int userID) throws Exception {
 		double total = mRegisterRepository.selectTotal(userID);
-		boolean negativeBalance = total < 0;
-		total = negativeBalance ? -1 * total : total;
-		return String.format("%s$%s", negativeBalance ? "-" : "", total);
+		return Algorithms.formatAsMoney(total);
 	}
 }

@@ -25,15 +25,19 @@ public class ReportRepository implements IReportRepository {
 		String year = "Year", month = "Month", category = "Category", account = "Account";
 		System.out.println(breakpoint);
 		System.out.println(type);
+		System.out.println(breakpoint.equals(year));
+		System.out.println(breakpoint.equals(month));
+		System.out.println(type.equals(category));
+		System.out.println(type.equals(account));
 		String group_by =
 			breakpoint.equals(year)
 			? (type.equals(category)
 				? Queries.GET_REPORT_GROUP_BY_YEAR_CATEGORY
-				: (type == account
+				: (type.equals(account)
 					? Queries.GET_REPORT_GROUP_BY_YEAR_ACCOUNT
 					: null))
 			: (breakpoint.equals(month)
-				? (type == category
+				? (type.equals(category)
 					? Queries.GET_REPORT_GROUP_BY_MONTH_CATEGORY
 					: (type.equals(account)
 						? Queries.GET_REPORT_GROUP_BY_MONTH_ACCOUNT

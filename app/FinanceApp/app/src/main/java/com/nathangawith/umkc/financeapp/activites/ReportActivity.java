@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
@@ -37,26 +38,32 @@ import java.util.stream.Collectors;
 
 public class ReportActivity extends AppCompatActivity {
 
-    private LinearLayout linearLayoutReport;
+    private TableLayout tableLayout;
     private Button btnSelectStartDate;
     private TextView lblStartDate;
     private Button btnSelectEndDate;
     private TextView lblEndDate;
     private RadioGroup radioGrpBreakpoint;
     private RadioGroup radioGrpType;
+    private TextView lblLabel1;
+    private TextView lblLabel2;
+    private Button btnSubmit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
         // initialize fields to ui elements
-        this.linearLayoutReport = findViewById(R.id.linearLayoutReport);
+        this.tableLayout = findViewById(R.id.tableReport);
         this.btnSelectStartDate = findViewById(R.id.btnSelectStartDate);
         this.lblStartDate = findViewById(R.id.lblStartDate);
         this.btnSelectEndDate = findViewById(R.id.btnSelectEndDate);
         this.lblEndDate = findViewById(R.id.lblEndDate);
         this.radioGrpBreakpoint = findViewById(R.id.radioGrpBreakpoint);
         this.radioGrpType = findViewById(R.id.radioGrpType);
+        this.lblLabel1 = findViewById(R.id.lblLabel1);
+        this.lblLabel2 = findViewById(R.id.lblLabel2);
+        this.btnSubmit = findViewById(R.id.btnSubmit);
         // initialize component
         this.init();
     }
@@ -73,6 +80,32 @@ public class ReportActivity extends AppCompatActivity {
     }
 
     /**
+     * @param content text to place in the cell
+     * @param title if it's a title, the text will be bolded
+     * @param color color to use in the cell
+     * @return TextView for a cell
+     */
+    private TextView getCellTextView(String content, boolean title, int color) {
+        TextView textView = new TextView(this);
+        textView.setText(String.format("    %s    ", content));
+        textView.setTextSize(20);
+        textView.setBackground(getDrawable(R.drawable.border));
+        textView.setTextColor(color);
+        if (title) textView.setTypeface(null, Typeface.BOLD);
+        return textView;
+    }
+
+    /**
+     * wrapper function for the above getCellTextView function
+     * @param content text to place in the cell
+     * @param title if it's a title, the text will be bolded
+     * @return TextView for a cell
+     */
+    private TextView getCellTextView(String content, boolean title) {
+        return this.getCellTextView(content, title, getColor(R.color.black));
+    }
+
+    /**
      * used this tutorial  for how to make a dynamic table https://www.youtube.com/watch?v=IaUjPIrKCrY
      * @param report report to build the table off of
      */
@@ -86,39 +119,66 @@ public class ReportActivity extends AppCompatActivity {
         List<String> columns = cells.stream().map(x -> categoryType ? x.CategoryDescription : x.AccountDescription).distinct().collect(Collectors.toList());
         // populate header
         header.addView(new TextView(this));
-        columns.forEach(col -> {
-            TextView textView = new TextView(this);
-            textView.setText(String.format("%s    ", col));
-            header.addView(textView);
-        });
+        columns.forEach(col -> header.addView(this.getCellTextView(col, true)));
+        header.addView(this.getCellTextView("Total", true));
         // populate rows
         List<TableRow> tableRows = new ArrayList<TableRow>();
+        List<Double> totals = new ArrayList<Double>();
+        columns.stream().forEach(x -> totals.add(new Double(0)));
         rows.forEach(row -> {
             TableRow tableRow = new TableRow(this);
-            TextView rowLabel = new TextView(this);
-            rowLabel.setText(row);
-            tableRow.addView(rowLabel);
-            columns.forEach(col -> {
+            tableRow.addView(this.getCellTextView(row, true));
+            double total = 0;
+            for (int i = 0; i < columns.size(); i++) {
+                String col = columns.get(i);
                 List<TransactionDto> candidateCells = cells.stream().filter(x -> x.Date.substring(0, dateCharacters).equals(row)
-                    && (categoryType ? x.CategoryDescription : x.AccountDescription).equals(col)).collect(Collectors.toList());
+                        && (categoryType ? x.CategoryDescription : x.AccountDescription).equals(col)).collect(Collectors.toList());
                 double cell = candidateCells.size() > 0 ? candidateCells.get(0).Amount : 0;
-                TextView cellView = new TextView(this);
-                cellView.setText(String.format("$%s", cell + ""));
-                tableRow.addView(cellView);
-            });
+                tableRow.addView(this.getCellTextView(MyUtility.formatAsMoney(cell), false, getColor(cell >= 0 ? R.color.green : R.color.red)));
+                totals.set(i, totals.get(i) + cell);
+                total += cell;
+            }
+            tableRow.addView(this.getCellTextView(MyUtility.formatAsMoney(total), false, getColor(total >= 0 ? R.color.green : R.color.red)));
             tableRows.add(tableRow);
         });
+        TableRow totalRow = new TableRow(this);
+        totalRow.addView(this.getCellTextView("Total", true));
+        totals.forEach(total -> totalRow.addView(this.getCellTextView(MyUtility.formatAsMoney(total), false, getColor(total >= 0 ? R.color.green : R.color.red))));
+        totalRow.addView(this.getCellTextView("", true));
+        tableRows.add(totalRow);
         /// build table
-        TableLayout tableLayout = new TableLayout(this);
-        tableLayout.addView(header);
-        tableRows.forEach(tableRow -> tableLayout.addView(tableRow));
-        TableLayout.LayoutParams params = new TableLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        tableLayout.setLayoutParams(params);
-        this.linearLayoutReport.addView(tableLayout);
+        this.toggleTableView();
+        this.tableLayout.removeAllViews();
+        this.tableLayout.addView(header);
+        tableRows.forEach(tableRow -> this.tableLayout.addView(tableRow));
     }
 
     /**
-     * When a radio button is clicked
+     * @return true if in table view
+     */
+    private boolean isInTableView() {
+        return this.btnSelectEndDate.getVisibility() == View.GONE;
+    }
+
+    /**
+     * toggles between Report and Report View view
+     */
+    private void toggleTableView() {
+        int visibility = this.isInTableView() ? View.VISIBLE : View.GONE;
+        this.btnSelectStartDate.setVisibility(visibility);
+        this.lblStartDate.setVisibility(visibility);
+        this.btnSelectEndDate.setVisibility(visibility);
+        this.lblEndDate.setVisibility(visibility);
+        this.radioGrpBreakpoint.setVisibility(visibility);
+        this.radioGrpType.setVisibility(visibility);
+        this.lblLabel1.setVisibility(visibility);
+        this.lblLabel2.setVisibility(visibility);
+        this.btnSubmit.setVisibility(visibility);
+        this.tableLayout.setVisibility(visibility == View.VISIBLE ? View.GONE : View.VISIBLE);
+    }
+
+    /**
+     * when a radio button is clicked
      * @param view radio button that was clicked
      */
     public void radioBtnClick(View view) {
@@ -128,6 +188,10 @@ public class ReportActivity extends AppCompatActivity {
         MyState.REPORT_SELECTED_TYPE = radioBtnType == null ? null : radioBtnType.getText().toString();
     }
 
+    /**
+     * when the Submit button is clicked
+     * @param view button view
+     */
     public void btnSubmitClick(View view) {
         MyState.REPORT_SELECTED_START_DATE = this.lblStartDate.getText().toString();
         MyState.REPORT_SELECTED_END_DATE = this.lblEndDate.getText().toString();
@@ -150,7 +214,15 @@ public class ReportActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * when the back button is clicked
+     * @param view button view
+     */
     public void btnBackClick(View view) {
-        startActivity(new Intent(this, MenuActivity.class));
+        if (this.isInTableView()) {
+            this.toggleTableView();
+        } else {
+            startActivity(new Intent(this, MenuActivity.class));
+        }
     }
 }

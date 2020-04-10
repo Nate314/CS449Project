@@ -93,8 +93,6 @@ public class Algorithms {
 	    TimeZone tz = TimeZone.getDefault();
 	    Calendar tzcal = GregorianCalendar.getInstance(tz);
 	    int offsetInMillis = tz.getOffset(tzcal.getTimeInMillis()) * -1;
-		String strDate = date.toString();
-		System.out.println(strDate);
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
 		cal.add(Calendar.MILLISECOND, offsetInMillis);
@@ -103,6 +101,17 @@ public class Algorithms {
 		int day = cal.get(Calendar.DAY_OF_MONTH);
 		return String.format("%s-%s-%s", year, fillLeft(month + "", '0', 2), fillLeft(day + "", '0', 2));
 	}
+
+	/**
+	 * returns the money string version of the double amount
+	 * @param amount amount of money
+	 * @return string version
+	 */
+    public static String formatAsMoney(double amount) {
+        boolean negativeBalance = amount < 0;
+        amount = negativeBalance ? -1 * amount : amount;
+        return String.format("%s$%s", negativeBalance ? "-" : "", amount);
+    }
 
 	// used to collect objects into a list of strings
 	private static List<String> concat(List<String> list, String str)

@@ -83,4 +83,21 @@ public class MyUtility {
         dialog.show();
     }
 
+    public static String formatAsMoney(double amount) {
+        boolean negativeBalance = amount < 0;
+        amount = negativeBalance ? -1 * amount : amount;
+        String result = String.format("%s$%s", negativeBalance ? "-" : "", amount);
+        if (result.indexOf(".") != -1) {
+            int zeros = Math.max(3 - result.substring(result.indexOf(".")).length(), 0);
+            System.out.println(String.format("----------------Zeros: %d ", zeros));
+            System.out.println(result);
+            System.out.println(result.substring(result.indexOf(".")));
+            System.out.println(String.format("----------------Zeros: %d ", zeros));
+            for (int i = 0; i < zeros; i++) result += "0";
+        } else {
+            result += ".00";
+        }
+        return result;
+    }
+
 }
