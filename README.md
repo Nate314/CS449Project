@@ -81,9 +81,9 @@ Stretch Goals:
 | ~~5~~ | ~~Create the Register screen with: - Total balance at top - List of transactions - Buttons to link to income/expense/transfer screens~~ | ~~10~~ | ~~1.3~~ | ~~Sprint3~~ |
 | ~~6~~ | ~~Create Reports screen with: - Start/End date calendar inputs - Breakpoint selection (Month, Year) - Type selection (Category, Account)~~ | ~~3~~ | ~~1.4~~ | ~~Sprint4~~ |
 | ~~7~~ | ~~Create Report view screen with: - Table view of the report configured in the Reports screen~~ | ~~7~~ | ~~1.5~~ | ~~Sprint4~~ |
-| 8 | Allow the user to edit/delete an account name, income/expense category or first/last name from the Settings screen | 2 | 2.0 | TODO |
-| 9 | Create Transfer screen with: - Same fields as Income/Expense screen - And To/From account dropdowns | 4 | 2.1 | TODO |
-| 10 | Integrate Google authentication | 3 | 3.0 | TODO |
+| 8 | Allow the user to edit/delete an account name, income/expense category or first/last name from the Settings screen | 5 | 2.0 | Sprint5 |
+| 9 | Create Account/Category Transfer screens with: - Same fields as Income/Expense screen - And To/From account/category dropdowns | 5 | 2.1 | Sprint5 |
+| 10 | Integrate Google authentication | 4 | 3.0 | TODO |
 | 11 | Filter Register based on Category, Description, Amount, etc. | 3 | 4.0 | TODO |
 | 12 | Filter Reports based on specific categories/accounts | 4 | 4.1 | TODO |
 | 13 | Prompt to transfer balance to another account when deleting an account | 1.5 | 4.2 | TODO |
@@ -304,7 +304,21 @@ Changes for future sprints:
 
 # Sprint 5
 
-[TODO]
+**Sprint Goal: Create Transaction Scren and Add functionality to Settings Screen**
+
+Sprint Backlog
+
+| Story ID | Story / Task | Estimated Hours | Actual Hours |
+| --- | --- | --- | --- |
+| 8 | Settings screen enhancements |  |  |
+| 8.1 | Settings screen: edit/delete an account name | 2:00 |  |
+| 8.2 | Settings screen: edit/delete income/expense category | 2:00 |  |
+| 8.3 | Settings screen: edit first/last/user name | 1:00 |  |
+| 9 | Create Transfer screens |  |  |
+| 9.1 | Create Account Transfer screen with: - Same fields as Income/Expense screen - And To/From account dropdowns | 3:00 |  |
+| 9.2 | Create Category Transfer screen with: - Same fields as Income/Expense screen - And To/From category dropdowns | 2:00 |  |
+| --- | --- | --- | --- |
+|  | Total | 10:00 |  |
 
 ## Sprint 5 Review
 
