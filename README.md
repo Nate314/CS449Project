@@ -79,8 +79,8 @@ Stretch Goals:
 | ~~3~~ | ~~Create Settings screen that allows for: - Creation of new accounts - Creation of new income categories - Creation of new expense categories~~ | ~~6~~ | ~~1.1~~ | ~~Sprint2~~ |
 | ~~4~~ | ~~Create the Income/Expense screen with: - Amount money field - Category dropdown - Date calendar input - Account dropdown - Description text field~~ | ~~6~~ | ~~1.2~~ | ~~Sprint2~~ |
 | ~~5~~ | ~~Create the Register screen with: - Total balance at top - List of transactions - Buttons to link to income/expense/transfer screens~~ | ~~10~~ | ~~1.3~~ | ~~Sprint3~~ |
-| 6 | Create Reports screen with: - Start/End date calendar inputs - Breakpoint selection (Month, Year) - Type selection (Category, Account) | 3 | 1.4 | Sprint4 |
-| 7 | Create Report view screen with: - Table view of the report configured in the Reports screen | 7 | 1.5 | Sprint4 |
+| ~~6~~ | ~~Create Reports screen with: - Start/End date calendar inputs - Breakpoint selection (Month, Year) - Type selection (Category, Account)~~ | ~~3~~ | ~~1.4~~ | ~~Sprint4~~ |
+| ~~7~~ | ~~Create Report view screen with: - Table view of the report configured in the Reports screen~~ | ~~7~~ | ~~1.5~~ | ~~Sprint4~~ |
 | 8 | Allow the user to edit/delete an account name, income/expense category or first/last name from the Settings screen | 2 | 2.0 | TODO |
 | 9 | Create Transfer screen with: - Same fields as Income/Expense screen - And To/From account dropdowns | 4 | 2.1 | TODO |
 | 10 | Integrate Google authentication | 3 | 3.0 | TODO |
@@ -260,21 +260,47 @@ Sprint Backlog
 | Story ID | Story / Task | Estimated Hours | Actual Hours |
 | --- | --- | --- | --- |
 | 6 | Create Reports screen |  |  |
-| 6.1 | Reports screen: Start/End date calendar inputs | 1:00 |  |
-| 6.2 | Reports screen: Breakpoint selection (Month, Year) | 1:00 |  |
-| 6.3 | Reports screen: Type selection (Category, Account) | 1:00 |  |
+| 6.1 | Reports screen: Start/End date calendar inputs | 1:00 | 1:16 |
+| 6.2 | Reports screen: Breakpoint selection (Month, Year) | 1:00 | 1:16 |
+| 6.3 | Reports screen: Type selection (Category, Account) | 1:00 | 1:16 |
 | 7 | Create Report View screen |  |  |
-| 7.1 | Report View screen: Table view of the report configured in the Reports screen | 7:00 |  |
+| 7.1 | Report View screen: Table view of the report configured in the Reports screen | 7:00 | 4:44 |
 | --- | --- | --- | --- |
-|  | Total | 10:00 |  |
+|  | Total | 10:00 | 8:32 |
 
 ## Sprint 4 Review
 
-[TODO]
+Video showing that the report screen works and button to get there was added to the Menu screen: https://youtu.be/aKEIY-rZlQg
+
+As you can see from the [screenshots below](#sprint-4-screenshots), what I achieved this sprint was:
+- Created Report Screen
+  - Initially, you are presented with:
+    - Start Date Selection
+    - End Date Selection
+    - Breakpoint Selection
+    - Type Selection
+  - After pressing the submit button:
+    - Table is generated to display the information querried for
+    - Date Breakpoints are used for the rows
+    - Type (Accounts/Categories) are used for the columns
+- Added Functionality to other screens
+  - Added logo to login screen
+- Unit Tests for the API
+- Android Instrumentation Tests for the UI
 
 ## Sprint 4 Retrospective
 
-[TODO]
+What went well:
+- This was the first sprint that I finished up all of my tasks in less time than I initially estimated.
+Although I finished in less time than extimated, I did not take on any additional tasks because I was
+only 1.5 hours under my 10 hour estimate.
+- I am feeling much more comfortable with the Android framework
+
+What didn't go well:
+- For future sprints, I will take into account my overestimate for estimating future tasks.
+
+Changes for future sprints:
+- None, this sprint was good overall.
 
 # Sprint 5
 
@@ -330,7 +356,10 @@ Sprint Backlog
 
 .|.
 :----:|:----:
-[TODO]|[TODO]
+![iter4_updated_login.png](readme_assets/iter4_updated_login.png?raw=true)|![iter4_updated_menu.png](readme_assets/iter4_updated_menu.png?raw=true)
+![iter4_report_screen.png](readme_assets/iter4_report_screen.png?raw=true)|![iter4_report_options.png](readme_assets/iter4_report_options.png?raw=true)
+![iter4_report_table_accounts.png](readme_assets/iter4_report_table_accounts.png?raw=true)|![iter4_report_table_categories.png](readme_assets/iter4_report_table_categories.png?raw=true)
+
 
 # Sprint 5 Screenshots:
 
