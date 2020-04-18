@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import com.nathangawith.umkc.Algorithms;
 import com.nathangawith.umkc.Queries;
 import com.nathangawith.umkc.database.IDatabase;
 import com.nathangawith.umkc.dtos.DBResponse;
@@ -22,7 +23,7 @@ public class RegisterRepository implements IRegisterRepository {
 
 	@Override
 	public Collection<Transaction> selectTransactions(int userID) {
-		List<String> params = Arrays.asList(new String[] { userID + "" });
+		List<String> params = Algorithms.params(userID, userID);
 		Collection<Transaction> transactions = DB.select(Queries.GET_TRANSACTIONS, params, Transaction.class);
 		return transactions;
 	}

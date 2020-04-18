@@ -63,6 +63,7 @@
                 android:textSize="20sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <!--<Account/Category for Income/Expense Screens>-->
         <TextView
             android:id="@+id/lblLabel1"
             android:text="Account:"
@@ -102,6 +103,91 @@
             android:layout_marginTop="0dp"
             android:layout_gravity="center"
             android:gravity="center"  />
+        <!--</ Account/Category for Income/Expense Screens>-->
+
+        <!--<From/To Account for Account Transfer Screen>-->
+        <TextView
+            android:id="@+id/lblLabel3"
+            android:text="From Account:"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="14sp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:gravity="center" />
+
+        <Spinner
+            android:id="@+id/spinnerFromAccount"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:layout_gravity="center"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/lblLabel4"
+            android:text="To Account:"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="14sp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:gravity="center" />
+
+        <Spinner
+            android:id="@+id/spinnerToAccount"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:layout_gravity="center"
+            android:gravity="center"  />
+        <!--</ From/To Account for Account Transfer Screen>-->
+
+        <!--<From/To Account for Account Transfer Screen>-->
+        <TextView
+            android:id="@+id/lblLabel5"
+            android:text="From Category:"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="14sp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:gravity="center" />
+
+        <Spinner
+            android:id="@+id/spinnerFromCategory"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:layout_gravity="center"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/lblLabel6"
+            android:text="To Category:"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="14sp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:gravity="center" />
+
+        <Spinner
+            android:id="@+id/spinnerToCategory"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:layout_gravity="center"
+            android:gravity="center"  />
+        <!--</ From/To Account for Account Transfer Screen>-->
 
         <Button
             android:id="@+id/btnSelectDate"

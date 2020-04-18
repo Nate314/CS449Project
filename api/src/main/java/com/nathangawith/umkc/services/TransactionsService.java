@@ -25,4 +25,9 @@ public class TransactionsService implements ITransactionsService {
 	public boolean addNewTransaction(int userID, int accountID, int categoryID, String description, double amount, Date date) {
 		return mTransactionsRepository.insertTransaction(userID, accountID, categoryID, description, amount, date);
 	}
+
+	@Override
+	public boolean addNewTransfer(int userID, int fromID, int toID, boolean isAccountTransfer, String description, double amount, Date date) {
+		return mTransactionsRepository.insertTransfer(userID, fromID, toID, isAccountTransfer, description, amount, date);
+	}
 }

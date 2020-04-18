@@ -3,9 +3,8 @@ package com.nathangawith.umkc.financeapp.http;
 import android.content.Context;
 
 import com.nathangawith.umkc.financeapp.constants.MyConstants;
-import com.nathangawith.umkc.financeapp.dtos.DBTransaction;
+import com.nathangawith.umkc.financeapp.dtos.TransactionRequest;
 import com.nathangawith.umkc.financeapp.dtos.GenericResponse;
-import com.nathangawith.umkc.financeapp.dtos.ReportRequest;
 import com.nathangawith.umkc.financeapp.dtos.ReportResponseDto;
 import com.nathangawith.umkc.financeapp.dtos.TokenResponseDto;
 import com.nathangawith.umkc.financeapp.dtos.DBAccount;
@@ -23,9 +22,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.TimeZone;
 import java.util.function.Consumer;
 
 import cz.msebera.android.httpclient.entity.ByteArrayEntity;
@@ -91,6 +88,10 @@ public class MyApi {
                 }
             }
             System.out.println("-------- Parsing --------");
+            System.out.println(resp.toString());
+            System.out.println(resp == null);
+            System.out.println(func == null);
+            // System.out.println(resp != null ? ((GenericResponse) resp).response : "RESPONSE IS NULL");
             func.accept(resp);
         };
     }
@@ -169,22 +170,30 @@ public class MyApi {
         MyHttpClient.get(context, "/settings/categories/all?categoryType=" + type, x -> {}, parseCollection(DBCategory.class, func), x -> {}, parse(new GenericResponse(), errorFunc));
     }
 
-    public static void postTransaction(Context context, boolean income, DBTransaction transaction, Consumer<GenericResponse> func, Consumer<GenericResponse> errorFunc) {
-        try {
-            String jsonObjectString = String.format("{\"%s\":%s,\"%s\":%s,\"%s\":\"%s\",\"%s\":%s,\"%s\":\"%s\"}",
-                    "AccountID", transaction.AccountID,
-                    "CategoryID", transaction.CategoryID,
-                    "Description", transaction.Description,
-                    "Amount", transaction.Amount,
-                    "Date", dateToString(transaction.Date));
-            ByteArrayEntity entity = new ByteArrayEntity(jsonObjectString.getBytes("UTF-8"));
-            GenericResponse resp = new GenericResponse();
-            String type = income ? MyConstants.INCOME : MyConstants.EXPENSE;
-            System.out.println("-------- Request: --------");
-            System.out.println(jsonObjectString);
-            MyHttpClient.post(context, "/transactions/add?transactionType=" + type, entity, parse(resp, func), x -> {}, x -> {}, parse(resp, errorFunc));
-        } catch (UnsupportedEncodingException ex) {
-            ex.printStackTrace();
+    public static void postTransaction(Context context, String type, TransactionRequest transaction, Consumer<GenericResponse> func, Consumer<GenericResponse> errorFunc) {
+        GenericResponse resp = new GenericResponse();
+        if (type.equals(MyConstants.INCOME) || type.equals(MyConstants.EXPENSE) || type.equals(MyConstants.TRANSFER_ACCOUNT)|| type.equals(MyConstants.TRANSFER_CATEGORY)) {
+            try {
+                String jsonObjectString = String.format("{\"%s\":%s,\"%s\":%s,\"%s\":\"%s\",\"%s\":%s,\"%s\":\"%s\",\"%s\":\"%s\",\"%s\":\"%s\",\"%s\":\"%s\",\"%s\":\"%s\"}",
+                        "AccountID", transaction.AccountID,
+                        "CategoryID", transaction.CategoryID,
+                        "AccountToID", transaction.AccountToID,
+                        "AccountFromID", transaction.AccountFromID,
+                        "CategoryToID", transaction.CategoryToID,
+                        "CategoryFromID", transaction.CategoryFromID,
+                        "Description", transaction.Description,
+                        "Amount", transaction.Amount,
+                        "Date", dateToString(transaction.Date));
+                ByteArrayEntity entity = new ByteArrayEntity(jsonObjectString.getBytes("UTF-8"));
+                System.out.println("-------- Request: --------");
+                System.out.println(jsonObjectString);
+                MyHttpClient.post(context, "/transactions/add?transactionType=" + type, entity, parse(resp, func), x -> {}, x -> {}, parse(resp, errorFunc));
+            } catch (UnsupportedEncodingException ex) {
+                ex.printStackTrace();
+            }
+        } else {
+            resp.response = "Only Income/Expense/Transfer[Account/Category] are valid options";
+            parse(resp, errorFunc);
         }
     }
 

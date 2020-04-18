@@ -56,6 +56,22 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     /**
+     * sends user to the Account Transfer Screen
+     * @param view button view
+     */
+    public void btnAccountTransferClick(View view) {
+        this.goToActivity(IncomeExpenseActivity.class, MyConstants.TRANSFER_ACCOUNT);
+    }
+
+    /**
+     * sends user to the Category Transfer Screen
+     * @param view button view
+     */
+    public void btnCategoryTransferClick(View view) {
+        this.goToActivity(IncomeExpenseActivity.class, MyConstants.TRANSFER_CATEGORY);
+    }
+
+    /**
      * sends user to the Settings screen
      * @param view button view
      */

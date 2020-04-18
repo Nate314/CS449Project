@@ -116,18 +116,19 @@ public class Algorithms {
 	// used to collect objects into a list of strings
 	private static List<String> concat(List<String> list, String str)
 		{ list.add(str); return list; }
+	private static String objectToString(Object o) { return o == null ? null : o.toString(); }
 	public static List<String> params(Object o1)
-		{ return concat(new ArrayList<String>(), o1.toString()); }
+		{ return concat(new ArrayList<String>(), objectToString(o1)); }
 	public static List<String> params(Object o1, Object o2)
-		{ return concat(params(o1), o2.toString()); }
+		{ return concat(params(o1), objectToString(o2)); }
 	public static List<String> params(Object o1, Object o2, Object o3)
-		{ return concat(params(o1, o2), o3.toString()); }
+		{ return concat(params(o1, o2), objectToString(o3)); }
 	public static List<String> params(Object o1, Object o2, Object o3, Object o4)
-		{ return concat(params(o1, o2, o3), o4.toString()); }
+		{ return concat(params(o1, o2, o3), objectToString(o4)); }
 	public static List<String> params(Object o1, Object o2, Object o3, Object o4, Object o5)
-		{ return concat(params(o1, o2, o3, o4), o5.toString()); }
+		{ return concat(params(o1, o2, o3, o4), objectToString(o5)); }
 	public static List<String> params(Object o1, Object o2, Object o3, Object o4, Object o5, Object o6)
-		{ return concat(params(o1, o2, o3, o4, o5), o6.toString()); }
+		{ return concat(params(o1, o2, o3, o4, o5), objectToString(o6)); }
 	public static List<String> params(Object o1, Object o2, Object o3, Object o4, Object o5, Object o6, Object o7)
-		{ return concat(params(o1, o2, o3, o4, o5, o6), o7.toString()); }
+		{ return concat(params(o1, o2, o3, o4, o5, o6), objectToString(o7)); }
 }

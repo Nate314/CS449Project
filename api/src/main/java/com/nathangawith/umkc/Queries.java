@@ -13,14 +13,33 @@ public class Queries {
 	public static final String INSERT_TRANSACTION = "INSERT INTO transactions (UserID, AccountID, CategoryID, Description, Amount, Date) VALUES (?, ?, ?, ?, ?, ?)";
 	public static final String GET_REGISTER_TOTAL = "SELECT SUM(amount) AS DOUBLE_RESPONSE FROM transactions WHERE userid = ?";
 	public static final String GET_TRANSACTIONS   = 
-				 "SELECT transactions.transactionid, transactions.userid, transactions.accountid,"
+				"SELECT transactions.transactionid, transactions.userid, transactions.accountid, transactions.categoryid,"
 		+ "\n\t" + "transactions.description, transactions.amount, transactions.date,"
-		+ "\n\t" + "accounts.description AS accountdescription, categories.description AS categorydescription" 
-		+ "\n" + "FROM transactions" 
-		+ "\n\t" + "JOIN accounts ON transactions.AccountID = accounts.AccountID" 
-		+ "\n\t" + "JOIN categories ON transactions.CategoryID = categories.CategoryID" 
+		+ "\n\t" + "accounts.description AS accountdescription, categories.description AS categorydescription,"
+		+ "\n\t" + "NULL AS TransferID, NULL AS AccountFromDescription, NULL AS AccountToDescription,"
+		+ "\n\t" + "NULL AS CategoryFromDescription, NULL AS CategoryToDescription,"
+		+ "\n\t" + "NULL AS AccountFromID, NULL AS AccountToID,"
+		+ "\n\t" + "NULL AS CategoryFromID, NULL AS CategoryToID"
+		+ "\n" + "FROM transactions"
+		+ "\n\t" + "JOIN accounts ON transactions.AccountID = accounts.AccountID"
+		+ "\n\t" + "JOIN categories ON transactions.CategoryID = categories.CategoryID"
 		+ "\n" + "WHERE transactions.userid = ?"
-		+ "\n" + "ORDER BY date DESC";
+		+ "\n" + "UNION"
+		+ "\n" + "SELECT NULL AS transactionid, transfers.UserID, NULL AS accountid, NULL AS categoryid, fromTransaction.Description, toTransaction.Amount, toTransaction.Date, NULL AS accountdescription, NULL AS categorydescription,"
+		+ "\n" + "transfers.TransferID,"
+		+ "\n" + "fromAccount.Description AS AccountFromDescription, toAccount.Description AS AccountToDescription,"
+		+ "\n" + "fromCategory.Description AS CategoryFromDescription, toCategory.Description AS CategoryToDescription,"
+		+ "\n" + "fromAccount.AccountID AS AccountFromID, toAccount.AccountID AS AccountToID,"
+		+ "\n" + "fromCategory.CategoryID AS CategoryFromID, toCategory.CategoryID AS CategoryToID"
+		+ "\n" + "FROM transfers"
+		+ "\n\t" + "LEFT JOIN transactions fromTransaction ON fromTransaction.TransactionID = transfers.TransactionFromID"
+		+ "\n\t" + "LEFT JOIN transactions toTransaction ON toTransaction.TransactionID = transfers.TransactionToID"
+		+ "\n\t" + "LEFT JOIN accounts fromAccount ON fromTransaction.AccountID = fromAccount.AccountID"
+		+ "\n\t" + "LEFT JOIN categories fromCategory ON fromTransaction.CategoryID = fromCategory.CategoryID"
+		+ "\n\t" + "LEFT JOIN accounts toAccount ON toTransaction.AccountID = toAccount.AccountID"
+		+ "\n\t" + "LEFT JOIN categories toCategory ON toTransaction.CategoryID = toCategory.CategoryID"
+		+ "\n" + "WHERE transfers.userid = ?"
+		+ "\n" + "ORDER BY Date DESC, transactionid DESC";
 	public static final String GET_REPORT_SELECT_FROM_WHERE =
 				 "SELECT SUM(transactions.Amount) AS Amount, transactions.Date,"
 		+ "\n\t" + "accounts.Description AS AccountDescription, categories.Description AS CategoryDescription," 
@@ -34,4 +53,6 @@ public class Queries {
 	public static final String GET_REPORT_GROUP_BY_YEAR_CATEGORY  = "\nGROUP BY Year, CategoryDescription";
 	public static final String GET_REPORT_GROUP_BY_MONTH_ACCOUNT  = "\nGROUP BY Month, AccountDescription";
 	public static final String GET_REPORT_GROUP_BY_MONTH_CATEGORY = "\nGROUP BY Month, CategoryDescription";
+	public static final String GET_FROM_TO_TRANSACTION_IDS = "SELECT TransactionID FROM Transactions WHERE UserID = ? ORDER BY TransactionID DESC LIMIT 2";
+	public static final String INSERT_TRANSFER = "INSERT INTO transfers (UserID, TransactionFromID, TransactionToID) VALUES (?, ?, ?)";
 }

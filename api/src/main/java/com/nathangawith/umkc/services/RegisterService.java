@@ -27,8 +27,10 @@ public class RegisterService implements IRegisterService {
 	@Override
 	public Collection<Transaction> getTransactions(int userID) throws Exception {
 		Collection<Transaction> transactions = mRegisterRepository.selectTransactions(userID);
-		for (Transaction transaction : transactions)
+		for (Transaction transaction : transactions) {
+			transaction.IsTransfer = transaction.TransferID != null;
 			transaction.IsIncome = transaction.Amount >= 0;
+		}
 		return transactions;
 	}
 	

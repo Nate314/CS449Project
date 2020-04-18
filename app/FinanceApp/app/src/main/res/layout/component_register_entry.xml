@@ -80,7 +80,7 @@
             android:layout_width="0dp"
             android:layout_height="30dp"
             android:layout_weight="1"
-            android:id="@+id/lblTransactionAccount"
+            android:id="@+id/lblLabel1"
             android:text="Account"
             android:textStyle="normal"
             android:textSize="20dp"
@@ -90,7 +90,29 @@
             android:layout_width="0dp"
             android:layout_height="30dp"
             android:layout_weight="1"
-            android:id="@+id/lblTransactionCategory"
+            android:id="@+id/lblValue1"
+            android:text="Account"
+            android:textStyle="normal"
+            android:textSize="20dp"
+            android:textColor="@color/almostblack" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:id="@+id/lblLabel2"
+            android:text="Category"
+            android:textStyle="normal"
+            android:gravity="right"
+            android:textAlignment="gravity"
+            android:textSize="20dp"
+            android:textColor="@color/almostblack" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:id="@+id/lblValue2"
             android:text="Category"
             android:textStyle="normal"
             android:gravity="right"

@@ -44,11 +44,17 @@ public class RegisterEntryArrayAdapter extends ArrayAdapter<RegisterEntry> {
         TextView lblTransactionDate = listItemView.findViewById(R.id.lblTransactionDate);
         lblTransactionDate.setText(currentItem.getDate());
 
-        TextView lblTransactionAccount = listItemView.findViewById(R.id.lblTransactionAccount);
-        lblTransactionAccount.setText(currentItem.getAccount());
+        TextView lblLabel1 = listItemView.findViewById(R.id.lblLabel1);
+        lblLabel1.setText(currentItem.getLabel1());
 
-        TextView lblTransactionCategory = listItemView.findViewById(R.id.lblTransactionCategory);
-        lblTransactionCategory.setText(currentItem.getCategory());
+        TextView lblLabel2 = listItemView.findViewById(R.id.lblLabel2);
+        lblLabel2.setText(currentItem.getLabel2());
+
+        TextView lblValue1 = listItemView.findViewById(R.id.lblValue1);
+        lblValue1.setText(currentItem.getValue1());
+
+        TextView lblValue2 = listItemView.findViewById(R.id.lblValue2);
+        lblValue2.setText(currentItem.getValue2());
 
         return listItemView;
     }

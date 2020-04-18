@@ -59,3 +59,20 @@ DELETE FROM transactions WHERE Description LIKE '@%';
 
 -- change amount column type
 ALTER TABLE Transactions MODIFY amount DECIMAL(15,2);
+
+
+-- Transfers Table
+CREATE TABLE Transfers (
+    TransferID INT NOT NULL AUTO_INCREMENT,
+    TransactionFromID INT NOT NULL,
+    TransactionToID INT NOT NULL,
+    PRIMARY KEY (TransferID),
+    FOREIGN KEY (TransactionFromID) REFERENCES Transactions(TransactionID),
+    FOREIGN KEY (TransactionToID) REFERENCES Transactions(TransactionID)
+);
+
+CREATE VIEW transfers AS SELECT * FROM Transfers;
+
+ALTER TABLE Transactions MODIFY AccountID INT(11);
+ALTER TABLE Transactions MODIFY CategoryID INT(11);
+ALTER TABLE Transfers ADD COLUMN UserID INT NOT NULL;

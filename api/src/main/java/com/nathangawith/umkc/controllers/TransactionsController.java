@@ -20,6 +20,7 @@ import com.nathangawith.umkc.Constants;
 import com.nathangawith.umkc.Messages;
 import com.nathangawith.umkc.dtos.DBTransaction;
 import com.nathangawith.umkc.dtos.GenericResponse;
+import com.nathangawith.umkc.dtos.TransactionRequest;
 import com.nathangawith.umkc.interceptors.JWTInterceptor;
 import com.nathangawith.umkc.services.ITransactionsService;
 
@@ -35,7 +36,7 @@ public class TransactionsController {
 	public ResponseEntity<String> postAddAccount(
 		HttpServletRequest request,
 		@RequestParam String transactionType,
-		@RequestBody DBTransaction body
+		@RequestBody TransactionRequest body
 	) throws Exception {
 		GenericResponse response = new GenericResponse();
 		try {
@@ -48,6 +49,17 @@ public class TransactionsController {
 			if (Arrays.asList(new String[] { Constants.EXPENSE, Constants.INCOME }).contains(transactionType)) {
 				amt = (transactionType.equals(Constants.INCOME) ? 1 : -1) * amt;
 				if (transactionsService.addNewTransaction(u, acc, cat, desc, amt, d)) {
+					response.response = Messages.TRANSACTION_CREATED_SUCCESSFULLY;
+					return new ResponseEntity<String>(Algorithms.toJSONObject(response), HttpStatus.OK);
+				} else {
+					response.response = Messages.TRANSACTION_CREATION_FAILED;
+					return new ResponseEntity<String>(Algorithms.toJSONObject(response), HttpStatus.NOT_FOUND);
+				}
+			} else if(Arrays.asList(new String[] { Constants.TRANSFER_ACCOUNT, Constants.TRANSFER_CATEGORY }).contains(transactionType)) {
+				boolean isAccountTransfer = transactionType.equals(Constants.TRANSFER_ACCOUNT);
+				int fromID = isAccountTransfer ? body.AccountFromID : body.CategoryFromID;
+				int toID = isAccountTransfer ? body.AccountToID : body.CategoryToID;
+				if (transactionsService.addNewTransfer(u, fromID, toID, isAccountTransfer, desc, amt, d)) {
 					response.response = Messages.TRANSACTION_CREATED_SUCCESSFULLY;
 					return new ResponseEntity<String>(Algorithms.toJSONObject(response), HttpStatus.OK);
 				} else {
