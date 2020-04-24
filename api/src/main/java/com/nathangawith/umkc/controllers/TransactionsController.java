@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nathangawith.umkc.Algorithms;
 import com.nathangawith.umkc.Constants;
 import com.nathangawith.umkc.Messages;
-import com.nathangawith.umkc.dtos.DBTransaction;
 import com.nathangawith.umkc.dtos.GenericResponse;
 import com.nathangawith.umkc.dtos.TransactionRequest;
 import com.nathangawith.umkc.interceptors.JWTInterceptor;
@@ -33,7 +32,7 @@ public class TransactionsController {
 	private ITransactionsService transactionsService;
 
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	public ResponseEntity<String> postAddAccount(
+	public ResponseEntity<String> postAddTransaction(
 		HttpServletRequest request,
 		@RequestParam String transactionType,
 		@RequestBody TransactionRequest body

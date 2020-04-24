@@ -3,8 +3,6 @@ package com.nathangawith.tests;
 import java.util.ArrayList;
 import java.util.Date;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,7 +22,7 @@ import com.nathangawith.umkc.dtos.Transaction;
 import com.nathangawith.umkc.services.ReportService;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ControllerReportTest {
+public class ControllerReportTest extends BaseTest {
 
 	@Mock
 	private ReportService mService;
@@ -57,8 +55,6 @@ public class ControllerReportTest {
 	private void postReportGenericTest(boolean creationFailed, String exception, ReportRequest body, ReportResponse expectedResult) {
 		try {
 			// Arrange
-			HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
-			Mockito.when(request.getHeader("Authorization")).thenReturn("Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJpc3MiOiJhdXRoMCIsInByZWZlcnJlZF91c2VybmFtZSI6InUiLCJleHAiOjE1ODI2MDU0MDIsImlhdCI6MTU4MjYwNDUwMn0.AVSbXFTQrUYII67oVfDhMJ3SzA22RgQXcDqlfIyKb00");
 			ReportResponse result = new ReportResponse();
 			result.StartDate = body.StartDate;
 			result.EndDate = body.EndDate;

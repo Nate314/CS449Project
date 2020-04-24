@@ -3,8 +3,6 @@ package com.nathangawith.tests;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,7 +23,7 @@ import com.nathangawith.umkc.dtos.GenericResponse;
 import com.nathangawith.umkc.services.SettingsService;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ControllerSettingsTest {
+public class ControllerSettingsTest extends BaseTest {
 
 	@Mock
 	private SettingsService mService;
@@ -69,8 +67,6 @@ public class ControllerSettingsTest {
 		try {
 			// Arrange
 			GenericResponse genericResponse = new GenericResponse();
-			HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
-			Mockito.when(request.getHeader("Authorization")).thenReturn("Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJpc3MiOiJhdXRoMCIsInByZWZlcnJlZF91c2VybmFtZSI6InUiLCJleHAiOjE1ODI2MDU0MDIsImlhdCI6MTU4MjYwNDUwMn0.AVSbXFTQrUYII67oVfDhMJ3SzA22RgQXcDqlfIyKb00");
 			DBAccount body = new DBAccount();
 			body.UserID = 1;
 			body.Description = "account_description";
@@ -104,7 +100,6 @@ public class ControllerSettingsTest {
 	private void getAllAccountsGenericTest(boolean throwException) {
 		try {
 			// Arrange
-			HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
 			Mockito.when(request.getHeader("Authorization")).thenReturn("Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJpc3MiOiJhdXRoMCIsInByZWZlcnJlZF91c2VybmFtZSI6InUiLCJleHAiOjE1ODI2MDU0MDIsImlhdCI6MTU4MjYwNDUwMn0.AVSbXFTQrUYII67oVfDhMJ3SzA22RgQXcDqlfIyKb00");
 			ArrayList<DBAccount> accounts = new ArrayList<DBAccount>();
 			DBAccount account = new DBAccount();
@@ -142,7 +137,6 @@ public class ControllerSettingsTest {
 		try {
 			// Arrange
 			GenericResponse genericResponse = new GenericResponse();
-			HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
 			Mockito.when(request.getHeader("Authorization")).thenReturn("Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJpc3MiOiJhdXRoMCIsInByZWZlcnJlZF91c2VybmFtZSI6InUiLCJleHAiOjE1ODI2MDU0MDIsImlhdCI6MTU4MjYwNDUwMn0.AVSbXFTQrUYII67oVfDhMJ3SzA22RgQXcDqlfIyKb00");
 			DBCategory body = new DBCategory ();
 			body.UserID = 1;
@@ -183,7 +177,6 @@ public class ControllerSettingsTest {
 	private void getAllCategoriesGenericTest(boolean throwException, String categoryType) {
 		try {
 			// Arrange
-			HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
 			Mockito.when(request.getHeader("Authorization")).thenReturn("Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJpc3MiOiJhdXRoMCIsInByZWZlcnJlZF91c2VybmFtZSI6InUiLCJleHAiOjE1ODI2MDU0MDIsImlhdCI6MTU4MjYwNDUwMn0.AVSbXFTQrUYII67oVfDhMJ3SzA22RgQXcDqlfIyKb00");
 			ArrayList<DBCategory> categories = new ArrayList<DBCategory>();
 			DBCategory category = new DBCategory();

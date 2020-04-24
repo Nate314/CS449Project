@@ -117,40 +117,55 @@
             android:gravity="center" />
 
         <TextView
-            android:id="@+id/lblAccounts"
+            android:id="@+id/lblLabel1"
             android:layout_marginRight="10dp"
             android:text="Accounts:"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="14sp"
+            android:textSize="25sp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="0dp"
             android:layout_gravity="center"
             android:gravity="center" />
 
+        <ListView
+            android:id="@+id/listAccounts"
+            android:layout_width="wrap_content"
+            android:layout_height="1000dp"></ListView>
+
         <TextView
-            android:id="@+id/lblIncomeCategories"
+            android:id="@+id/lblLabel2"
             android:layout_marginRight="10dp"
             android:text="Income Categories"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="14sp"
+            android:textSize="25sp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
             android:layout_gravity="center"
             android:gravity="center" />
 
+        <ListView
+            android:id="@+id/listIncomeCategories"
+            android:layout_width="wrap_content"
+            android:layout_height="1000dp"></ListView>
+
         <TextView
-            android:id="@+id/lblExpenseCategories"
+            android:id="@+id/lblLabel3"
             android:layout_marginRight="10dp"
             android:text="Expense Categories:"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="14sp"
+            android:textSize="25sp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
             android:layout_gravity="center"
             android:gravity="center" />
+
+        <ListView
+            android:id="@+id/listExpenseCategories"
+            android:layout_width="wrap_content"
+            android:layout_height="1000dp"></ListView>
 
     </LinearLayout>
 

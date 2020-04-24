@@ -15,7 +15,7 @@ import com.nathangawith.umkc.repositories.ITransactionsRepository;
 import com.nathangawith.umkc.services.TransactionsService;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ServiceTransactionsTest  {
+public class ServiceTransactionsTest extends BaseTest  {
 
 	@Mock
 	private ITransactionsRepository mRepository;
@@ -25,11 +25,17 @@ public class ServiceTransactionsTest  {
 
 	@Test
 	public void addTransactionTest() {
-		addTransactionGenericTest(true);
-		addTransactionGenericTest(false);
+		addTransactionTransferGenericTest(false, true);
+		addTransactionTransferGenericTest(false, false);
+	}
+
+	@Test
+	public void addTransferTest() {
+		addTransactionTransferGenericTest(true, true);
+		addTransactionTransferGenericTest(true, false);
 	}
 	
-	private void addTransactionGenericTest(boolean success) {
+	private void addTransactionTransferGenericTest(boolean transfer, boolean success) {
 		// Arrange
 		DBTransaction transaction = new DBTransaction();
 		transaction.UserID = 1;
@@ -38,10 +44,19 @@ public class ServiceTransactionsTest  {
 		transaction.Description = "transaction_description";
 		transaction.Amount = 3.14;
 		transaction.Date = new Date();
-		Mockito.when(mRepository.insertTransaction(transaction.UserID, transaction.AccountID, transaction.CategoryID, transaction.Description, transaction.Amount, transaction.Date)).thenReturn(success);
+		if (transfer) {
+			Mockito.when(mRepository.insertTransfer(transaction.UserID, transaction.AccountID, transaction.CategoryID, true, transaction.Description, transaction.Amount, transaction.Date)).thenReturn(success);
+		} else {
+			Mockito.when(mRepository.insertTransaction(transaction.UserID, transaction.AccountID, transaction.CategoryID, transaction.Description, transaction.Amount, transaction.Date)).thenReturn(success);
+		}
 
 		// Act
-		boolean result = mService.addNewTransaction(transaction.UserID, transaction.AccountID, transaction.CategoryID, transaction.Description, transaction.Amount, transaction.Date);
+		boolean result;
+		if (transfer) {
+			result = mService.addNewTransfer(transaction.UserID, transaction.AccountID, transaction.CategoryID, true, transaction.Description, transaction.Amount, transaction.Date);
+		} else {
+			result = mService.addNewTransaction(transaction.UserID, transaction.AccountID, transaction.CategoryID, transaction.Description, transaction.Amount, transaction.Date);
+		}
 		
 		// Assert
 		Assert.assertEquals(success, result);

@@ -148,6 +148,23 @@ public class MyApi {
         }
     }
 
+    public static void putEditAccount(Context context, int accountID, String accountDescription, Consumer<GenericResponse> func, Consumer<GenericResponse> errorFunc) {
+        try {
+            GenericResponse resp = new GenericResponse();
+            String jsonObjectString = String.format("{\"%s\":\"%s\",\"%s\":\"%s\"}", "AccountID", accountID, "Description", accountDescription);
+            ByteArrayEntity entity = new ByteArrayEntity(jsonObjectString.getBytes("UTF-8"));
+
+            MyHttpClient.put(context, "/settings/account/edit", entity, parse(resp, func), x -> {}, x -> {}, parse(resp, errorFunc));
+        } catch (UnsupportedEncodingException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static void deleteRemoveAccount(Context context, int accountID, Consumer<GenericResponse> func, Consumer<GenericResponse> errorFunc) {
+        GenericResponse resp = new GenericResponse();
+        MyHttpClient.delete(context, String.format("/settings/account/remove?id=%d", accountID), parse(resp, func), x -> {}, x -> {}, parse(resp, errorFunc));
+    }
+
     public static void getAllAccounts(Context context, Consumer<Collection<DBAccount>> func, Consumer<GenericResponse> errorFunc) {
         MyHttpClient.get(context, "/settings/accounts/all", x -> {}, parseCollection(DBAccount.class, func), x -> {}, parse(new GenericResponse(), errorFunc));
     }
@@ -163,6 +180,23 @@ public class MyApi {
         } catch (UnsupportedEncodingException ex) {
             ex.printStackTrace();
         }
+    }
+
+    public static void putEditCategory(Context context, int categoryID, String categoryDescription, Consumer<GenericResponse> func, Consumer<GenericResponse> errorFunc) {
+        try {
+            GenericResponse resp = new GenericResponse();
+            String jsonObjectString = String.format("{\"%s\":\"%s\",\"%s\":\"%s\"}", "AccountID", categoryID, "Description", categoryDescription);
+            ByteArrayEntity entity = new ByteArrayEntity(jsonObjectString.getBytes("UTF-8"));
+
+            MyHttpClient.put(context, "/settings/category/edit", entity, parse(resp, func), x -> {}, x -> {}, parse(resp, errorFunc));
+        } catch (UnsupportedEncodingException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static void deleteRemoveCategory(Context context, int categoryID, Consumer<GenericResponse> func, Consumer<GenericResponse> errorFunc) {
+        GenericResponse resp = new GenericResponse();
+        MyHttpClient.delete(context, String.format("/settings/category/remove?id=%d", categoryID), parse(resp, func), x -> {}, x -> {}, parse(resp, errorFunc));
     }
 
     public static void getAllCategories(Context context, boolean income, Consumer<Collection<DBCategory>> func, Consumer<GenericResponse> errorFunc) {

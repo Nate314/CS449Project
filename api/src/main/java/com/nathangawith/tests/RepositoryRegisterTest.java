@@ -21,7 +21,7 @@ import com.nathangawith.umkc.dtos.Transaction;
 import com.nathangawith.umkc.repositories.RegisterRepository;
 
 @RunWith(MockitoJUnitRunner.class)
-public class RepositoryRegisterTest {
+public class RepositoryRegisterTest extends BaseTest {
 
 	@Mock
 	private IDatabase mDatabase;
@@ -67,7 +67,7 @@ public class RepositoryRegisterTest {
 	private void selectTransactionsGenericTest(Collection<Transaction> expectedResult) {
 		// Arrange
 		String sql = Queries.GET_TRANSACTIONS;
-		List<String> params = Arrays.asList(new String[] {"1"});
+		List<String> params = Arrays.asList(new String[] {"1", "1"});
 		Mockito.when(mDatabase.select(sql, params, Transaction.class)).thenReturn(expectedResult);
 
 		// Act

@@ -17,7 +17,7 @@ import com.nathangawith.umkc.repositories.IRegisterRepository;
 import com.nathangawith.umkc.services.RegisterService;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ServiceRegisterTest {
+public class ServiceRegisterTest extends BaseTest {
 
 	@Mock
 	private IRegisterRepository mRepository;

@@ -25,8 +25,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private TextView lblTotal;
     private SwipeRefreshLayout swipeRefresh;
-    // private TextView lblTempTransactions;
-    ListView listTransactions;
+    private ListView listTransactions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +56,7 @@ public class RegisterActivity extends AppCompatActivity {
             for (TransactionDto transaction : respCollection) {
                 transactionsList.add(new RegisterEntry(transaction));
             }
-            RegisterEntryArrayAdapter arrayAdapter = new RegisterEntryArrayAdapter(this, 0, transactionsList);
+            RegisterEntryArrayAdapter arrayAdapter = new RegisterEntryArrayAdapter(this, this, 0, transactionsList);
             listTransactions.setAdapter(arrayAdapter);
             this.swipeRefresh.setRefreshing(false);
         }, data -> MyUtility.okDialog(this, "Error", data.response));

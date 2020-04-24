@@ -18,7 +18,7 @@ import com.nathangawith.umkc.dtos.DBUser;
 import com.nathangawith.umkc.repositories.AuthenticationRepository;
 
 @RunWith(MockitoJUnitRunner.class)
-public class RepositoryAuthenticationTest {
+public class RepositoryAuthenticationTest extends BaseTest {
 
 	@Mock
 	private IDatabase mDatabase;

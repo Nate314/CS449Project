@@ -2,8 +2,6 @@ package com.nathangawith.tests;
 
 import java.util.Date;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,12 +16,12 @@ import com.nathangawith.umkc.Algorithms;
 import com.nathangawith.umkc.Constants;
 import com.nathangawith.umkc.Messages;
 import com.nathangawith.umkc.controllers.TransactionsController;
-import com.nathangawith.umkc.dtos.DBTransaction;
 import com.nathangawith.umkc.dtos.GenericResponse;
+import com.nathangawith.umkc.dtos.TransactionRequest;
 import com.nathangawith.umkc.services.TransactionsService;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ControllerTransactionsTest {
+public class ControllerTransactionsTest extends BaseTest {
 
 	@Mock
 	private TransactionsService mService;
@@ -41,9 +39,7 @@ public class ControllerTransactionsTest {
 		try {
 			// Arrange
 			GenericResponse genericResponse = new GenericResponse();
-			HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
-			Mockito.when(request.getHeader("Authorization")).thenReturn("Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJpc3MiOiJhdXRoMCIsInByZWZlcnJlZF91c2VybmFtZSI6InUiLCJleHAiOjE1ODI2MDU0MDIsImlhdCI6MTU4MjYwNDUwMn0.AVSbXFTQrUYII67oVfDhMJ3SzA22RgQXcDqlfIyKb00");
-			DBTransaction body = new DBTransaction();
+			TransactionRequest body = new TransactionRequest();
 			body.UserID = 1;
 			body.AccountID = 1;
 			body.CategoryID = 1;
@@ -54,7 +50,7 @@ public class ControllerTransactionsTest {
 			Mockito.when(mService.addNewTransaction(body.UserID, body.AccountID, body.CategoryID, body.Description, body.Amount, body.Date)).thenReturn(!creationFailed);
 			
 			// Act
-			ResponseEntity<String> response = mController.postAddAccount(request, Constants.INCOME, body);
+			ResponseEntity<String> response = mController.postAddTransaction(request, Constants.INCOME, body);
 			
 			// Assert
 			Assert.assertEquals(response.getStatusCode(), creationFailed ? HttpStatus.NOT_FOUND : HttpStatus.OK);

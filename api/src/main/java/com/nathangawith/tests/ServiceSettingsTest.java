@@ -19,7 +19,7 @@ import com.nathangawith.umkc.repositories.ISettingsRepository;
 import com.nathangawith.umkc.services.SettingsService;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ServiceSettingsTest {
+public class ServiceSettingsTest extends BaseTest {
 
 	@Mock
 	private ISettingsRepository mRepository;

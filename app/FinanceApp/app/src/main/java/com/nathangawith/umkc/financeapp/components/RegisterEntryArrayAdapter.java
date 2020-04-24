@@ -9,16 +9,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nathangawith.umkc.financeapp.R;
+import com.nathangawith.umkc.financeapp.constants.MyUtility;
 
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class RegisterEntryArrayAdapter extends ArrayAdapter<RegisterEntry> {
 
-    public RegisterEntryArrayAdapter(@NonNull Context context, int resource, @NonNull ArrayList<RegisterEntry> registerEntry) {
+    private AppCompatActivity activity;
+
+    public RegisterEntryArrayAdapter(@NonNull AppCompatActivity activity, @NonNull Context context, int resource, @NonNull ArrayList<RegisterEntry> registerEntry) {
         super(context, resource, registerEntry);
+        this.activity = activity;
     }
 
     @NonNull
@@ -55,6 +60,14 @@ public class RegisterEntryArrayAdapter extends ArrayAdapter<RegisterEntry> {
 
         TextView lblValue2 = listItemView.findViewById(R.id.lblValue2);
         lblValue2.setText(currentItem.getValue2());
+
+        RegisterEntryArrayAdapter me = this;
+        listItemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MyUtility.okDialog(me.activity, "Clicked!", currentItem.getAmount());
+            }
+        });
 
         return listItemView;
     }

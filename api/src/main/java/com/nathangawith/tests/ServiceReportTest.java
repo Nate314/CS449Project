@@ -20,7 +20,7 @@ import com.nathangawith.umkc.repositories.IReportRepository;
 import com.nathangawith.umkc.services.ReportService;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ServiceReportTest {
+public class ServiceReportTest extends BaseTest {
 	
 	class ReportRequestResponse {
 		ReportRequest request;
@@ -62,34 +62,29 @@ public class ServiceReportTest {
 		ReportRequestResponse requestAndExpectedResult = getRequestAndExpectedResult("Year", "Account");
 		ReportRequest request = requestAndExpectedResult.request;
 		ReportResponse expectedResult = requestAndExpectedResult.response;
-		selectReportGenericTest(true, true, request, expectedResult);
+		getReportGenericTest(true, true, request, expectedResult);
 	}
 	
-	private void selectReportGenericTest(boolean year, boolean account, ReportRequest request, ReportResponse expectedResult) {
+	private void getReportGenericTest(boolean year, boolean account, ReportRequest request, ReportResponse expectedResult) {
 		try {
 			// Arrange
 			Date sd = request.StartDate, ed = request.EndDate;
 			String bp = request.Breakpoint, type = request.Type;
-			ReportResponse result = new ReportResponse();
-			result.StartDate = request.StartDate;
-			result.EndDate = request.EndDate;
-			result.Breakpoint = request.Breakpoint;
-			result.Type = type;
 			Mockito.when(mRepository.selectBreakpointCategoryReport(1, sd, ed, bp, type)).thenReturn(expectedResult.Cells);
 
 			// Act
-			Collection<Transaction> response = mRepository.selectBreakpointCategoryReport(1, request.StartDate, request.EndDate, bp, type);
-			result.Cells = (List<Transaction>) response;
+			ReportResponse response = mService.getReport(1, request);
 
 			// Assert
-			Assert.assertEquals(expectedResult.StartDate, result.StartDate);
-			Assert.assertEquals(expectedResult.EndDate, result.EndDate);
-			Assert.assertEquals(expectedResult.Breakpoint, result.Breakpoint);
-			Assert.assertEquals(expectedResult.Type, result.Type);
-			Assert.assertEquals(expectedResult.Cells, result.Cells);
+			Assert.assertEquals(expectedResult.StartDate, response.StartDate);
+			Assert.assertEquals(expectedResult.EndDate, response.EndDate);
+			Assert.assertEquals(expectedResult.Breakpoint, response.Breakpoint);
+			Assert.assertEquals(expectedResult.Type, response.Type);
+			Assert.assertEquals(expectedResult.Cells, response.Cells);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			Assert.fail();
 		}
 	}
 }

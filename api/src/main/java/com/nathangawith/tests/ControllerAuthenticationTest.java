@@ -15,7 +15,7 @@ import com.nathangawith.umkc.dtos.LoginRequest;
 import com.nathangawith.umkc.services.AuthenticationService;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ControllerAuthenticationTest {
+public class ControllerAuthenticationTest extends BaseTest {
 
 	@Mock
 	private AuthenticationService mService;

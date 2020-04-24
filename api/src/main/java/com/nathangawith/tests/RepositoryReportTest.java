@@ -22,7 +22,7 @@ import com.nathangawith.umkc.dtos.Transaction;
 import com.nathangawith.umkc.repositories.ReportRepository;
 
 @RunWith(MockitoJUnitRunner.class)
-public class RepositoryReportTest {
+public class RepositoryReportTest extends BaseTest {
 	
 	class ReportRequestResponse {
 		ReportRequest request;

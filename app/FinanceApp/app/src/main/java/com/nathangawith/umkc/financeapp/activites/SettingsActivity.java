@@ -4,13 +4,20 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.nathangawith.umkc.financeapp.components.RegisterEntry;
+import com.nathangawith.umkc.financeapp.components.RegisterEntryArrayAdapter;
+import com.nathangawith.umkc.financeapp.components.SettingsEntry;
+import com.nathangawith.umkc.financeapp.components.SettingsEntryArrayAdapter;
 import com.nathangawith.umkc.financeapp.constants.MyUtility;
+import com.nathangawith.umkc.financeapp.dtos.TransactionDto;
 import com.nathangawith.umkc.financeapp.http.MyApi;
 import com.nathangawith.umkc.financeapp.R;
 import com.nathangawith.umkc.financeapp.dtos.DBAccount;
@@ -18,6 +25,7 @@ import com.nathangawith.umkc.financeapp.dtos.DBCategory;
 import com.nathangawith.umkc.financeapp.dtos.GenericResponse;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.function.Consumer;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -27,10 +35,10 @@ public class SettingsActivity extends AppCompatActivity {
     private EditText txtAddExpenseCategory;
     private Button btnAdd;
     private Button btnBack;
-    private TextView lblAccounts;
-    private TextView lblIncomeCategories;
-    private TextView lblExpenseCategories;
     private ProgressBar progressBar;
+    private ListView listAccounts;
+    private ListView listIncomeCategories;
+    private ListView listExpenseCategories;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,14 +48,14 @@ public class SettingsActivity extends AppCompatActivity {
         // initialize fields to ui elements
         this.txtAddAccount = findViewById(R.id.txtAddAccount);
         this.btnAdd = findViewById(R.id.btnAdd);
-        this.lblAccounts = findViewById(R.id.lblAccounts);
         this.txtAddIncomeCategory = findViewById(R.id.txtAddIncomeCategory);
-        this.lblIncomeCategories = findViewById(R.id.lblIncomeCategories);
         this.txtAddExpenseCategory = findViewById(R.id.txtAddExpenseCategory);
-        this.lblExpenseCategories = findViewById(R.id.lblExpenseCategories);
         this.btnBack = findViewById(R.id.btnBack);
         this.progressBar = findViewById(R.id.progressBar);
         this.progressBar.setVisibility(View.INVISIBLE);
+        this.listAccounts = findViewById(R.id.listAccounts);
+        this.listIncomeCategories = findViewById(R.id.listIncomeCategories);
+        this.listExpenseCategories = findViewById(R.id.listExpenseCategories);
         // populate info
         this.getAllAccounts();
         this.getAllCategories(true);
@@ -73,15 +81,21 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+
+    private <T> void bindListView(ListView listView, Collection<T> respCollection, boolean account, boolean income) {
+        ArrayList<SettingsEntry> list = new ArrayList<SettingsEntry>();
+        for (T item : respCollection) list.add(account ? new SettingsEntry((DBAccount) item) : new SettingsEntry((DBCategory) item, income));
+        SettingsEntryArrayAdapter arrayAdapter = new SettingsEntryArrayAdapter(this, this, 0, list);
+        listView.setAdapter(arrayAdapter);
+    }
+
     /**
      * retrieves all accounts from the api and displays them on the screen
      */
     private void getAllAccounts() {
-        MyApi.getAllAccounts(getApplicationContext(), respCollection -> {
-            String accountLabel = "Accounts: ";
-            for (DBAccount acc : respCollection) accountLabel += String.format("%s, ", acc.Description);
-            this.lblAccounts.setText(accountLabel.substring(0, accountLabel.length() - 2));
-        }, errFunc);
+        MyApi.getAllAccounts(getApplicationContext(),
+            respCollection -> this.bindListView(this.listAccounts, respCollection, true, false),
+            errFunc);
     }
 
     /**
@@ -89,13 +103,9 @@ public class SettingsActivity extends AppCompatActivity {
      * @param income true to retrieve income categories, false to retrieve expense categories
      */
     private void getAllCategories(boolean income) {
-        MyApi.getAllCategories(getApplicationContext(), income, respCollection -> {
-            String categoriesLabel = String.format("%s Categories: ", income ? "Income" : "Expense");
-            for (DBCategory cat : respCollection)
-                categoriesLabel += String.format("%s, ", cat.Description);
-            (income ? this.lblIncomeCategories : this.lblExpenseCategories)
-                    .setText(categoriesLabel.substring(0, categoriesLabel.length() - 2));
-        }, errFunc);
+        MyApi.getAllCategories(getApplicationContext(), income,
+            respCollection -> this.bindListView(income ? this.listIncomeCategories : this.listExpenseCategories, respCollection, false, income),
+            errFunc);
     }
 
     /**
@@ -166,6 +176,36 @@ public class SettingsActivity extends AppCompatActivity {
         }
         if (noneAdded){
             MyUtility.okDialog(this, "Please enter:", "an Account, an Income Category, or an Expense Category");
+        }
+    }
+
+    /**
+     * when the edit button is clicked on an account or category entry
+     */
+    public void btnEditClick(SettingsEntry entry) {
+        if (entry.getIsAccount()) {
+            MyApi.putEditAccount(this, entry.getID(), entry.getDescription(),
+                    x -> MyUtility.okDialog(this, "EDIT ACCOUNT SUCCESS", x.response),
+                    x -> MyUtility.okDialog(this, "EDIT ACCOUNT FAILED", x.response));
+        } else {
+            MyApi.putEditCategory(this, entry.getID(), entry.getDescription(),
+                    x -> MyUtility.okDialog(this, "EDIT CATEGORY SUCCESS", x.response),
+                    x -> MyUtility.okDialog(this, "EDIT CATEGORY FAILED", x.response));
+        }
+    }
+
+    /**
+     * when the delete button is clicked on an account or category entry
+     */
+    public void btnDeleteClick(SettingsEntry entry) {
+        if (entry.getIsAccount()) {
+            MyApi.deleteRemoveAccount(this, entry.getID(),
+                    x -> MyUtility.okDialog(this, "DELETE ACCOUNT SUCCESS", x.response),
+                    x -> MyUtility.okDialog(this, "DELETE ACCOUNT FAILED", x.response));
+        } else {
+            MyApi.deleteRemoveCategory(this, entry.getID(),
+                    x -> MyUtility.okDialog(this, "DELETE CATEGORY SUCCESS", x.response),
+                    x -> MyUtility.okDialog(this, "DELETE CATEGORY FAILED", x.response));
         }
     }
 

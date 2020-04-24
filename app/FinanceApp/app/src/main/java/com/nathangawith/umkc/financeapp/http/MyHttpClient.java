@@ -43,21 +43,41 @@ public class MyHttpClient {
         }
     }
 
-    public static void put(Context context, String url, ByteArrayEntity entity, AsyncHttpResponseHandler responseHandler) {
-        url = getAbsoluteUrl(url);
-        System.out.println("Sending request to: " + url);
-        entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-        client.addHeader("Authorization", String.format("Bearer %s", MyState.TOKEN));
-        client.put(context, url, entity, "application/json", responseHandler);
+    public static void put(Context context, String url, ByteArrayEntity entity, Consumer<JSONObject> obCallback, Consumer<JSONArray> arrCallback, Consumer<Throwable> errCallback, Consumer<JSONObject> errObCallback) {
+        client.setMaxRetriesAndTimeout(3, 10);
+        try {
+            url = getAbsoluteUrl(url);
+            System.out.println("Sending request to: " + url);
+            entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+            client.addHeader("Authorization", String.format("Bearer %s", MyState.TOKEN));
+            client.put(context, url, entity, "application/json", getHandler(obCallback, arrCallback, errCallback, errObCallback));
+        } catch (Exception ex) {
+            errCallback.accept(null);
+        }
     }
 
-    public static void delete(Context context, String url, ByteArrayEntity entity, AsyncHttpResponseHandler responseHandler) {
+//    public static void put(Context context, String url, ByteArrayEntity entity, AsyncHttpResponseHandler responseHandler) {
+//        url = getAbsoluteUrl(url);
+//        System.out.println("Sending request to: " + url);
+//        entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+//        client.addHeader("Authorization", String.format("Bearer %s", MyState.TOKEN));
+//        client.put(context, url, entity, "application/json", responseHandler);
+//    }
+
+    public static void delete(Context context, String url, Consumer<JSONObject> obCallback, Consumer<JSONArray> arrCallback, Consumer<Throwable> errCallback, Consumer<JSONObject> errObCallback) {
         url = getAbsoluteUrl(url);
         System.out.println("Sending request to: " + url);
-        entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
         client.addHeader("Authorization", String.format("Bearer %s", MyState.TOKEN));
-        client.delete(context, url, entity, "application/json", responseHandler);
+        client.delete(context, url, null, getHandler(obCallback, arrCallback, errCallback, errObCallback));
     }
+
+//    public static void delete(Context context, String url, ByteArrayEntity entity, AsyncHttpResponseHandler responseHandler) {
+//        url = getAbsoluteUrl(url);
+//        System.out.println("Sending request to: " + url);
+//        entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+//        client.addHeader("Authorization", String.format("Bearer %s", MyState.TOKEN));
+//        client.delete(context, url, entity, "application/json", responseHandler);
+//    }
 
     private static String getAbsoluteUrl(String relativeUrl) {
         return MyState.ROOT_API_URL + relativeUrl;

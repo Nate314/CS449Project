@@ -52,6 +52,43 @@ public class SettingsController {
 		}
 	}
 
+	@RequestMapping(value = "/account/edit", method = RequestMethod.PUT)
+	public ResponseEntity<String> putEditAccount(HttpServletRequest request, @RequestBody DBAccount body)
+			throws Exception {
+		GenericResponse response = new GenericResponse();
+		try {
+			int userID = JWTInterceptor.getUserIDFromHeader(request);
+			String description = body.Description;
+			System.out.println("ENDPOINT /account/edit");
+			System.out.println(userID);
+			System.out.println(description);
+			System.out.println(body.AccountID);
+			System.out.println("ENDPOINT /account/edit");
+			response.response = Messages.ACCOUNT_EDITED_SUCCESSFULLY;
+			return new ResponseEntity<String>(Algorithms.toJSONObject(response), HttpStatus.OK);
+		} catch (Exception ex) {
+			response.response = ex.getMessage();
+			return new ResponseEntity<String>(Algorithms.toJSONObject(response), HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@RequestMapping(value = "/account/remove", method = RequestMethod.DELETE)
+	public ResponseEntity<String> deleteRemoveAccount(HttpServletRequest request, @RequestParam int id) throws Exception {
+		GenericResponse response = new GenericResponse();
+		try {
+			int userID = JWTInterceptor.getUserIDFromHeader(request);
+			System.out.println("ENDPOINT /account/remove");
+			System.out.println(userID);
+			System.out.println(id);
+			System.out.println("ENDPOINT /account/remove");
+			response.response = Messages.ACCOUNT_REMOVED_SUCCESSFULLY;
+			return new ResponseEntity<String>(Algorithms.toJSONObject(response), HttpStatus.OK);
+		} catch (Exception ex) {
+			response.response = ex.getMessage();
+			return new ResponseEntity<String>(Algorithms.toJSONObject(response), HttpStatus.NOT_FOUND);
+		}
+	}
+
 	@RequestMapping(value = "/accounts/all", method = RequestMethod.GET)
 	public ResponseEntity<String> getAllAccounts(HttpServletRequest request) throws Exception {
 		try {
@@ -86,6 +123,43 @@ public class SettingsController {
 				response.response = Messages.INVALID_REQUEST_PARAMETER;
 				return new ResponseEntity<String>(Algorithms.toJSONObject(response), HttpStatus.NOT_FOUND);
 			}
+		} catch (Exception ex) {
+			response.response = ex.getMessage();
+			return new ResponseEntity<String>(Algorithms.toJSONObject(response), HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@RequestMapping(value = "/category/edit", method = RequestMethod.PUT)
+	public ResponseEntity<String> putEditCategory(HttpServletRequest request, @RequestBody DBAccount body)
+			throws Exception {
+		GenericResponse response = new GenericResponse();
+		try {
+			int userID = JWTInterceptor.getUserIDFromHeader(request);
+			String description = body.Description;
+			System.out.println("ENDPOINT /category/edit");
+			System.out.println(userID);
+			System.out.println(description);
+			System.out.println(body.AccountID);
+			System.out.println("ENDPOINT /category/edit");
+			response.response = Messages.CATEGORY_EDITED_SUCCESSFULLY;
+			return new ResponseEntity<String>(Algorithms.toJSONObject(response), HttpStatus.OK);
+		} catch (Exception ex) {
+			response.response = ex.getMessage();
+			return new ResponseEntity<String>(Algorithms.toJSONObject(response), HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@RequestMapping(value = "/category/remove", method = RequestMethod.DELETE)
+	public ResponseEntity<String> deleteRemoveCategory(HttpServletRequest request, @RequestParam int id) throws Exception {
+		GenericResponse response = new GenericResponse();
+		try {
+			int userID = JWTInterceptor.getUserIDFromHeader(request);
+			System.out.println("ENDPOINT /category/remove");
+			System.out.println(userID);
+			System.out.println(id);
+			System.out.println("ENDPOINT /category/remove");
+			response.response = Messages.CATEGORY_REMOVED_SUCCESSFULLY;
+			return new ResponseEntity<String>(Algorithms.toJSONObject(response), HttpStatus.OK);
 		} catch (Exception ex) {
 			response.response = ex.getMessage();
 			return new ResponseEntity<String>(Algorithms.toJSONObject(response), HttpStatus.NOT_FOUND);

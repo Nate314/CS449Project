@@ -3,8 +3,6 @@ package com.nathangawith.tests;
 import java.util.ArrayList;
 import java.util.Date;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,7 +20,7 @@ import com.nathangawith.umkc.dtos.Transaction;
 import com.nathangawith.umkc.services.RegisterService;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ControllerRegisterTest {
+public class ControllerRegisterTest extends BaseTest {
 
 	@Mock
 	private RegisterService mService;
@@ -46,8 +44,6 @@ public class ControllerRegisterTest {
 		// Arrange
 		String total = "$3.14";
 		GenericResponse genericResponse = new GenericResponse();
-		HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
-		Mockito.when(request.getHeader("Authorization")).thenReturn("Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJpc3MiOiJhdXRoMCIsInByZWZlcnJlZF91c2VybmFtZSI6InUiLCJleHAiOjE1ODI2MDU0MDIsImlhdCI6MTU4MjYwNDUwMn0.AVSbXFTQrUYII67oVfDhMJ3SzA22RgQXcDqlfIyKb00");
 		try {
 			if (throwException)
 				Mockito.when(mService.getTotal(1)).thenThrow(new Exception("some_error"));
@@ -84,8 +80,6 @@ public class ControllerRegisterTest {
 		tranasction.CategoryDescription = "some income cat";
 		transactions.add(tranasction);
 		GenericResponse genericResponse = new GenericResponse();
-		HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
-		Mockito.when(request.getHeader("Authorization")).thenReturn("Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJpc3MiOiJhdXRoMCIsInByZWZlcnJlZF91c2VybmFtZSI6InUiLCJleHAiOjE1ODI2MDU0MDIsImlhdCI6MTU4MjYwNDUwMn0.AVSbXFTQrUYII67oVfDhMJ3SzA22RgQXcDqlfIyKb00");
 		try {
 			if (throwException)
 				Mockito.when(mService.getTransactions(1)).thenThrow(new Exception("some_error"));

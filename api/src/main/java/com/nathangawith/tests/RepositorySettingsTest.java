@@ -21,7 +21,7 @@ import com.nathangawith.umkc.dtos.DBCategory;
 import com.nathangawith.umkc.repositories.SettingsRepository;
 
 @RunWith(MockitoJUnitRunner.class)
-public class RepositorySettingsTest {
+public class RepositorySettingsTest extends BaseTest {
 
 	@Mock
 	private IDatabase mDatabase;

@@ -15,7 +15,7 @@ import com.nathangawith.umkc.repositories.IAuthenticationRepository;
 import com.nathangawith.umkc.services.AuthenticationService;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ServiceAuthenticationTest {
+public class ServiceAuthenticationTest extends BaseTest {
 
 	@Mock
 	private IAuthenticationRepository mRepository;
