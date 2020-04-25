@@ -81,12 +81,13 @@ Stretch Goals:
 | ~~5~~ | ~~Create the Register screen with: - Total balance at top - List of transactions - Buttons to link to income/expense/transfer screens~~ | ~~10~~ | ~~1.3~~ | ~~Sprint3~~ |
 | ~~6~~ | ~~Create Reports screen with: - Start/End date calendar inputs - Breakpoint selection (Month, Year) - Type selection (Category, Account)~~ | ~~3~~ | ~~1.4~~ | ~~Sprint4~~ |
 | ~~7~~ | ~~Create Report view screen with: - Table view of the report configured in the Reports screen~~ | ~~7~~ | ~~1.5~~ | ~~Sprint4~~ |
-| 8 | Allow the user to edit/delete an account name, income/expense category or first/last name from the Settings screen | 5 | 2.0 | Sprint5 |
-| 9 | Create Account/Category Transfer screens with: - Same fields as Income/Expense screen - And To/From account/category dropdowns | 5 | 2.1 | Sprint5 |
+| ~~8~~ | ~~Allow the user to edit/delete an account name, income/expense category from the Settings screen~~ | ~~5~~ | ~~2.0~~ | ~~Sprint5~~ |
+| ~~9~~ | ~~Create Account/Category Transfer screens with: - Same fields as Income/Expense screen - And To/From account/category dropdowns~~ | ~~5~~ | ~~2.1~~ | ~~Sprint5~~ |
+| 18 | Allow the user to edit their first/last name from the settings screen | 1.5 | 2.2 | TODO |
 | 10 | Integrate Google authentication | 4 | 3.0 | TODO |
 | 11 | Filter Register based on Category, Description, Amount, etc. | 3 | 4.0 | TODO |
 | 12 | Filter Reports based on specific categories/accounts | 4 | 4.1 | TODO |
-| 13 | Prompt to transfer balance to another account when deleting an account | 1.5 | 4.2 | TODO |
+| ~~13~~ | ~~Prompt to transfer balance to another account when deleting an account~~ | ~~1.5~~ | ~~4.2~~ | ~~TODO~~ |
 | 14 | Subcategories | 6 | 4.3 | TODO |
 | 14 | Allow reports to be generated through a website accessible on a laptop or desktop | 7 | 4.3 | TODO |
 | 15 | Scheduled Transactions | 5 | 4.4 | TODO |
@@ -311,22 +312,54 @@ Sprint Backlog
 | Story ID | Story / Task | Estimated Hours | Actual Hours |
 | --- | --- | --- | --- |
 | 8 | Settings screen enhancements |  |  |
-| 8.1 | Settings screen: edit/delete an account name | 2:00 |  |
-| 8.2 | Settings screen: edit/delete income/expense category | 2:00 |  |
-| 8.3 | Settings screen: edit first/last/user name | 1:00 |  |
+| 8.1 | Settings screen: edit/delete an account name | 2:00 | 2:23 |
+| 8.2 | Settings screen: edit/delete income/expense category | 2:00 | 2:23 |
+| 13 | Prompt to transfer balance to another account when deleting an account | 1:30 | 2:23 |
+| ~~8.3~~ | ~~Settings screen: edit first/last/user name~~ | ~~1:00~~ | ~~0:00~~ |
 | 9 | Create Transfer screens |  |  |
-| 9.1 | Create Account Transfer screen with: - Same fields as Income/Expense screen - And To/From account dropdowns | 3:00 |  |
-| 9.2 | Create Category Transfer screen with: - Same fields as Income/Expense screen - And To/From category dropdowns | 2:00 |  |
+| 9.1 | Create Account Transfer screen with: - Same fields as Income/Expense screen - And To/From account dropdowns | 3:00 | 2:09 |
+| 9.2 | Create Category Transfer screen with: - Same fields as Income/Expense screen - And To/From category dropdowns | 2:00 | 2:09 |
 | --- | --- | --- | --- |
-|  | Total | 10:00 |  |
+|  | Total | Initial: 10:00, Final: 10:30 | 11:27 |
 
 ## Sprint 5 Review
 
-[TODO]
+Video showing that the transfer screen works for both accounts and categories, and buttons to get there were added to the Menu screen. Also, added the ability to edit the name of or delete any account or category and added logic to warn the user if necessary: https://www.youtube.com/watch?v=lpD4e1Z2ZkE
+
+As you can see from the [screenshots below](#sprint-5-screenshots), what I achieved this sprint was:
+- Created Transfer Screens
+  - Built off of the Income/Espense screen and contains these fields:
+    - Amount
+    - Description
+    - From (Account/Category)
+    - To (Account/Category)
+  - After pressing the submit button:
+    - The API creates two TRANSACTIONS in the transaction table
+      - one record is for the 'from' part of the transfer
+      - the other record is for the 'to' part of the transfer
+    - And one entry in the TRANSFERS table
+      - The entry in the TRANSFERS table links the two entries in the TRANSACTIONS table
+- Added Functionality to other screens
+  - Made sure that totals show with two decimal places in the report and on the Menu screen
+  - Modified Register query to work with transfers and display a new icon for transfers
+- Unit Tests for the API
 
 ## Sprint 5 Retrospective
 
-[TODO]
+What went well:
+- I enjoyed working on these tasks since they had a good mix of UI/API/DB work
+- I am feeling much more comfortable with the Android framework
+
+What didn't go well:
+- The amount of logic around deleting and renaming accounts/categories was more than expected.
+  - once I started thinking about it after the sprint started, lots of edge cases came to mind
+- Accidentally worked on task 13 in addition to task 8, and didn't complete task 8.3
+  - This is why there are two total times in the above table for this sprint
+  - So, I have created another task in the backlog (18) for what I missed on 8.3
+
+Changes for future sprints:
+- More planning needs to happen before the sprint starts so that I don't underestimate again
+- I am going to meed with my parents as part of planning for the final sprint, since I met with them at the beginning to create the inital mock ups. I will plan the final sprint for this course (Sprint 6) based on suggestions they make to improve the app tonight
 
 # Sprint 6
 
@@ -379,7 +412,10 @@ Sprint Backlog
 
 .|.
 :----:|:----:
-[TODO]|[TODO]
+![iter5_updated_menu](readme_assets/iter5_updated_menu.png?raw=true)|![iter5_register](readme_assets/iter5_register.png?raw=true)
+![iter5_account_transfer](readme_assets/iter5_account_transfer.png?raw=true)|![iter5_category_transfer](readme_assets/iter5_category_transfer.png?raw=true)
+![iter5_settings_warning_1](readme_assets/iter5_settings_warning_1.png?raw=true)|![iter5_settings_warning_2](readme_assets/iter5_settings_warning_2.png?raw=true)
+![iter5_settings_edit_from_account](readme_assets/iter5_settings_edit_from_account.png?raw=true)|![iter5_settings_edit](readme_assets/iter5_settings_edit.png?raw=true)
 
 # Sprint 6 Screenshots:
 
