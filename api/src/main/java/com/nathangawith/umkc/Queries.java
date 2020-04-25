@@ -5,11 +5,11 @@ public class Queries {
 	public static final String GET_USER_PASSWORD  = "SELECT * FROM users WHERE username = ? AND password = ?";
 	public static final String INSERT_USER        = "INSERT INTO users (username, password) VALUES (?, ?)";
 	public static final String GET_ACCOUNT        = "SELECT * FROM accounts WHERE userid = ? AND description = ?";
-	public static final String GET_ACCOUNTS       = "SELECT * FROM accounts WHERE userid = ?";
-	public static final String INSERT_ACCOUNT     = "INSERT INTO accounts (userid, description) VALUES (?, ?)";
+	public static final String GET_ACCOUNTS       = "SELECT * FROM accounts WHERE userid = ? AND Enabled = 1";
+	public static final String INSERT_ACCOUNT     = "INSERT INTO accounts (userid, description, enabled) VALUES (?, ?, 1)";
 	public static final String GET_CATEGORY       = "SELECT * FROM categories WHERE userid = ? AND type = ? AND description = ?";
-	public static final String GET_CATEGORIES     = "SELECT * FROM categories WHERE userid = ? AND type = ?";
-	public static final String INSERT_CATEGORY    = "INSERT INTO categories (userid, type, description) VALUES (?, ?, ?)";
+	public static final String GET_CATEGORIES     = "SELECT * FROM categories WHERE userid = ? AND type = ? AND Enabled = 1";
+	public static final String INSERT_CATEGORY    = "INSERT INTO categories (userid, type, description, enabled) VALUES (?, ?, ?, 1)";
 	public static final String INSERT_TRANSACTION = "INSERT INTO transactions (UserID, AccountID, CategoryID, Description, Amount, Date) VALUES (?, ?, ?, ?, ?, ?)";
 	public static final String GET_REGISTER_TOTAL = "SELECT SUM(amount) AS DOUBLE_RESPONSE FROM transactions WHERE userid = ?";
 	public static final String GET_TRANSACTIONS   = 
@@ -53,6 +53,12 @@ public class Queries {
 	public static final String GET_REPORT_GROUP_BY_YEAR_CATEGORY  = "\nGROUP BY Year, CategoryDescription";
 	public static final String GET_REPORT_GROUP_BY_MONTH_ACCOUNT  = "\nGROUP BY Month, AccountDescription";
 	public static final String GET_REPORT_GROUP_BY_MONTH_CATEGORY = "\nGROUP BY Month, CategoryDescription";
-	public static final String GET_FROM_TO_TRANSACTION_IDS = "SELECT TransactionID FROM Transactions WHERE UserID = ? ORDER BY TransactionID DESC LIMIT 2";
-	public static final String INSERT_TRANSFER = "INSERT INTO transfers (UserID, TransactionFromID, TransactionToID) VALUES (?, ?, ?)";
+	public static final String GET_FROM_TO_TRANSACTION_IDS        = "SELECT TransactionID FROM Transactions WHERE UserID = ? ORDER BY TransactionID DESC LIMIT 2";
+	public static final String INSERT_TRANSFER                    = "INSERT INTO transfers (UserID, TransactionFromID, TransactionToID) VALUES (?, ?, ?)";
+	public static final String GET_ACCOUNT_IN_TRANSACTIONS_COUNT  = "SELECT COUNT(*) AS INT_RESPONSE FROM transactions WHERE UserID = ? AND AccountID = ?";
+	public static final String UPDATE_ACCOUNT_ENABLE_DISABLE      = "UPDATE accounts SET Enabled = ? WHERE UserID = ? AND AccountID = ?";
+	public static final String DELETE_ACCOUNT                     = "DELETE FROM accounts WHERE UserID = ? AND AccountID = ?";
+	public static final String GET_CATEGORY_IN_TRANSACTIONS_COUNT = "SELECT COUNT(*) AS INT_RESPONSE FROM transactions WHERE UserID = ? AND CategoryID = ?";
+	public static final String UPDATE_CATEGORY_ENABLE_DISABLE     = "UPDATE categories SET Enabled = ? WHERE UserID = ? AND CategoryID = ?";
+	public static final String DELETE_CATEGORY                    = "DELETE FROM categories WHERE UserID = ? AND CategoryID = ?";
 }

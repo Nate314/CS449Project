@@ -4,20 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
-import com.nathangawith.umkc.financeapp.components.RegisterEntry;
-import com.nathangawith.umkc.financeapp.components.RegisterEntryArrayAdapter;
 import com.nathangawith.umkc.financeapp.components.SettingsEntry;
 import com.nathangawith.umkc.financeapp.components.SettingsEntryArrayAdapter;
 import com.nathangawith.umkc.financeapp.constants.MyUtility;
-import com.nathangawith.umkc.financeapp.dtos.TransactionDto;
 import com.nathangawith.umkc.financeapp.http.MyApi;
 import com.nathangawith.umkc.financeapp.R;
 import com.nathangawith.umkc.financeapp.dtos.DBAccount;
@@ -83,10 +78,14 @@ public class SettingsActivity extends AppCompatActivity {
 
 
     private <T> void bindListView(ListView listView, Collection<T> respCollection, boolean account, boolean income) {
+        listView.invalidateViews();
+        listView.refreshDrawableState();
         ArrayList<SettingsEntry> list = new ArrayList<SettingsEntry>();
         for (T item : respCollection) list.add(account ? new SettingsEntry((DBAccount) item) : new SettingsEntry((DBCategory) item, income));
         SettingsEntryArrayAdapter arrayAdapter = new SettingsEntryArrayAdapter(this, this, 0, list);
         listView.setAdapter(arrayAdapter);
+        listView.invalidateViews();
+        listView.refreshDrawableState();
     }
 
     /**
@@ -120,40 +119,61 @@ public class SettingsActivity extends AppCompatActivity {
     /**
      * adds account via api call, and then re-retrieves accounts
      */
-    public void addAccount() {
+    public void addAccountApiCall(boolean showWarning) {
         String accountDescription = this.txtAddAccount.getText().toString();
         this.loading(true);
-        MyApi.postAddAccount(getApplicationContext(), new GenericResponse(), accountDescription, resp -> {
-            this.loading(false);
-            this.txtAddAccount.setText("");
-            this.getAllAccounts();
-        }, errFunc);
+        SettingsActivity me = this;
+        MyApi.postAddAccount(getApplicationContext(), accountDescription, showWarning,
+                x -> {
+                    MyUtility.okDialog(this, "ADD ACCOUNT SUCCESS", x.response);
+                    me.loading(false);
+                    me.txtAddAccount.setText("");
+                    me.getAllAccounts();
+                },
+                x -> {
+                    if (showWarning && x.response.toLowerCase().contains("is disabled")) {
+                        MyUtility.yesnoDialog(this, "Warning", x.response, yesNoResponse -> {
+                            if (yesNoResponse) {
+                                me.addAccountApiCall(false);
+                            } else {
+                                me.loading(false);
+                                me.txtAddAccount.setText("");
+                            }
+                        });
+                    }
+                    else errFunc.accept(x);
+                });
     }
 
     /**
-     * adds income category via api call, and then re-retrieves income categories
+     * adds income or expense category via api call, and then re-retrieves income categories
      */
-    public void addIncomeCategory() {
-        String incomeCategoryDescription = this.txtAddIncomeCategory.getText().toString();
+    public void addCategory(boolean income, boolean showWarning) {
+        String categoryDescription = income ? this.txtAddIncomeCategory.getText().toString() : this.txtAddExpenseCategory.getText().toString();
         this.loading(true);
-        MyApi.postAddCategory(getApplicationContext(), new GenericResponse(), true, incomeCategoryDescription, resp -> {
-            this.loading(false);
-            this.txtAddIncomeCategory.setText("");
-            this.getAllCategories(true);
-        }, errFunc);
-    }
-
-    /**
-     * adds expense category via api call, and then re-retrieves expense categories
-     */
-    public void addExpenseCategory() {
-        String expenseCategoryDescription = this.txtAddExpenseCategory.getText().toString();
-        this.loading(true);
-        MyApi.postAddCategory(getApplicationContext(), new GenericResponse(), false, expenseCategoryDescription, resp -> {
-            this.loading(false);
-            this.txtAddExpenseCategory.setText("");
-            this.getAllCategories(false);
-        }, errFunc);
+        SettingsActivity me = this;
+        MyApi.postAddCategory(getApplicationContext(), income, categoryDescription, showWarning,
+                x -> {
+                    MyUtility.okDialog(this, "ADD CATEGORY SUCCESS", x.response);
+                    me.loading(false);
+                    if (income) me.txtAddIncomeCategory.setText("");
+                    else me.txtAddExpenseCategory.setText("");
+                    me.getAllCategories(income);
+                },
+                x -> {
+                    if (showWarning && x.response.toLowerCase().contains("is disabled")) {
+                        MyUtility.yesnoDialog(this, "Warning", x.response, yesNoResponse -> {
+                            if (yesNoResponse) {
+                                me.addCategory(income, false);
+                            } else {
+                                me.loading(false);
+                                if (income) me.txtAddIncomeCategory.setText("");
+                                else me.txtAddExpenseCategory.setText("");
+                            }
+                        });
+                    }
+                    else errFunc.accept(x);
+                });
     }
 
     /**
@@ -163,15 +183,15 @@ public class SettingsActivity extends AppCompatActivity {
     public void btnAddClick(View view) {
         boolean noneAdded = true;
         if (!this.txtAddAccount.getText().toString().equals("")) {
-            this.addAccount();
+            this.addAccountApiCall(true);
             noneAdded = false;
         }
         if (!this.txtAddIncomeCategory.getText().toString().equals("")) {
-            this.addIncomeCategory();
+            this.addCategory(true, true);
             noneAdded = false;
         }
         if (!this.txtAddExpenseCategory.getText().toString().equals("")) {
-            this.addExpenseCategory();
+            this.addCategory(false, true);
             noneAdded = false;
         }
         if (noneAdded){
@@ -194,19 +214,48 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+    private void deleteApiCall(SettingsEntry entry, boolean showWarning) {
+        SettingsActivity me = this;
+        if (entry.getIsAccount()) {
+            MyApi.deleteRemoveAccount(this, entry.getID(), showWarning,
+                    x -> {
+                        MyUtility.okDialog(this, "DELETE ACCOUNT SUCCESS", x.response);
+                        me.getAllAccounts();
+                    },
+                    x -> {
+                        if (showWarning && x.response.toLowerCase().contains("used for some transaction")) {
+                            MyUtility.yesnoDialog(this, "Warning", x.response, yesNoResponse -> {
+                                if (yesNoResponse) {
+                                    me.deleteApiCall(entry, false);
+                                }
+                            });
+                        }
+                        else MyUtility.okDialog(this, "DELETE ACCOUNT FAILED", x.response);
+                    });
+        } else {
+            MyApi.deleteRemoveCategory(this, entry.getID(), showWarning,
+                    x -> {
+                        MyUtility.okDialog(this, "DELETE CATEGORY SUCCESS", x.response);
+                        me.getAllCategories(entry.getIsIncomeCategory());
+                    },
+                    x -> {
+                        if (showWarning && x.response.toLowerCase().contains("used for some transaction")) {
+                            MyUtility.yesnoDialog(this, "Warning", x.response, yesNoResponse -> {
+                                if (yesNoResponse) {
+                                    me.deleteApiCall(entry, false);
+                                }
+                            });
+                        }
+                        else MyUtility.okDialog(this, "DELETE CATEGORY FAILED", x.response);
+                    });
+        }
+    }
+
     /**
      * when the delete button is clicked on an account or category entry
      */
     public void btnDeleteClick(SettingsEntry entry) {
-        if (entry.getIsAccount()) {
-            MyApi.deleteRemoveAccount(this, entry.getID(),
-                    x -> MyUtility.okDialog(this, "DELETE ACCOUNT SUCCESS", x.response),
-                    x -> MyUtility.okDialog(this, "DELETE ACCOUNT FAILED", x.response));
-        } else {
-            MyApi.deleteRemoveCategory(this, entry.getID(),
-                    x -> MyUtility.okDialog(this, "DELETE CATEGORY SUCCESS", x.response),
-                    x -> MyUtility.okDialog(this, "DELETE CATEGORY FAILED", x.response));
-        }
+        this.deleteApiCall(entry, true);
     }
 
     /**

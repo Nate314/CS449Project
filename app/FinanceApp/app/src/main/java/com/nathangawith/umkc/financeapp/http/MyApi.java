@@ -136,13 +136,13 @@ public class MyApi {
         }
     }
 
-    public static void postAddAccount(Context context, GenericResponse resp, String accountDescription, Consumer<GenericResponse> func, Consumer<GenericResponse> errorFunc) {
+    public static void postAddAccount(Context context, String accountDescription, boolean showWarning, Consumer<GenericResponse> func, Consumer<GenericResponse> errorFunc) {
         try {
+            GenericResponse resp = new GenericResponse();
             String jsonObjectString = String.format("{\"%s\":\"%s\"}", "Description", accountDescription);
             ByteArrayEntity entity = new ByteArrayEntity(jsonObjectString.getBytes("UTF-8"));
-            resp.getClass().getFields();
 
-            MyHttpClient.post(context, "/settings/account/add", entity, parse(resp, func), x -> {}, x -> {}, parse(resp, errorFunc));
+            MyHttpClient.post(context, String.format("/settings/account/add?showWarning=%d", showWarning ? 1 : 0), entity, parse(resp, func), x -> {}, x -> {}, parse(resp, errorFunc));
         } catch (UnsupportedEncodingException ex) {
             ex.printStackTrace();
         }
@@ -160,23 +160,24 @@ public class MyApi {
         }
     }
 
-    public static void deleteRemoveAccount(Context context, int accountID, Consumer<GenericResponse> func, Consumer<GenericResponse> errorFunc) {
+    public static void deleteRemoveAccount(Context context, int accountID, boolean showWarning, Consumer<GenericResponse> func, Consumer<GenericResponse> errorFunc) {
         GenericResponse resp = new GenericResponse();
-        MyHttpClient.delete(context, String.format("/settings/account/remove?id=%d", accountID), parse(resp, func), x -> {}, x -> {}, parse(resp, errorFunc));
+        MyHttpClient.delete(context, String.format("/settings/account/remove?id=%d&showWarning=%d", accountID, showWarning ? 1 : 0), parse(resp, func), x -> {}, x -> {}, parse(resp, errorFunc));
     }
 
     public static void getAllAccounts(Context context, Consumer<Collection<DBAccount>> func, Consumer<GenericResponse> errorFunc) {
         MyHttpClient.get(context, "/settings/accounts/all", x -> {}, parseCollection(DBAccount.class, func), x -> {}, parse(new GenericResponse(), errorFunc));
     }
 
-    public static void postAddCategory(Context context, GenericResponse resp, boolean income, String accountDescription, Consumer<GenericResponse> func, Consumer<GenericResponse> errorFunc) {
+    public static void postAddCategory(Context context, boolean income, String accountDescription, boolean showWarning, Consumer<GenericResponse> func, Consumer<GenericResponse> errorFunc) {
         try {
+            GenericResponse resp = new GenericResponse();
             String jsonObjectString = String.format("{\"%s\":\"%s\"}", "Description", accountDescription);
             ByteArrayEntity entity = new ByteArrayEntity(jsonObjectString.getBytes("UTF-8"));
-            resp.getClass().getFields();
 
             String type = income ? MyConstants.INCOME : MyConstants.EXPENSE;
-            MyHttpClient.post(context, "/settings/category/add?categoryType=" + type, entity, parse(resp, func), x -> {}, x -> {}, parse(resp, errorFunc));
+            String url = String.format("/settings/category/add?categoryType=%s&showWarning=%d", type, showWarning ? 1 : 0);
+            MyHttpClient.post(context, url, entity, parse(resp, func), x -> {}, x -> {}, parse(resp, errorFunc));
         } catch (UnsupportedEncodingException ex) {
             ex.printStackTrace();
         }
@@ -194,9 +195,9 @@ public class MyApi {
         }
     }
 
-    public static void deleteRemoveCategory(Context context, int categoryID, Consumer<GenericResponse> func, Consumer<GenericResponse> errorFunc) {
+    public static void deleteRemoveCategory(Context context, int categoryID, boolean showWarning, Consumer<GenericResponse> func, Consumer<GenericResponse> errorFunc) {
         GenericResponse resp = new GenericResponse();
-        MyHttpClient.delete(context, String.format("/settings/category/remove?id=%d", categoryID), parse(resp, func), x -> {}, x -> {}, parse(resp, errorFunc));
+        MyHttpClient.delete(context, String.format("/settings/category/remove?id=%d&showWarning=%d", categoryID, showWarning ? 1 : 0), parse(resp, func), x -> {}, x -> {}, parse(resp, errorFunc));
     }
 
     public static void getAllCategories(Context context, boolean income, Consumer<Collection<DBCategory>> func, Consumer<GenericResponse> errorFunc) {

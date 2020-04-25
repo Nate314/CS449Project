@@ -33,13 +33,13 @@ public class SettingsController {
 	private ISettingsService settingsService;
 
 	@RequestMapping(value = "/account/add", method = RequestMethod.POST)
-	public ResponseEntity<String> postAddAccount(HttpServletRequest request, @RequestBody DBAccount body)
+	public ResponseEntity<String> postAddAccount(HttpServletRequest request, @RequestBody DBAccount body, @RequestParam int showWarning)
 			throws Exception {
 		GenericResponse response = new GenericResponse();
 		try {
 			int userID = JWTInterceptor.getUserIDFromHeader(request);
 			String description = body.Description;
-			if (settingsService.addAccount(userID, description)) {
+			if (settingsService.addAccount(userID, description, showWarning == 1)) {
 				response.response = Messages.ACCOUNT_CREATED_SUCCESSFULLY;
 				return new ResponseEntity<String>(Algorithms.toJSONObject(response), HttpStatus.OK);
 			} else {
@@ -73,16 +73,17 @@ public class SettingsController {
 	}
 
 	@RequestMapping(value = "/account/remove", method = RequestMethod.DELETE)
-	public ResponseEntity<String> deleteRemoveAccount(HttpServletRequest request, @RequestParam int id) throws Exception {
+	public ResponseEntity<String> deleteRemoveAccount(HttpServletRequest request, @RequestParam int id, @RequestParam int showWarning) throws Exception {
 		GenericResponse response = new GenericResponse();
 		try {
 			int userID = JWTInterceptor.getUserIDFromHeader(request);
-			System.out.println("ENDPOINT /account/remove");
-			System.out.println(userID);
-			System.out.println(id);
-			System.out.println("ENDPOINT /account/remove");
-			response.response = Messages.ACCOUNT_REMOVED_SUCCESSFULLY;
-			return new ResponseEntity<String>(Algorithms.toJSONObject(response), HttpStatus.OK);
+			if (settingsService.removeAccount(userID, id, showWarning == 1)) {
+				response.response = Messages.ACCOUNT_REMOVED_SUCCESSFULLY;
+				return new ResponseEntity<String>(Algorithms.toJSONObject(response), HttpStatus.OK);
+			} else {
+				response.response = Messages.ACCOUNT_REMOVE_FAILED;
+				return new ResponseEntity<String>(Algorithms.toJSONObject(response), HttpStatus.NOT_FOUND);
+			}
 		} catch (Exception ex) {
 			response.response = ex.getMessage();
 			return new ResponseEntity<String>(Algorithms.toJSONObject(response), HttpStatus.NOT_FOUND);
@@ -104,7 +105,7 @@ public class SettingsController {
 
 	@RequestMapping(value = "/category/add", method = RequestMethod.POST)
 	public ResponseEntity<String> postAddCategory(HttpServletRequest request, @RequestParam String categoryType,
-			@RequestBody DBCategory body) throws Exception {
+			@RequestBody DBCategory body, @RequestParam int showWarning) throws Exception {
 		GenericResponse response = new GenericResponse();
 		try {
 			int userID = JWTInterceptor.getUserIDFromHeader(request);
@@ -112,7 +113,7 @@ public class SettingsController {
 			categoryType = categoryType.toUpperCase();
 			if (Arrays.asList(new String[] { Constants.EXPENSE, Constants.INCOME }).contains(categoryType)) {
 				categoryType = categoryType.equals(Constants.INCOME) ? Constants.INCOME : Constants.EXPENSE;
-				if (settingsService.addCategory(userID, categoryType, description)) {
+				if (settingsService.addCategory(userID, categoryType, description, showWarning == 1)) {
 					response.response = Messages.CATEGORY_CREATED_SUCCESSFULLY;
 					return new ResponseEntity<String>(Algorithms.toJSONObject(response), HttpStatus.OK);
 				} else {
@@ -150,16 +151,17 @@ public class SettingsController {
 	}
 
 	@RequestMapping(value = "/category/remove", method = RequestMethod.DELETE)
-	public ResponseEntity<String> deleteRemoveCategory(HttpServletRequest request, @RequestParam int id) throws Exception {
+	public ResponseEntity<String> deleteRemoveCategory(HttpServletRequest request, @RequestParam int id, @RequestParam int showWarning) throws Exception {
 		GenericResponse response = new GenericResponse();
 		try {
 			int userID = JWTInterceptor.getUserIDFromHeader(request);
-			System.out.println("ENDPOINT /category/remove");
-			System.out.println(userID);
-			System.out.println(id);
-			System.out.println("ENDPOINT /category/remove");
-			response.response = Messages.CATEGORY_REMOVED_SUCCESSFULLY;
-			return new ResponseEntity<String>(Algorithms.toJSONObject(response), HttpStatus.OK);
+			if (settingsService.removeCategory(userID, id, showWarning == 1)) {
+				response.response = Messages.CATEGORY_REMOVED_SUCCESSFULLY;
+				return new ResponseEntity<String>(Algorithms.toJSONObject(response), HttpStatus.OK);
+			} else {
+				response.response = Messages.CATEGORY_REMOVE_FAILED;
+				return new ResponseEntity<String>(Algorithms.toJSONObject(response), HttpStatus.NOT_FOUND);
+			}
 		} catch (Exception ex) {
 			response.response = ex.getMessage();
 			return new ResponseEntity<String>(Algorithms.toJSONObject(response), HttpStatus.NOT_FOUND);

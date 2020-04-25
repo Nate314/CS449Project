@@ -6,10 +6,18 @@ import com.nathangawith.umkc.dtos.DBAccount;
 import com.nathangawith.umkc.dtos.DBCategory;
 
 public interface ISettingsRepository {
-	public Collection<DBAccount>  selectAccounts   (int userID);
-	public boolean                doesAccountExist (int userID, String description);
-	public boolean                insertAccount    (int userID, String description);
-	public Collection<DBCategory> selectCategories (int userID, String categoryType);
-	public boolean                doesCategoryExist(int userID, String categoryType, String description);
-	public boolean                insertCategory   (int userID, String categoryType, String description);
+	public DBAccount              selectAccount                (int userID, String description);
+	public Collection<DBAccount>  selectAccounts               (int userID);
+	public boolean                insertAccount                (int userID, String description);
+	public boolean                deleteAccount                (int userID, int id);
+	public boolean                updateAccountDisable         (int userID, int id);
+	public boolean                updateAccountEnable          (int userID, int id);
+	public boolean                isAccountUsedInTransactions  (int userID, int id);
+	public DBCategory             selectCategory               (int userID, String categoryType, String description);
+	public Collection<DBCategory> selectCategories             (int userID, String categoryType);
+	public boolean                insertCategory               (int userID, String categoryType, String description);
+	public boolean                deleteCategory               (int userID, int id);
+	public boolean                updateCategoryDisable        (int userID, int id);
+	public boolean                updateCategoryEnable         (int userID, int id);
+	public boolean                isCategoryUsedInTransactions (int userID, int id);
 }

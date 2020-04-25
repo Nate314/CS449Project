@@ -5,4 +5,5 @@ public class DBCategory {
 	public int UserID;
 	public int TypeID;
 	public String Description;
+	public int Enabled;
 }

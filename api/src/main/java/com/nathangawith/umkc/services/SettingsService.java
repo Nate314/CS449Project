@@ -25,11 +25,14 @@ public class SettingsService implements ISettingsService {
     }
 
 	@Override
-	public boolean addAccount(int userID, String description) throws Exception {
-		if (mSettingsRepository.doesAccountExist(userID, description))
-			throw new Exception(Messages.ACCOUNT_ALREADY_EXISTS);
-		else
-			return mSettingsRepository.insertAccount(userID, description);
+	public boolean addAccount(int userID, String description, boolean showWarning) throws Exception {
+		DBAccount account = mSettingsRepository.selectAccount(userID, description);
+		if (account != null) {
+			if (account.Enabled == 1) throw new Exception(Messages.ACCOUNT_ALREADY_EXISTS);
+			else if (showWarning) throw new Exception(Messages.ACCOUNT_DISABLED);
+			else return mSettingsRepository.updateAccountEnable(userID, account.AccountID);
+		}
+		else return mSettingsRepository.insertAccount(userID, description);
 	}
 
 	@Override
@@ -38,15 +41,40 @@ public class SettingsService implements ISettingsService {
 	}
 	
 	@Override
-	public boolean addCategory(int userID, String categoryType, String description) throws Exception {
-		if (mSettingsRepository.doesCategoryExist(userID, categoryType, description))
-			throw new Exception(Messages.CATEGORY_ALREADY_EXISTS);
-		else
-			return mSettingsRepository.insertCategory(userID, categoryType, description);
+	public boolean removeAccount(int userID, int id, boolean showWarning) throws Exception {
+		boolean isAccountUsed = mSettingsRepository.isAccountUsedInTransactions(userID, id);
+		if (isAccountUsed && showWarning) throw new Exception(Messages.ACCOUNT_USED_IN_TRANSACTIONS);
+		if (isAccountUsed) {
+			return mSettingsRepository.updateAccountDisable(userID, id);
+		} else {
+			return mSettingsRepository.deleteAccount(userID, id);
+		}
+	}
+
+	@Override
+	public boolean addCategory(int userID, String categoryType, String description, boolean showWarning) throws Exception {
+		DBCategory category = mSettingsRepository.selectCategory(userID, categoryType, description);
+		if (category != null) {
+			if (category.Enabled == 1) throw new Exception(Messages.CATEGORY_ALREADY_EXISTS);
+			else if (showWarning) throw new Exception(Messages.CATEGORY_DISABLED);
+			else return mSettingsRepository.updateCategoryEnable(userID, category.CategoryID);
+		}
+		else return mSettingsRepository.insertCategory(userID, categoryType, description);
 	}
 
 	@Override
 	public Collection<DBCategory> getCategories(int userID, String categoryType) throws Exception {
 		return mSettingsRepository.selectCategories(userID, categoryType);
+	}
+
+	@Override
+	public boolean removeCategory(int userID, int id, boolean showWarning) throws Exception {
+		boolean isCategoryUsed = mSettingsRepository.isCategoryUsedInTransactions(userID, id);
+		if (isCategoryUsed && showWarning) throw new Exception(Messages.CATEGORY_USED_IN_TRANSACTIONS);
+		if (isCategoryUsed) {
+			return mSettingsRepository.updateCategoryDisable(userID, id);
+		} else {
+			return mSettingsRepository.deleteCategory(userID, id);
+		}
 	}
 }

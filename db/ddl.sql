@@ -70,9 +70,17 @@ CREATE TABLE Transfers (
     FOREIGN KEY (TransactionFromID) REFERENCES Transactions(TransactionID),
     FOREIGN KEY (TransactionToID) REFERENCES Transactions(TransactionID)
 );
+ALTER TABLE Transfers ADD COLUMN UserID INT NOT NULL;
 
+-- Create transfers view
 CREATE VIEW transfers AS SELECT * FROM Transfers;
 
+-- Alter Transactions Table
 ALTER TABLE Transactions MODIFY AccountID INT(11);
 ALTER TABLE Transactions MODIFY CategoryID INT(11);
-ALTER TABLE Transfers ADD COLUMN UserID INT NOT NULL;
+
+-- Add Enabled column to Accounts and Categories Tables
+ALTER TABLE Accounts ADD Enabled INT(1);
+UPDATE accounts SET Enabled = 1;
+ALTER TABLE Categories ADD Enabled INT(1);
+UPDATE categories SET Enabled = 1;

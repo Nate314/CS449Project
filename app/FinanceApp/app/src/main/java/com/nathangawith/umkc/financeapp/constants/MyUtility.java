@@ -3,6 +3,7 @@ package com.nathangawith.umkc.financeapp.constants;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -21,7 +22,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.function.Consumer;
 
+import androidx.annotation.Size;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentManager;
 
 public class MyUtility {
@@ -54,6 +57,10 @@ public class MyUtility {
 
     public static void okDialog(AppCompatActivity activity, String title, String text) {
         new MyDialog(title, text).show(activity.getSupportFragmentManager(), null);
+    }
+
+    public static void yesnoDialog(AppCompatActivity activity, String title, String text, Consumer<Boolean> yesNoConsumer) {
+        new MyDialog(title, text, new String[]{"YES", "NO"}, btnText -> yesNoConsumer.accept(btnText.equals("YES"))).show(activity.getSupportFragmentManager(), null);
     }
 
     public static <T> void goToActivity(Activity thisActivity, Class<T> nextActivity) {
