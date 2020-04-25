@@ -20,6 +20,7 @@ import com.nathangawith.umkc.financeapp.dialogs.MyDialog;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.function.Consumer;
 
 import androidx.annotation.Size;
@@ -53,6 +54,31 @@ public class MyUtility {
         };
         spinner.setOnItemSelectedListener(listener);
         listener.onItemSelected(null, null, 0, 0);
+    }
+
+    /**
+     * @param spinner spinner to set the items on
+     * @param type type of the respCollection items
+     * @param respCollection collection of items used for spinner
+     * @param onSelection when an item is selected, this function is called
+     * @param <T> DBAccount or DBCategory
+     */
+    public static <T extends Object> void setSpinnerItems(Context context, Spinner spinner, Class<T> type, Collection<T> respCollection, Consumer<T> onSelection) {
+        try {
+            ArrayList<T> respArrayList = new ArrayList<T>(respCollection);
+            ArrayList<String> descriptions = new ArrayList<String>();
+            for (T x : respArrayList) descriptions.add(type.getField("Description").get(x).toString());
+            MyUtility.initializeSpinner(context, spinner, descriptions, new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    onSelection.accept(respArrayList.get((int) id));
+                }
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) { }
+            });
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
     }
 
     public static void okDialog(AppCompatActivity activity, String title, String text) {
@@ -90,21 +116,22 @@ public class MyUtility {
         dialog.show();
     }
 
+    /**
+     * returns the money string version of the double amount
+     * @param amount amount of money
+     * @return string version
+     */
     public static String formatAsMoney(double amount) {
         boolean negativeBalance = amount < 0;
         amount = negativeBalance ? -1 * amount : amount;
-        String result = String.format("%s$%s", negativeBalance ? "-" : "", amount);
-        if (result.indexOf(".") != -1) {
-            int zeros = Math.max(3 - result.substring(result.indexOf(".")).length(), 0);
-            System.out.println(String.format("----------------Zeros: %d ", zeros));
-            System.out.println(result);
-            System.out.println(result.substring(result.indexOf(".")));
-            System.out.println(String.format("----------------Zeros: %d ", zeros));
-            for (int i = 0; i < zeros; i++) result += "0";
-        } else {
-            result += ".00";
-        }
-        return result;
+        String stramt = "" + amount;
+        String[] parts = stramt.split("\\.");
+        String dollars = parts.length > 0 ? parts[0] : "0";
+        String cents = parts.length > 1 ? parts[1] : "00";
+        cents = cents.substring(0, Math.min(2, cents.length()));
+        cents = cents.length() <= 1 ? cents + "0" : cents;
+        cents = cents.length() <= 1 ? cents + "0" : cents;
+        return String.format("%s$%s.%s", negativeBalance ? "-" : "", dollars, cents);
     }
 
 }

@@ -5,25 +5,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nathangawith.umkc.financeapp.R;
-import com.nathangawith.umkc.financeapp.constants.MyUtility;
+import com.nathangawith.umkc.financeapp.activites.RegisterActivity;
 
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 public class RegisterEntryArrayAdapter extends ArrayAdapter<RegisterEntry> {
 
-    private AppCompatActivity activity;
+    private RegisterActivity registerActivity;
 
-    public RegisterEntryArrayAdapter(@NonNull AppCompatActivity activity, @NonNull Context context, int resource, @NonNull ArrayList<RegisterEntry> registerEntry) {
+    public RegisterEntryArrayAdapter(@NonNull RegisterActivity registerActivity, @NonNull Context context, int resource, @NonNull ArrayList<RegisterEntry> registerEntry) {
         super(context, resource, registerEntry);
-        this.activity = activity;
+        this.registerActivity = registerActivity;
     }
 
     @NonNull
@@ -61,11 +61,23 @@ public class RegisterEntryArrayAdapter extends ArrayAdapter<RegisterEntry> {
         TextView lblValue2 = listItemView.findViewById(R.id.lblValue2);
         lblValue2.setText(currentItem.getValue2());
 
+        ImageButton btnEdit = listItemView.findViewById(R.id.btnEdit);
+        btnEdit.setImageResource(R.drawable.edit_black);
+
+        ImageButton btnDelete = listItemView.findViewById(R.id.btnDelete);
+        btnDelete.setImageResource(R.drawable.delete_black);
+
         RegisterEntryArrayAdapter me = this;
-        listItemView.setOnClickListener(new View.OnClickListener() {
+        listItemView.findViewById(R.id.btnEdit).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MyUtility.okDialog(me.activity, "Clicked!", currentItem.getAmount());
+                me.registerActivity.btnEditClick(currentItem);
+            }
+        });
+        listItemView.findViewById(R.id.btnDelete).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                me.registerActivity.btnDeleteClick(currentItem);
             }
         });
 

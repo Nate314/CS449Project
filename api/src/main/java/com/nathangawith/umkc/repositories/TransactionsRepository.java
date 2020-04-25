@@ -32,12 +32,13 @@ public class TransactionsRepository implements ITransactionsRepository {
 
 	@Override
 	public boolean insertTransfer(int userID, int fromID, int toID, boolean isAccountTransfer, String description, double amount, Date date) {
+		boolean success = true;
 		if (isAccountTransfer) {
-			this.insertTransaction(userID, fromID, -1, description, -1 * amount, date);
-			this.insertTransaction(userID, toID, -1, description, amount, date);
+			success = success && this.insertTransaction(userID, fromID, -1, description, -1 * amount, date);
+			success = success && this.insertTransaction(userID, toID, -1, description, amount, date);
 		} else {
-			this.insertTransaction(userID, -1, fromID, description, -1 * amount, date);
-			this.insertTransaction(userID, -1, toID, description, amount, date);
+			success = success && this.insertTransaction(userID, -1, fromID, description, -1 * amount, date);
+			success = success && this.insertTransaction(userID, -1, toID, description, amount, date);
 		}
 		List<String> params = Algorithms.params(userID);
 		Collection<DBTransaction> queryResult = DB.select(Queries.GET_FROM_TO_TRANSACTION_IDS, params, DBTransaction.class);
@@ -48,7 +49,7 @@ public class TransactionsRepository implements ITransactionsRepository {
 			int toTransactionID = transactionIDs.get(0);
 			int fromTransactionID = transactionIDs.get(1);
 			params = Algorithms.params(userID, fromTransactionID, toTransactionID);
-			boolean success = DB.execute(Queries.INSERT_TRANSFER, params);
+			success = success && DB.execute(Queries.INSERT_TRANSFER, params);
 			return success;
 		}
 	}

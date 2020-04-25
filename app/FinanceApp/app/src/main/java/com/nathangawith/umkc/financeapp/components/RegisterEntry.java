@@ -32,19 +32,19 @@ public class RegisterEntry {
 
         if (transaction.IsTransfer) {
             if (transaction.AccountFromDescription != null) {
-                this.label1 = "From Account";
-                this.label2 = "To Account";
+                this.label1 = "From Account:";
+                this.label2 = "To Account:";
                 this.value1 = transaction.AccountFromDescription;
                 this.value2 = transaction.AccountToDescription;
             } else {
-                this.label1 = "From Category";
-                this.label2 = "To Category";
+                this.label1 = "From Category:";
+                this.label2 = "To Category:";
                 this.value1 = transaction.CategoryFromDescription;
                 this.value2 = transaction.CategoryToDescription;
             }
         } else {
-            this.label1 = "Account";
-            this.label2 = "Category";
+            this.label1 = "Account:";
+            this.label2 = "Category:";
             this.value1 = transaction.AccountDescription;
             this.value2 = transaction.CategoryDescription;
         }

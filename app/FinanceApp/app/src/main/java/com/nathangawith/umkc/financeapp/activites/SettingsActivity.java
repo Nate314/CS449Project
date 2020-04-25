@@ -9,11 +9,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.nathangawith.umkc.financeapp.components.SettingsEntry;
 import com.nathangawith.umkc.financeapp.components.SettingsEntryArrayAdapter;
+import com.nathangawith.umkc.financeapp.constants.MyConstants;
 import com.nathangawith.umkc.financeapp.constants.MyUtility;
+import com.nathangawith.umkc.financeapp.dtos.TransactionRequest;
 import com.nathangawith.umkc.financeapp.http.MyApi;
 import com.nathangawith.umkc.financeapp.R;
 import com.nathangawith.umkc.financeapp.dtos.DBAccount;
@@ -22,15 +25,19 @@ import com.nathangawith.umkc.financeapp.dtos.GenericResponse;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.function.Consumer;
 
 public class SettingsActivity extends AppCompatActivity {
 
+    // Views
     private TextView lblScreenName;
     private TextView lblLabel1;
     private TextView lblLabel2;
     private TextView lblLabel3;
     private EditText txtAddAccount;
+    private TextView lblOptions;
+    private Spinner spinnerOptions;
     private EditText txtAddIncomeCategory;
     private EditText txtAddExpenseCategory;
     private Button btnAdd;
@@ -40,8 +47,10 @@ public class SettingsActivity extends AppCompatActivity {
     private ListView listAccounts;
     private ListView listIncomeCategories;
     private ListView listExpenseCategories;
-
+    // Private Fields
     private SettingsEntry editEntity;
+    private DBAccount selectedAccount;
+    private DBCategory selectedCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +63,8 @@ public class SettingsActivity extends AppCompatActivity {
         this.lblLabel2 = findViewById(R.id.lblLabel2);
         this.lblLabel3 = findViewById(R.id.lblLabel3);
         this.txtAddAccount = findViewById(R.id.txtAddAccount);
+        this.lblOptions = findViewById(R.id.lblOptions);
+        this.spinnerOptions = findViewById(R.id.spinnerOptions);
         this.btnAdd = findViewById(R.id.btnAdd);
         this.txtAddIncomeCategory = findViewById(R.id.txtAddIncomeCategory);
         this.txtAddExpenseCategory = findViewById(R.id.txtAddExpenseCategory);
@@ -65,6 +76,8 @@ public class SettingsActivity extends AppCompatActivity {
         this.listIncomeCategories = findViewById(R.id.listIncomeCategories);
         this.listExpenseCategories = findViewById(R.id.listExpenseCategories);
         this.txtEdit.setVisibility(View.GONE);
+        this.lblOptions.setVisibility(View.GONE);
+        this.spinnerOptions.setVisibility(View.GONE);
         // populate info
         this.getAllAccounts();
         this.getAllCategories(true);
@@ -94,12 +107,11 @@ public class SettingsActivity extends AppCompatActivity {
         return this.txtEdit.getVisibility() == View.VISIBLE;
     }
 
-    /**
-     * toggles between Settings and Edit view
-     */
-    private void toggleEditView(SettingsEntry entry) {
-        this.editEntity = entry;
-        int visibility = this.isInEditView() ? View.VISIBLE : View.GONE;
+    private boolean isInPickView() {
+        return this.lblOptions.getVisibility() == View.VISIBLE;
+    }
+
+    private void setVisibilityOfMainElements(int visibility) {
         this.lblLabel1.setVisibility(visibility);
         this.lblLabel2.setVisibility(visibility);
         this.lblLabel3.setVisibility(visibility);
@@ -112,6 +124,15 @@ public class SettingsActivity extends AppCompatActivity {
         this.listAccounts.setVisibility(visibility);
         this.listIncomeCategories.setVisibility(visibility);
         this.listExpenseCategories.setVisibility(visibility);
+    }
+
+    /**
+     * toggles between Settings and Edit view
+     */
+    private void toggleEditView(SettingsEntry entry) {
+        this.editEntity = entry;
+        int visibility = this.isInEditView() ? View.VISIBLE : View.GONE;
+        this.setVisibilityOfMainElements(visibility);
         if (visibility == View.VISIBLE) {
             this.btnAdd.setText("+");
             this.lblScreenName.setText("Settings");
@@ -120,6 +141,36 @@ public class SettingsActivity extends AppCompatActivity {
             this.btnAdd.setText("Submit");
             this.lblScreenName.setText(String.format("Edit %s Name", entry.getIsAccount() ? "Account" : "Category"));
             this.txtEdit.setVisibility(View.VISIBLE);
+        }
+    }
+
+    /**
+     * toggles between Settings and Pick view
+     */
+    private void togglePickView(SettingsEntry entry) {
+        this.editEntity = entry;
+        int visibility = this.isInPickView() ? View.VISIBLE : View.GONE;
+        this.setVisibilityOfMainElements(visibility);
+        if (visibility == View.VISIBLE) {
+            this.btnAdd.setText("+");
+            this.lblScreenName.setText("Settings");
+            this.lblOptions.setVisibility(View.GONE);
+            this.spinnerOptions.setVisibility(View.GONE);
+        } else {
+            this.btnAdd.setText("Submit");
+            this.lblOptions.setVisibility(View.VISIBLE);
+            this.spinnerOptions.setVisibility(View.VISIBLE);
+            this.lblOptions.setText(entry.getIsAccount() ? "Account:" : "Category:");
+            this.lblScreenName.setText(String.format("Pick %s To Transfer Funds (From %s)", entry.getIsAccount() ? "Account" : "Category", entry.getDescription().split("                    ")[0]));
+            if (entry.getIsAccount()) {
+                MyApi.getAllAccounts(getApplicationContext(), respCollection ->
+                    MyUtility.setSpinnerItems(this, this.spinnerOptions, DBAccount.class, respCollection, account -> this.selectedAccount = account),
+                x -> MyUtility.okDialog(this, "Error", x.response));
+            } else {
+                MyApi.getAllIncomeAndExpenseCategories(getApplicationContext(), respCollection ->
+                    MyUtility.setSpinnerItems(this, this.spinnerOptions, DBCategory.class, respCollection, category -> this.selectedCategory = category),
+                x -> MyUtility.okDialog(this, "Error", x.response));
+            }
         }
     }
 
@@ -257,6 +308,24 @@ public class SettingsActivity extends AppCompatActivity {
             } else {
                 this.editApiCall(editText, true);
             }
+        } else if (this.isInPickView()) {
+            boolean isAccount = this.editEntity.getIsAccount();
+            TransactionRequest transaction = new TransactionRequest();
+            transaction.AccountID = -1;
+            transaction.CategoryID = -1;
+            transaction.AccountFromID = isAccount ? this.editEntity.getID() : -1;
+            transaction.AccountToID = isAccount ? this.selectedAccount.AccountID : -1;
+            transaction.CategoryFromID = isAccount ? -1 : this.editEntity.getID();
+            transaction.CategoryToID = isAccount ? -1 : this.selectedCategory.CategoryID;
+            transaction.Amount = this.editEntity.getTotal();
+            transaction.Description = String.format("Closed %s: %s", isAccount ? "Account" : "Category", this.editEntity.getDescription());
+            transaction.Date = new Date();
+            MyApi.postTransaction(getApplicationContext(), isAccount ? MyConstants.TRANSFER_ACCOUNT : MyConstants.TRANSFER_CATEGORY, transaction,
+                x -> {
+                    this.deleteApiCall(this.editEntity, false);
+                    this.togglePickView(null);
+                },
+                x -> MyUtility.okDialog(this, "Error when submitting transfer transaction", ""));
         } else {
             boolean noneAdded = true;
             if (!this.txtAddAccount.getText().toString().equals("")) {
@@ -285,39 +354,35 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void deleteApiCall(SettingsEntry entry, boolean showWarning) {
-        SettingsActivity me = this;
+        Consumer<GenericResponse> failedResponse = x -> {
+            boolean isUsedInTransactions = x.response.toLowerCase().contains("used for some transaction");
+            boolean isNonzeroBalance = x.response.toLowerCase().contains("nonzero balance");
+            if ((showWarning && isUsedInTransactions) || isNonzeroBalance) {
+                MyUtility.yesnoDialog(this, "Warning", x.response, yesNoResponse -> {
+                    if (yesNoResponse) {
+                        if (isUsedInTransactions) {
+                            this.deleteApiCall(entry, false);
+                        } else {
+                            this.togglePickView(entry);
+                        }
+                    }
+                });
+            } else MyUtility.okDialog(this, "DELETE FAILED", x.response);
+        };
         if (entry.getIsAccount()) {
             MyApi.deleteRemoveAccount(this, entry.getID(), showWarning,
-                    x -> {
-                        MyUtility.okDialog(this, "DELETE ACCOUNT SUCCESS", x.response);
-                        me.getAllAccounts();
-                    },
-                    x -> {
-                        if (showWarning && x.response.toLowerCase().contains("used for some transaction")) {
-                            MyUtility.yesnoDialog(this, "Warning", x.response, yesNoResponse -> {
-                                if (yesNoResponse) {
-                                    me.deleteApiCall(entry, false);
-                                }
-                            });
-                        }
-                        else MyUtility.okDialog(this, "DELETE ACCOUNT FAILED", x.response);
-                    });
+                x -> {
+                    MyUtility.okDialog(this, "DELETE ACCOUNT SUCCESS", x.response);
+                    this.getAllAccounts();
+                },
+                x -> failedResponse.accept(x));
         } else {
             MyApi.deleteRemoveCategory(this, entry.getID(), showWarning,
-                    x -> {
-                        MyUtility.okDialog(this, "DELETE CATEGORY SUCCESS", x.response);
-                        me.getAllCategories(entry.getIsIncomeCategory());
-                    },
-                    x -> {
-                        if (showWarning && x.response.toLowerCase().contains("used for some transaction")) {
-                            MyUtility.yesnoDialog(this, "Warning", x.response, yesNoResponse -> {
-                                if (yesNoResponse) {
-                                    me.deleteApiCall(entry, false);
-                                }
-                            });
-                        }
-                        else MyUtility.okDialog(this, "DELETE CATEGORY FAILED", x.response);
-                    });
+                x -> {
+                    MyUtility.okDialog(this, "DELETE CATEGORY SUCCESS", x.response);
+                    this.getAllCategories(entry.getIsIncomeCategory());
+                },
+                x -> failedResponse.accept(x));
         }
     }
 
@@ -335,6 +400,8 @@ public class SettingsActivity extends AppCompatActivity {
     public void btnBackClick(View view) {
         if (this.isInEditView()) {
             this.toggleEditView(null);
+        } else if (this.isInPickView()) {
+            this.togglePickView(null);
         } else {
             startActivity(new Intent(this, MenuActivity.class));
         }

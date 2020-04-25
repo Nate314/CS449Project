@@ -3,6 +3,7 @@ package com.nathangawith.umkc.financeapp.http;
 import android.content.Context;
 
 import com.nathangawith.umkc.financeapp.constants.MyConstants;
+import com.nathangawith.umkc.financeapp.constants.MyUtility;
 import com.nathangawith.umkc.financeapp.dtos.TransactionRequest;
 import com.nathangawith.umkc.financeapp.dtos.GenericResponse;
 import com.nathangawith.umkc.financeapp.dtos.ReportResponseDto;
@@ -205,6 +206,16 @@ public class MyApi {
         MyHttpClient.get(context, "/settings/categories/all?categoryType=" + type, x -> {}, parseCollection(DBCategory.class, func), x -> {}, parse(new GenericResponse(), errorFunc));
     }
 
+    public static void getAllIncomeAndExpenseCategories(Context context, Consumer<Collection<DBCategory>> func, Consumer<GenericResponse> errorFunc) {
+        MyApi.getAllCategories(context, true, expenseCollection -> {
+            MyApi.getAllCategories(context, false, incomeCollection -> {
+                        Collection<DBCategory> respCollection = expenseCollection;
+                        incomeCollection.stream().forEach(incomeCategory -> respCollection.add(incomeCategory));
+                        func.accept(respCollection);
+                    }, errorFunc);
+            }, errorFunc);
+    }
+
     public static void postTransaction(Context context, String type, TransactionRequest transaction, Consumer<GenericResponse> func, Consumer<GenericResponse> errorFunc) {
         GenericResponse resp = new GenericResponse();
         if (type.equals(MyConstants.INCOME) || type.equals(MyConstants.EXPENSE) || type.equals(MyConstants.TRANSFER_ACCOUNT)|| type.equals(MyConstants.TRANSFER_CATEGORY)) {
@@ -216,7 +227,7 @@ public class MyApi {
                         "AccountFromID", transaction.AccountFromID,
                         "CategoryToID", transaction.CategoryToID,
                         "CategoryFromID", transaction.CategoryFromID,
-                        "Description", transaction.Description,
+                        "Description", transaction.Description == null ? null : transaction.Description.substring(0, Math.min(transaction.Description.length(), 20)).trim(),
                         "Amount", transaction.Amount,
                         "Date", dateToString(transaction.Date));
                 ByteArrayEntity entity = new ByteArrayEntity(jsonObjectString.getBytes("UTF-8"));

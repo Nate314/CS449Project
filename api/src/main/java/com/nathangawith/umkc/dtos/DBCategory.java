@@ -6,4 +6,5 @@ public class DBCategory {
 	public int TypeID;
 	public String Description;
 	public int Enabled;
+    public double Total;
 }

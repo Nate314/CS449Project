@@ -5,4 +5,5 @@ public class DBAccount {
     public int UserID;
     public String Description;
     public int Enabled;
+    public double Total;
 }

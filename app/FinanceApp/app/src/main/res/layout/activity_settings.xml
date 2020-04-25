@@ -94,6 +94,7 @@
                 android:textSize="20sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <!--<Edit Text for Edit View>-->
         <com.google.android.material.textfield.TextInputLayout
             android:textColorHint="@color/colorPrimaryDark"
             android:layout_width="wrap_content"
@@ -112,6 +113,29 @@
                 android:maxLength="20"
                 android:textSize="20sp" />
         </com.google.android.material.textfield.TextInputLayout>
+        <!--</ Edit Text for Edit View>-->
+
+        <!--<Spinner for Transfer Option Case>-->
+        <TextView
+            android:id="@+id/lblOptions"
+            android:text="Option:"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="14sp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:gravity="center" />
+
+        <Spinner
+            android:id="@+id/spinnerOptions"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:layout_gravity="center"
+            android:gravity="center" />
+        <!--</ Spinner for Transfer Option Case>-->
 
         <Button
             android:id="@+id/btnAdd"

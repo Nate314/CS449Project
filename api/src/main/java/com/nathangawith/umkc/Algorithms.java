@@ -110,7 +110,14 @@ public class Algorithms {
     public static String formatAsMoney(double amount) {
         boolean negativeBalance = amount < 0;
         amount = negativeBalance ? -1 * amount : amount;
-        return String.format("%s$%s", negativeBalance ? "-" : "", amount);
+        String stramt = "" + amount;
+        String[] parts = stramt.split("\\.");
+        String dollars = parts.length > 0 ? parts[0] : "0";
+        String cents = parts.length > 1 ? parts[1] : "00";
+        cents = cents.substring(0, Math.min(2, cents.length()));
+        cents = cents.length() <= 1 ? cents + "0" : cents;
+        cents = cents.length() <= 1 ? cents + "0" : cents; 
+        return String.format("%s$%s.%s", negativeBalance ? "-" : "", dollars, cents);
     }
 
 	// used to collect objects into a list of strings

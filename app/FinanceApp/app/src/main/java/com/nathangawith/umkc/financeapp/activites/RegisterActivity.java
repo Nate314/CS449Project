@@ -105,4 +105,12 @@ public class RegisterActivity extends AppCompatActivity {
     public void btnBackClick(View view) {
         startActivity(new Intent(this, MenuActivity.class));
     }
+
+    public void btnEditClick(RegisterEntry entry) {
+        MyUtility.okDialog(this, "Not Yet Implemented", "");
+    }
+
+    public void btnDeleteClick(RegisterEntry entry) {
+        MyUtility.okDialog(this, "Not Yet Implemented", "");
+    }
 }

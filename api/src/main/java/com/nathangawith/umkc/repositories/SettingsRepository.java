@@ -35,6 +35,11 @@ public class SettingsRepository implements ISettingsRepository {
 		DBAccount account = DB.selectFirst(Queries.GET_ACCOUNT, params, DBAccount.class);
 		return account;
 	}
+
+	@Override
+	public DBAccount selectAccount(int userID, int id) {
+		return this.selectAccounts(userID).stream().filter(x -> x.AccountID == id).findFirst().orElse(null);
+	}
 	
 	@Override
 	public Collection<DBAccount> selectAccounts(int userID) {
@@ -86,6 +91,11 @@ public class SettingsRepository implements ISettingsRepository {
 		List<String> params = Algorithms.params(userID, categoryType, description);
 		DBCategory category = DB.selectFirst(Queries.GET_CATEGORY, params, DBCategory.class);
 		return category;
+	}
+
+	@Override
+	public DBCategory selectCategory(int userID, String type, int id) {
+		return this.selectCategories(userID, type).stream().filter(x -> x.CategoryID == id).findFirst().orElse(null);
 	}
 	
 	@Override

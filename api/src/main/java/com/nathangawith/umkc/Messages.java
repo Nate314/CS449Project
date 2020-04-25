@@ -14,6 +14,8 @@ public class Messages {
 	public static final String ACCOUNT_ALREADY_EXISTS           = "Account with this name already exists";
 	public static final String ACCOUNT_ALREADY_DISABLED         = "Account with this name already exists and has been disabled";
 	public static final String ACCOUNT_DISABLED                 = "An account with this name is disabled. Would you like to re-open this account?";
+	public static final String ACCOUNT_HAS_NONZERO_BALANCE      = "The account you are trying to remove has a nonzero balance."
+			+ "Would you like to transfer the funds to another account before closing this account?";
 	public static final String CATEGORY_CREATED_SUCCESSFULLY    = "Success";
 	public static final String CATEGORY_CREATION_FAILED         = "Unable to create category";
 	public static final String CATEGORY_EDITED_SUCCESSFULLY     = "Success";
@@ -23,6 +25,8 @@ public class Messages {
 	public static final String CATEGORY_ALREADY_EXISTS          = "Category with this name already exists";
 	public static final String CATEGORY_ALREADY_DISABLED        = "Category with this name already exists and has been disabled";
 	public static final String CATEGORY_DISABLED                = "A category with this name is disabled. Would you like to re-open this category?";
+	public static final String CATEGORY_HAS_NONZERO_BALANCE     = "The category you are trying to remove has a nonzero balance."
+			+ "Would you like to transfer the funds to another account before closing this category?";
 	public static final String TRANSACTION_CREATED_SUCCESSFULLY = "Success";
 	public static final String TRANSACTION_CREATION_FAILED      = "Unable to create transaction";
 	

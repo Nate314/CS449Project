@@ -111,10 +111,10 @@ public class IncomeExpenseActivity extends AppCompatActivity {
             this.spinnerCategory.setVisibility(View.VISIBLE);
             this.spinnerAccount.setVisibility(View.VISIBLE);
             MyApi.getAllAccounts(getApplicationContext(),
-                    respCollection -> this.setSpinnerItems(this.spinnerAccount, DBAccount.class, respCollection, account -> this.selectedAccount = account),
+                    respCollection -> MyUtility.setSpinnerItems(this, this.spinnerAccount, DBAccount.class, respCollection, account -> this.selectedAccount = account),
                     x -> MyUtility.okDialog(this, "Error", x.response));
             MyApi.getAllCategories(getApplicationContext(), income,
-                    respCollection -> this.setSpinnerItems(this.spinnerCategory, DBCategory.class, respCollection, category -> this.selectedCategory = category),
+                    respCollection -> MyUtility.setSpinnerItems(this, this.spinnerCategory, DBCategory.class, respCollection, category -> this.selectedCategory = category),
                     x -> MyUtility.okDialog(this, "Error", x.response));
         } else if (MyState.SCREEN.equals(MyConstants.TRANSFER_ACCOUNT)) {
             this.lblScreenName.setText("Account Transfer");
@@ -124,8 +124,8 @@ public class IncomeExpenseActivity extends AppCompatActivity {
             this.spinnerFromAccount.setVisibility(View.VISIBLE);
             MyApi.getAllAccounts(getApplicationContext(),
                     respCollection -> {
-                        this.setSpinnerItems(this.spinnerFromAccount, DBAccount.class, respCollection, account -> this.selectedFromAccount = account);
-                        this.setSpinnerItems(this.spinnerToAccount, DBAccount.class, respCollection, account -> this.selectedToAccount = account);
+                        MyUtility.setSpinnerItems(this, this.spinnerFromAccount, DBAccount.class, respCollection, account -> this.selectedFromAccount = account);
+                        MyUtility.setSpinnerItems(this, this.spinnerToAccount, DBAccount.class, respCollection, account -> this.selectedToAccount = account);
                     },
                     x -> MyUtility.okDialog(this, "Error", x.response));
         } else if (MyState.SCREEN.equals(MyConstants.TRANSFER_CATEGORY)) {
@@ -138,8 +138,8 @@ public class IncomeExpenseActivity extends AppCompatActivity {
                 MyApi.getAllCategories(getApplicationContext(), false, incomeCollection -> {
                     Collection<DBCategory> respCollection = expenseCollection;
                     incomeCollection.stream().forEach(incomeCategory -> respCollection.add(incomeCategory));
-                    this.setSpinnerItems(this.spinnerFromCategory, DBCategory.class, respCollection, category -> this.selectedFromCategory = category);
-                    this.setSpinnerItems(this.spinnerToCategory, DBCategory.class, respCollection, category -> this.selectedToCategory = category);
+                    MyUtility.setSpinnerItems(this, this.spinnerFromCategory, DBCategory.class, respCollection, category -> this.selectedFromCategory = category);
+                    MyUtility.setSpinnerItems(this, this.spinnerToCategory, DBCategory.class, respCollection, category -> this.selectedToCategory = category);
                 },
                 x -> MyUtility.okDialog(this, "Error", x.response));
             },
@@ -161,31 +161,6 @@ public class IncomeExpenseActivity extends AppCompatActivity {
             this.spinnerToCategory.getOnItemSelectedListener().onItemSelected(null, null, 0, 0);
         }
         this.lblDate.setText("");
-    }
-
-    /**
-     * @param spinner spinner to set the items on
-     * @param type type of the respCollection items
-     * @param respCollection collection of items used for spinner
-     * @param onSelection when an item is selected, this function is called
-     * @param <T> DBAccount or DBCategory
-     */
-    private <T extends Object> void setSpinnerItems(Spinner spinner, Class<T> type, Collection<T> respCollection, Consumer<T> onSelection) {
-        try {
-            ArrayList<T> respArrayList = new ArrayList<T>(respCollection);
-            ArrayList<String> descriptions = new ArrayList<String>();
-            for (T x : respArrayList) descriptions.add(type.getField("Description").get(x).toString());
-            MyUtility.initializeSpinner(this, spinner, descriptions, new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    onSelection.accept(respArrayList.get((int) id));
-                }
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) { }
-            });
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
     }
 
     /**
