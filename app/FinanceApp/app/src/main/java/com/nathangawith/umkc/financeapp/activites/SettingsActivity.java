@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.nathangawith.umkc.financeapp.components.SettingsEntry;
 import com.nathangawith.umkc.financeapp.components.SettingsEntryArrayAdapter;
@@ -25,15 +26,22 @@ import java.util.function.Consumer;
 
 public class SettingsActivity extends AppCompatActivity {
 
+    private TextView lblScreenName;
+    private TextView lblLabel1;
+    private TextView lblLabel2;
+    private TextView lblLabel3;
     private EditText txtAddAccount;
     private EditText txtAddIncomeCategory;
     private EditText txtAddExpenseCategory;
     private Button btnAdd;
     private Button btnBack;
+    private EditText txtEdit;
     private ProgressBar progressBar;
     private ListView listAccounts;
     private ListView listIncomeCategories;
     private ListView listExpenseCategories;
+
+    private SettingsEntry editEntity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,16 +49,22 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         // initialize fields to ui elements
+        this.lblScreenName = findViewById(R.id.lblScreenName);
+        this.lblLabel1 = findViewById(R.id.lblLabel1);
+        this.lblLabel2 = findViewById(R.id.lblLabel2);
+        this.lblLabel3 = findViewById(R.id.lblLabel3);
         this.txtAddAccount = findViewById(R.id.txtAddAccount);
         this.btnAdd = findViewById(R.id.btnAdd);
         this.txtAddIncomeCategory = findViewById(R.id.txtAddIncomeCategory);
         this.txtAddExpenseCategory = findViewById(R.id.txtAddExpenseCategory);
         this.btnBack = findViewById(R.id.btnBack);
+        this.txtEdit = findViewById(R.id.txtEdit);
         this.progressBar = findViewById(R.id.progressBar);
         this.progressBar.setVisibility(View.INVISIBLE);
         this.listAccounts = findViewById(R.id.listAccounts);
         this.listIncomeCategories = findViewById(R.id.listIncomeCategories);
         this.listExpenseCategories = findViewById(R.id.listExpenseCategories);
+        this.txtEdit.setVisibility(View.GONE);
         // populate info
         this.getAllAccounts();
         this.getAllCategories(true);
@@ -76,6 +90,38 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+    private boolean isInEditView() {
+        return this.txtEdit.getVisibility() == View.VISIBLE;
+    }
+
+    /**
+     * toggles between Settings and Edit view
+     */
+    private void toggleEditView(SettingsEntry entry) {
+        this.editEntity = entry;
+        int visibility = this.isInEditView() ? View.VISIBLE : View.GONE;
+        this.lblLabel1.setVisibility(visibility);
+        this.lblLabel2.setVisibility(visibility);
+        this.lblLabel3.setVisibility(visibility);
+        this.txtAddAccount.setVisibility(visibility);
+        this.txtAddIncomeCategory.setVisibility(visibility);
+        this.txtAddExpenseCategory.setVisibility(visibility);
+        // this.btnAdd.setVisibility(visibility);
+        // this.btnBack.setVisibility(visibility);
+        // this.progressBar.setVisibility(visibility);
+        this.listAccounts.setVisibility(visibility);
+        this.listIncomeCategories.setVisibility(visibility);
+        this.listExpenseCategories.setVisibility(visibility);
+        if (visibility == View.VISIBLE) {
+            this.btnAdd.setText("+");
+            this.lblScreenName.setText("Settings");
+            this.txtEdit.setVisibility(View.GONE);
+        } else {
+            this.btnAdd.setText("Submit");
+            this.lblScreenName.setText(String.format("Edit %s Name", entry.getIsAccount() ? "Account" : "Category"));
+            this.txtEdit.setVisibility(View.VISIBLE);
+        }
+    }
 
     private <T> void bindListView(ListView listView, Collection<T> respCollection, boolean account, boolean income) {
         listView.invalidateViews();
@@ -148,7 +194,7 @@ public class SettingsActivity extends AppCompatActivity {
     /**
      * adds income or expense category via api call, and then re-retrieves income categories
      */
-    public void addCategory(boolean income, boolean showWarning) {
+    public void addCategoryApiCall(boolean income, boolean showWarning) {
         String categoryDescription = income ? this.txtAddIncomeCategory.getText().toString() : this.txtAddExpenseCategory.getText().toString();
         this.loading(true);
         SettingsActivity me = this;
@@ -164,7 +210,7 @@ public class SettingsActivity extends AppCompatActivity {
                     if (showWarning && x.response.toLowerCase().contains("is disabled")) {
                         MyUtility.yesnoDialog(this, "Warning", x.response, yesNoResponse -> {
                             if (yesNoResponse) {
-                                me.addCategory(income, false);
+                                me.addCategoryApiCall(income, false);
                             } else {
                                 me.loading(false);
                                 if (income) me.txtAddIncomeCategory.setText("");
@@ -176,26 +222,58 @@ public class SettingsActivity extends AppCompatActivity {
                 });
     }
 
+    private void editApiCall(String editText, boolean showWarning) {
+        if (this.editEntity.getIsAccount()) {
+            MyApi.putEditAccount(this, editEntity.getID(), editText,
+                    x -> {
+                        MyUtility.okDialog(this, "EDIT ACCOUNT SUCCESS", x.response);
+                        this.txtEdit.setText("");
+                        this.toggleEditView(null);
+                        this.getAllAccounts();
+                    },
+                    x -> MyUtility.okDialog(this, "EDIT ACCOUNT FAILED", x.response));
+        } else {
+            MyApi.putEditCategory(this, editEntity.getID(), editText,
+                    x -> {
+                        MyUtility.okDialog(this, "EDIT CATEGORY SUCCESS", x.response);
+                        this.txtEdit.setText("");
+                        this.toggleEditView(null);
+                        this.getAllCategories(true);
+                        this.getAllCategories(false);
+                    },
+                    x -> MyUtility.okDialog(this, "EDIT CATEGORY FAILED", x.response));
+        }
+    }
+
     /**
      * adds expense category via api call, and then re-retrieves expense categories
      * @param view button view
      */
     public void btnAddClick(View view) {
-        boolean noneAdded = true;
-        if (!this.txtAddAccount.getText().toString().equals("")) {
-            this.addAccountApiCall(true);
-            noneAdded = false;
-        }
-        if (!this.txtAddIncomeCategory.getText().toString().equals("")) {
-            this.addCategory(true, true);
-            noneAdded = false;
-        }
-        if (!this.txtAddExpenseCategory.getText().toString().equals("")) {
-            this.addCategory(false, true);
-            noneAdded = false;
-        }
-        if (noneAdded){
-            MyUtility.okDialog(this, "Please enter:", "an Account, an Income Category, or an Expense Category");
+        if (this.isInEditView()) {
+            String editText = this.txtEdit.getText().toString();
+            if (editText.equals("")){
+                MyUtility.okDialog(this, "Please enter:", "An alternate title");
+            } else {
+                this.editApiCall(editText, true);
+            }
+        } else {
+            boolean noneAdded = true;
+            if (!this.txtAddAccount.getText().toString().equals("")) {
+                this.addAccountApiCall(true);
+                noneAdded = false;
+            }
+            if (!this.txtAddIncomeCategory.getText().toString().equals("")) {
+                this.addCategoryApiCall(true, true);
+                noneAdded = false;
+            }
+            if (!this.txtAddExpenseCategory.getText().toString().equals("")) {
+                this.addCategoryApiCall(false, true);
+                noneAdded = false;
+            }
+            if (noneAdded){
+                MyUtility.okDialog(this, "Please enter:", "an Account, an Income Category, or an Expense Category");
+            }
         }
     }
 
@@ -203,15 +281,7 @@ public class SettingsActivity extends AppCompatActivity {
      * when the edit button is clicked on an account or category entry
      */
     public void btnEditClick(SettingsEntry entry) {
-        if (entry.getIsAccount()) {
-            MyApi.putEditAccount(this, entry.getID(), entry.getDescription(),
-                    x -> MyUtility.okDialog(this, "EDIT ACCOUNT SUCCESS", x.response),
-                    x -> MyUtility.okDialog(this, "EDIT ACCOUNT FAILED", x.response));
-        } else {
-            MyApi.putEditCategory(this, entry.getID(), entry.getDescription(),
-                    x -> MyUtility.okDialog(this, "EDIT CATEGORY SUCCESS", x.response),
-                    x -> MyUtility.okDialog(this, "EDIT CATEGORY FAILED", x.response));
-        }
+        this.toggleEditView(entry);
     }
 
     private void deleteApiCall(SettingsEntry entry, boolean showWarning) {
@@ -263,6 +333,10 @@ public class SettingsActivity extends AppCompatActivity {
      * @param view button view
      */
     public void btnBackClick(View view) {
-        startActivity(new Intent(this, MenuActivity.class));
+        if (this.isInEditView()) {
+            this.toggleEditView(null);
+        } else {
+            startActivity(new Intent(this, MenuActivity.class));
+        }
     }
 }

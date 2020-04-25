@@ -94,6 +94,25 @@
                 android:textSize="20sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:textColorHint="@color/colorPrimaryDark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:layout_gravity="center"
+            android:gravity="center" >
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtEdit"
+                android:ems="15"
+                android:hint="Edit"
+                android:imeActionLabel="hl"
+                android:inputType="text"
+                android:maxLength="20"
+                android:textSize="20sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
         <Button
             android:id="@+id/btnAdd"
             android:width="10dp"

@@ -83,11 +83,23 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     /**
-     * transfer button
+     * account transfer button
      * @param view button view
      */
-    public void btnFloatingTransferClick(View view) {
-        MyUtility.okDialog(this, "Not Yet Implemented!", "This functionality will be added in a later version");
+    public void btnFloatingAccountTransferClick(View view) {
+        MyState.SCREEN = MyConstants.TRANSFER_ACCOUNT;
+        MyState.LAST_SCREEN = MyConstants.REGISTER;
+        MyUtility.goToActivity(this, IncomeExpenseActivity.class);
+    }
+
+    /**
+     * category transfer button
+     * @param view button view
+     */
+    public void btnFloatingCategoryTransferClick(View view) {
+        MyState.SCREEN = MyConstants.TRANSFER_CATEGORY;
+        MyState.LAST_SCREEN = MyConstants.REGISTER;
+        MyUtility.goToActivity(this, IncomeExpenseActivity.class);
     }
 
     public void btnBackClick(View view) {

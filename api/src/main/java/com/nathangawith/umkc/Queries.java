@@ -57,8 +57,10 @@ public class Queries {
 	public static final String INSERT_TRANSFER                    = "INSERT INTO transfers (UserID, TransactionFromID, TransactionToID) VALUES (?, ?, ?)";
 	public static final String GET_ACCOUNT_IN_TRANSACTIONS_COUNT  = "SELECT COUNT(*) AS INT_RESPONSE FROM transactions WHERE UserID = ? AND AccountID = ?";
 	public static final String UPDATE_ACCOUNT_ENABLE_DISABLE      = "UPDATE accounts SET Enabled = ? WHERE UserID = ? AND AccountID = ?";
+	public static final String UPDATE_ACCOUNT_DESCRIPTION         = "UPDATE accounts SET Description = ? WHERE UserID = ? AND AccountID = ?";
 	public static final String DELETE_ACCOUNT                     = "DELETE FROM accounts WHERE UserID = ? AND AccountID = ?";
 	public static final String GET_CATEGORY_IN_TRANSACTIONS_COUNT = "SELECT COUNT(*) AS INT_RESPONSE FROM transactions WHERE UserID = ? AND CategoryID = ?";
 	public static final String UPDATE_CATEGORY_ENABLE_DISABLE     = "UPDATE categories SET Enabled = ? WHERE UserID = ? AND CategoryID = ?";
+	public static final String UPDATE_CATEGORY_DESCRIPTION        = "UPDATE categories SET Description = ? WHERE UserID = ? AND CategoryID = ?";
 	public static final String DELETE_CATEGORY                    = "DELETE FROM categories WHERE UserID = ? AND CategoryID = ?";
 }

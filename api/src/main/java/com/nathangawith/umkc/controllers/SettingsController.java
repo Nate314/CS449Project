@@ -58,14 +58,15 @@ public class SettingsController {
 		GenericResponse response = new GenericResponse();
 		try {
 			int userID = JWTInterceptor.getUserIDFromHeader(request);
+			int id = body.AccountID;
 			String description = body.Description;
-			System.out.println("ENDPOINT /account/edit");
-			System.out.println(userID);
-			System.out.println(description);
-			System.out.println(body.AccountID);
-			System.out.println("ENDPOINT /account/edit");
-			response.response = Messages.ACCOUNT_EDITED_SUCCESSFULLY;
-			return new ResponseEntity<String>(Algorithms.toJSONObject(response), HttpStatus.OK);
+			if (settingsService.editAccount(userID, id, description)) {
+				response.response = Messages.ACCOUNT_EDITED_SUCCESSFULLY;
+				return new ResponseEntity<String>(Algorithms.toJSONObject(response), HttpStatus.OK);
+			} else {
+				response.response = Messages.ACCOUNT_EDIT_FAILED;
+				return new ResponseEntity<String>(Algorithms.toJSONObject(response), HttpStatus.NOT_FOUND);
+			}
 		} catch (Exception ex) {
 			response.response = ex.getMessage();
 			return new ResponseEntity<String>(Algorithms.toJSONObject(response), HttpStatus.NOT_FOUND);
@@ -136,14 +137,15 @@ public class SettingsController {
 		GenericResponse response = new GenericResponse();
 		try {
 			int userID = JWTInterceptor.getUserIDFromHeader(request);
+			int id = body.AccountID;
 			String description = body.Description;
-			System.out.println("ENDPOINT /category/edit");
-			System.out.println(userID);
-			System.out.println(description);
-			System.out.println(body.AccountID);
-			System.out.println("ENDPOINT /category/edit");
-			response.response = Messages.CATEGORY_EDITED_SUCCESSFULLY;
-			return new ResponseEntity<String>(Algorithms.toJSONObject(response), HttpStatus.OK);
+			if (settingsService.editCategory(userID, id, description)) {
+				response.response = Messages.CATEGORY_EDITED_SUCCESSFULLY;
+				return new ResponseEntity<String>(Algorithms.toJSONObject(response), HttpStatus.OK);
+			} else {
+				response.response = Messages.CATEGORY_EDIT_FAILED;
+				return new ResponseEntity<String>(Algorithms.toJSONObject(response), HttpStatus.NOT_FOUND);
+			}
 		} catch (Exception ex) {
 			response.response = ex.getMessage();
 			return new ResponseEntity<String>(Algorithms.toJSONObject(response), HttpStatus.NOT_FOUND);

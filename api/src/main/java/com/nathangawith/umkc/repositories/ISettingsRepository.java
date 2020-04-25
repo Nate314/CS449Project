@@ -13,6 +13,7 @@ public interface ISettingsRepository {
 	public boolean                updateAccountDisable         (int userID, int id);
 	public boolean                updateAccountEnable          (int userID, int id);
 	public boolean                isAccountUsedInTransactions  (int userID, int id);
+	public boolean                updateAccount                (int userID, int id,              String description);
 	public DBCategory             selectCategory               (int userID, String categoryType, String description);
 	public Collection<DBCategory> selectCategories             (int userID, String categoryType);
 	public boolean                insertCategory               (int userID, String categoryType, String description);
@@ -20,4 +21,5 @@ public interface ISettingsRepository {
 	public boolean                updateCategoryDisable        (int userID, int id);
 	public boolean                updateCategoryEnable         (int userID, int id);
 	public boolean                isCategoryUsedInTransactions (int userID, int id);
+	public boolean                updateCategory               (int userID, int id,              String description);
 }

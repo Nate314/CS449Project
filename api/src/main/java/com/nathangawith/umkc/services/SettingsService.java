@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import com.nathangawith.umkc.Constants;
 import com.nathangawith.umkc.Messages;
 import com.nathangawith.umkc.dtos.DBAccount;
 import com.nathangawith.umkc.dtos.DBCategory;
@@ -39,7 +40,7 @@ public class SettingsService implements ISettingsService {
 	public Collection<DBAccount> getAccounts(int userID) throws Exception {
 		return mSettingsRepository.selectAccounts(userID);
 	}
-	
+
 	@Override
 	public boolean removeAccount(int userID, int id, boolean showWarning) throws Exception {
 		boolean isAccountUsed = mSettingsRepository.isAccountUsedInTransactions(userID, id);
@@ -49,6 +50,16 @@ public class SettingsService implements ISettingsService {
 		} else {
 			return mSettingsRepository.deleteAccount(userID, id);
 		}
+	}
+
+	@Override
+	public boolean editAccount(int userID, int id, String description) throws Exception {
+		DBAccount account = mSettingsRepository.selectAccount(id, description);
+		if (account != null) {
+			if (account.Enabled == 1) throw new Exception(Messages.ACCOUNT_ALREADY_EXISTS);
+			else throw new Exception(Messages.ACCOUNT_ALREADY_DISABLED);
+		}
+		else return mSettingsRepository.updateAccount(userID, id, description);
 	}
 
 	@Override
@@ -76,5 +87,17 @@ public class SettingsService implements ISettingsService {
 		} else {
 			return mSettingsRepository.deleteCategory(userID, id);
 		}
+	}
+
+	@Override
+	public boolean editCategory(int userID, int id, String description) throws Exception {
+		DBCategory incomeCategory = mSettingsRepository.selectCategory(userID, Constants.INCOME, description);
+		DBCategory expenseCategory = mSettingsRepository.selectCategory(userID, Constants.EXPENSE, description);
+		DBCategory category = incomeCategory != null ? incomeCategory : expenseCategory;
+		if (category != null) {
+			if (category.Enabled == 1) throw new Exception(Messages.CATEGORY_ALREADY_EXISTS);
+			else throw new Exception(Messages.CATEGORY_ALREADY_DISABLED);
+		}
+		else return mSettingsRepository.updateCategory(userID, id, description);
 	}
 }

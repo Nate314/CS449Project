@@ -68,6 +68,11 @@ public class SettingsRepository implements ISettingsRepository {
 		DBResponse queryResult = DB.selectFirst(Queries.GET_ACCOUNT_IN_TRANSACTIONS_COUNT, params, DBResponse.class);
 		return queryResult != null ? queryResult.INT_RESPONSE > 0 : true;
 	}
+
+	@Override
+	public boolean updateAccount(int userID, int id, String description) {
+		return DB.execute(Queries.UPDATE_ACCOUNT_DESCRIPTION, Algorithms.params(description, userID, id));
+	}
 	
 	@Override
 	public boolean insertCategory(int userID, String categoryType, String description) {
@@ -114,5 +119,10 @@ public class SettingsRepository implements ISettingsRepository {
 		List<String> params = Algorithms.params(userID, id);
 		DBResponse queryResult = DB.selectFirst(Queries.GET_CATEGORY_IN_TRANSACTIONS_COUNT, params, DBResponse.class);
 		return queryResult != null ? queryResult.INT_RESPONSE > 0 : true;
+	}
+
+	@Override
+	public boolean updateCategory(int userID, int id, String description) {
+		return DB.execute(Queries.UPDATE_CATEGORY_DESCRIPTION, Algorithms.params(description, userID, id));
 	}
 }
