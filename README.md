@@ -381,7 +381,7 @@ Sprint Backlog
 | 20.6 | Modify Messages |  |  |
 | 18 | Allow the user to edit their first/last name from the settings screen | 1:30 |  |
 | --- | --- | --- | --- |
-|  | Total |  |  |
+|  | Total | 10:00 |  |
 
 ## Sprint 6 Review
 
