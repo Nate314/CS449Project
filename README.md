@@ -83,11 +83,13 @@ Stretch Goals:
 | ~~7~~ | ~~Create Report view screen with: - Table view of the report configured in the Reports screen~~ | ~~7~~ | ~~1.5~~ | ~~Sprint4~~ |
 | ~~8~~ | ~~Allow the user to edit/delete an account name, income/expense category from the Settings screen~~ | ~~5~~ | ~~2.0~~ | ~~Sprint5~~ |
 | ~~9~~ | ~~Create Account/Category Transfer screens with: - Same fields as Income/Expense screen - And To/From account/category dropdowns~~ | ~~5~~ | ~~2.1~~ | ~~Sprint5~~ |
-| 18 | Allow the user to edit their first/last name from the settings screen | 1.5 | 2.2 | TODO |
+| 19 | Edit/Delete income/expense/transfers from register screen | 5 | 2.3 | Sprint6 |
+| 20 | Fix all bugs found in Sprint5 | 3.5 | 2.3 | Sprint6 |
+| 18 | Allow the user to edit their first/last name from the settings screen | 1.5 | 2.4 | Sprint6 |
 | 10 | Integrate Google authentication | 4 | 3.0 | TODO |
 | 11 | Filter Register based on Category, Description, Amount, etc. | 3 | 4.0 | TODO |
 | 12 | Filter Reports based on specific categories/accounts | 4 | 4.1 | TODO |
-| ~~13~~ | ~~Prompt to transfer balance to another account when deleting an account~~ | ~~1.5~~ | ~~4.2~~ | ~~TODO~~ |
+| ~~13~~ | ~~Prompt to transfer balance to another account when deleting an account~~ | ~~1.5~~ | ~~4.2~~ | ~~Sprint5~~ |
 | 14 | Subcategories | 6 | 4.3 | TODO |
 | 14 | Allow reports to be generated through a website accessible on a laptop or desktop | 7 | 4.3 | TODO |
 | 15 | Scheduled Transactions | 5 | 4.4 | TODO |
@@ -363,7 +365,23 @@ Changes for future sprints:
 
 # Sprint 6
 
-[TODO]
+**Sprint Goal: Fix bugs and work on final features for the end of the semester**
+
+Sprint Backlog
+
+| Story ID | Story / Task | Estimated Hours | Actual Hours |
+| --- | --- | --- | --- |
+| 19 | Edit/Delete income/expense/transfers from register screen | 5:00 |  |
+| 20 | Fix all bugs found in Sprint5 | 3:30 |  |
+| 20.1 | Report screen not working sometimes |  |  |
+| 20.2 | Register in the wrong order |  |  |
+| 20.3 | Don't show the account transfering from on transfer screen and settings |  |  |
+| 20.4 | Put ("From {ACCOUNT}") on next line |  |  |
+| 20.5 | No transactions over 1 million dollars |  |  |
+| 20.6 | Modify Messages |  |  |
+| 18 | Allow the user to edit their first/last name from the settings screen | 1:30 |  |
+| --- | --- | --- | --- |
+|  | Total |  |  |
 
 ## Sprint 6 Review
 

@@ -58,7 +58,7 @@ public class SettingsService implements ISettingsService {
 
 	@Override
 	public boolean editAccount(int userID, int id, String description) throws Exception {
-		DBAccount account = mSettingsRepository.selectAccount(id, description);
+		DBAccount account = mSettingsRepository.selectAccount(userID, description);
 		if (account != null) {
 			if (account.Enabled == 1) throw new Exception(Messages.ACCOUNT_ALREADY_EXISTS);
 			else throw new Exception(Messages.ACCOUNT_ALREADY_DISABLED);

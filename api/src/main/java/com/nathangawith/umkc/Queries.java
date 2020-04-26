@@ -57,8 +57,8 @@ public class Queries {
 		+ "\n\t" + "accounts.Description AS AccountDescription, categories.Description AS CategoryDescription," 
 	 	+ "\n\t" + "YEAR(Date) AS Year, CONCAT(YEAR(Date), '-', MONTH(Date)) AS Month"
 		+ "\n" + "FROM transactions"
-		+ "\n\t" + "JOIN accounts ON transactions.AccountID = accounts.AccountID" 
-		+ "\n\t" + "JOIN categories ON transactions.CategoryID = categories.CategoryID" 
+		+ "\n\t" + "LEFT OUTER JOIN accounts ON transactions.AccountID = accounts.AccountID" 
+		+ "\n\t" + "LEFT OUTER JOIN categories ON transactions.CategoryID = categories.CategoryID" 
 		+ "\n" + "WHERE transactions.UserID = ?"
 		+ "\n\t" + "AND transactions.Date BETWEEN STR_TO_DATE(?, '%Y-%m-%d') AND STR_TO_DATE(?, '%Y-%m-%d')";
 	public static final String GET_REPORT_GROUP_BY_YEAR_ACCOUNT   = "\nGROUP BY Year, AccountDescription";
