@@ -26,7 +26,9 @@ import com.nathangawith.umkc.financeapp.dtos.GenericResponse;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -161,15 +163,18 @@ public class SettingsActivity extends AppCompatActivity {
             this.lblOptions.setVisibility(View.VISIBLE);
             this.spinnerOptions.setVisibility(View.VISIBLE);
             this.lblOptions.setText(entry.getIsAccount() ? "Account:" : "Category:");
-            this.lblScreenName.setText(String.format("Pick %s To Transfer Funds (From %s)", entry.getIsAccount() ? "Account" : "Category", entry.getDescription().split("                    ")[0]));
+            String description = entry.getDescription().split("                    ")[0];
+            this.lblScreenName.setText(String.format("Pick %s To Transfer Funds From:\n%s", entry.getIsAccount() ? "Account" : "Category", description));
             if (entry.getIsAccount()) {
-                MyApi.getAllAccounts(getApplicationContext(), respCollection ->
-                    MyUtility.setSpinnerItems(this, this.spinnerOptions, DBAccount.class, respCollection, account -> this.selectedAccount = account),
-                x -> MyUtility.okDialog(this, "Error", x.response));
+                MyApi.getAllAccounts(getApplicationContext(), respCollection -> {
+                    List<DBAccount> options = respCollection.stream().filter(x -> !x.Description.equals(description)).collect(Collectors.toList());
+                    MyUtility.setSpinnerItems(this, this.spinnerOptions, DBAccount.class, options, account -> this.selectedAccount = account);
+                }, x -> MyUtility.okDialog(this, "Error", x.response));
             } else {
-                MyApi.getAllIncomeAndExpenseCategories(getApplicationContext(), respCollection ->
-                    MyUtility.setSpinnerItems(this, this.spinnerOptions, DBCategory.class, respCollection, category -> this.selectedCategory = category),
-                x -> MyUtility.okDialog(this, "Error", x.response));
+                MyApi.getAllIncomeAndExpenseCategories(getApplicationContext(), respCollection -> {
+                    List<DBCategory> options = respCollection.stream().filter(x -> !x.Description.equals(description)).collect(Collectors.toList());
+                    MyUtility.setSpinnerItems(this, this.spinnerOptions, DBCategory.class, options, category -> this.selectedCategory = category);
+                }, x -> MyUtility.okDialog(this, "Error", x.response));
             }
         }
     }
@@ -228,7 +233,7 @@ public class SettingsActivity extends AppCompatActivity {
                     me.getAllAccounts();
                 },
                 x -> {
-                    if (showWarning && x.response.toLowerCase().contains("is disabled")) {
+                    if (showWarning && x.response.toLowerCase().contains("this name was deleted")) {
                         MyUtility.yesnoDialog(this, "Warning", x.response, yesNoResponse -> {
                             if (yesNoResponse) {
                                 me.addAccountApiCall(false);
@@ -258,7 +263,7 @@ public class SettingsActivity extends AppCompatActivity {
                     me.getAllCategories(income);
                 },
                 x -> {
-                    if (showWarning && x.response.toLowerCase().contains("is disabled")) {
+                    if (showWarning && x.response.toLowerCase().contains("this name was deleted")) {
                         MyUtility.yesnoDialog(this, "Warning", x.response, yesNoResponse -> {
                             if (yesNoResponse) {
                                 me.addCategoryApiCall(income, false);
@@ -356,7 +361,7 @@ public class SettingsActivity extends AppCompatActivity {
     private void deleteApiCall(SettingsEntry entry, boolean showWarning) {
         Consumer<GenericResponse> failedResponse = x -> {
             boolean isUsedInTransactions = x.response.toLowerCase().contains("used for some transaction");
-            boolean isNonzeroBalance = x.response.toLowerCase().contains("nonzero balance");
+            boolean isNonzeroBalance = x.response.toLowerCase().contains("remove has a balance");
             if ((showWarning && isUsedInTransactions) || isNonzeroBalance) {
                 MyUtility.yesnoDialog(this, "Warning", x.response, yesNoResponse -> {
                     if (yesNoResponse) {

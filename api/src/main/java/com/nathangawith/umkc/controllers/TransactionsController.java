@@ -45,28 +45,33 @@ public class TransactionsController {
 			double amt = body.Amount;
 			Date d = body.Date;
 			transactionType = transactionType.toUpperCase();
-			if (Arrays.asList(new String[] { Constants.EXPENSE, Constants.INCOME }).contains(transactionType)) {
-				amt = (transactionType.equals(Constants.INCOME) ? 1 : -1) * amt;
-				if (transactionsService.addNewTransaction(u, acc, cat, desc, amt, d)) {
-					response.response = Messages.TRANSACTION_CREATED_SUCCESSFULLY;
-					return new ResponseEntity<String>(Algorithms.toJSONObject(response), HttpStatus.OK);
+			if (amt < 1000000) {
+				if (Arrays.asList(new String[] { Constants.EXPENSE, Constants.INCOME }).contains(transactionType)) {
+					amt = (transactionType.equals(Constants.INCOME) ? 1 : -1) * amt;
+					if (transactionsService.addNewTransaction(u, acc, cat, desc, amt, d)) {
+						response.response = Messages.TRANSACTION_CREATED_SUCCESSFULLY;
+						return new ResponseEntity<String>(Algorithms.toJSONObject(response), HttpStatus.OK);
+					} else {
+						response.response = Messages.TRANSACTION_CREATION_FAILED;
+						return new ResponseEntity<String>(Algorithms.toJSONObject(response), HttpStatus.NOT_FOUND);
+					}
+				} else if(Arrays.asList(new String[] { Constants.TRANSFER_ACCOUNT, Constants.TRANSFER_CATEGORY }).contains(transactionType)) {
+					boolean isAccountTransfer = transactionType.equals(Constants.TRANSFER_ACCOUNT);
+					int fromID = isAccountTransfer ? body.AccountFromID : body.CategoryFromID;
+					int toID = isAccountTransfer ? body.AccountToID : body.CategoryToID;
+					if (transactionsService.addNewTransfer(u, fromID, toID, isAccountTransfer, desc, amt, d)) {
+						response.response = Messages.TRANSACTION_CREATED_SUCCESSFULLY;
+						return new ResponseEntity<String>(Algorithms.toJSONObject(response), HttpStatus.OK);
+					} else {
+						response.response = Messages.TRANSACTION_CREATION_FAILED;
+						return new ResponseEntity<String>(Algorithms.toJSONObject(response), HttpStatus.NOT_FOUND);
+					}
 				} else {
-					response.response = Messages.TRANSACTION_CREATION_FAILED;
-					return new ResponseEntity<String>(Algorithms.toJSONObject(response), HttpStatus.NOT_FOUND);
-				}
-			} else if(Arrays.asList(new String[] { Constants.TRANSFER_ACCOUNT, Constants.TRANSFER_CATEGORY }).contains(transactionType)) {
-				boolean isAccountTransfer = transactionType.equals(Constants.TRANSFER_ACCOUNT);
-				int fromID = isAccountTransfer ? body.AccountFromID : body.CategoryFromID;
-				int toID = isAccountTransfer ? body.AccountToID : body.CategoryToID;
-				if (transactionsService.addNewTransfer(u, fromID, toID, isAccountTransfer, desc, amt, d)) {
-					response.response = Messages.TRANSACTION_CREATED_SUCCESSFULLY;
-					return new ResponseEntity<String>(Algorithms.toJSONObject(response), HttpStatus.OK);
-				} else {
-					response.response = Messages.TRANSACTION_CREATION_FAILED;
+					response.response = Messages.INVALID_REQUEST_PARAMETER;
 					return new ResponseEntity<String>(Algorithms.toJSONObject(response), HttpStatus.NOT_FOUND);
 				}
 			} else {
-				response.response = Messages.INVALID_REQUEST_PARAMETER;
+				response.response = Messages.NO_TRANSACTIONS_OVER_ONE_MILLION;
 				return new ResponseEntity<String>(Algorithms.toJSONObject(response), HttpStatus.NOT_FOUND);
 			}
 		} catch (Exception ex) {

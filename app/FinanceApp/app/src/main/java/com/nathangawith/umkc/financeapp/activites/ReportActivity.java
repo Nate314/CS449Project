@@ -34,6 +34,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class ReportActivity extends AppCompatActivity {
@@ -110,13 +112,16 @@ public class ReportActivity extends AppCompatActivity {
      * @param report report to build the table off of
      */
     private void buildTable(ReportResponseDto report) {
+        BiFunction<String, String, String> coalesce = (str, replace) -> str == null ? replace : str;
         List<TransactionDto> cells = report.Cells;
         boolean categoryType = report.Type.equals("Category");
         boolean monthBreakpoint = report.Breakpoint.equals("Month");
         TableRow header = new TableRow(this);
         int dateCharacters = 4 + (monthBreakpoint ? 1 + 2 : 0);
         List<String> rows = cells.stream().map(x -> x.Date.substring(0, dateCharacters)).distinct().collect(Collectors.toList());
-        List<String> columns = cells.stream().map(x -> categoryType ? x.CategoryDescription : x.AccountDescription).distinct().collect(Collectors.toList());
+        List<String> columns = cells.stream().map(x -> categoryType ? x.CategoryDescription : x.AccountDescription).distinct().filter(x -> x != null).collect(Collectors.toList());
+        System.out.println("---------------- columns ----------------");
+        System.out.println(columns);
         // populate header
         header.addView(new TextView(this));
         columns.forEach(col -> header.addView(this.getCellTextView(col, true)));
@@ -132,7 +137,7 @@ public class ReportActivity extends AppCompatActivity {
             for (int i = 0; i < columns.size(); i++) {
                 String col = columns.get(i);
                 List<TransactionDto> candidateCells = cells.stream().filter(x -> x.Date.substring(0, dateCharacters).equals(row)
-                        && (categoryType ? x.CategoryDescription : x.AccountDescription).equals(col)).collect(Collectors.toList());
+                    && coalesce.apply(categoryType ? x.CategoryDescription : x.AccountDescription, "                ").equals(col)).collect(Collectors.toList());
                 double cell = candidateCells.size() > 0 ? candidateCells.get(0).Amount : 0;
                 tableRow.addView(this.getCellTextView(MyUtility.formatAsMoney(cell), false, getColor(cell >= 0 ? R.color.green : R.color.red)));
                 totals.set(i, totals.get(i) + cell);

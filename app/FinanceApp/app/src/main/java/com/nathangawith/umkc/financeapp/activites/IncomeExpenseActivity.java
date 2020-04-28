@@ -25,7 +25,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.OptionalInt;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class IncomeExpenseActivity extends AppCompatActivity {
 
@@ -57,6 +60,8 @@ public class IncomeExpenseActivity extends AppCompatActivity {
     private DBAccount selectedToAccount = null;
     private DBCategory selectedFromCategory = null;
     private DBCategory selectedToCategory = null;
+    private Collection<DBCategory> allCategories = null;
+    private Collection<DBAccount> allAccounts = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,8 +129,9 @@ public class IncomeExpenseActivity extends AppCompatActivity {
             this.spinnerFromAccount.setVisibility(View.VISIBLE);
             MyApi.getAllAccounts(getApplicationContext(),
                     respCollection -> {
-                        MyUtility.setSpinnerItems(this, this.spinnerFromAccount, DBAccount.class, respCollection, account -> this.selectedFromAccount = account);
-                        MyUtility.setSpinnerItems(this, this.spinnerToAccount, DBAccount.class, respCollection, account -> this.selectedToAccount = account);
+                        this.allAccounts = respCollection;
+                        this.setFromAccounts(respCollection);
+                        this.setToAccounts(respCollection);
                     },
                     x -> MyUtility.okDialog(this, "Error", x.response));
         } else if (MyState.SCREEN.equals(MyConstants.TRANSFER_CATEGORY)) {
@@ -134,17 +140,81 @@ public class IncomeExpenseActivity extends AppCompatActivity {
             this.lblLabel6.setVisibility(View.VISIBLE);
             this.spinnerFromCategory.setVisibility(View.VISIBLE);
             this.spinnerToCategory.setVisibility(View.VISIBLE);
-            MyApi.getAllCategories(getApplicationContext(), true, expenseCollection -> {
-                MyApi.getAllCategories(getApplicationContext(), false, incomeCollection -> {
-                    Collection<DBCategory> respCollection = expenseCollection;
-                    incomeCollection.stream().forEach(incomeCategory -> respCollection.add(incomeCategory));
-                    MyUtility.setSpinnerItems(this, this.spinnerFromCategory, DBCategory.class, respCollection, category -> this.selectedFromCategory = category);
-                    MyUtility.setSpinnerItems(this, this.spinnerToCategory, DBCategory.class, respCollection, category -> this.selectedToCategory = category);
-                },
-                x -> MyUtility.okDialog(this, "Error", x.response));
+            MyApi.getAllIncomeAndExpenseCategories(getApplicationContext(), respCollection -> {
+                this.allCategories = respCollection;
+                this.setFromCategories(respCollection);
+                this.setToCategories(respCollection);
             },
             x -> MyUtility.okDialog(this, "Error", x.response));
         }
+    }
+
+    private void setFromCategories(Collection<DBCategory> respCollection) {
+        Integer previousCategoryID = this.selectedFromCategory == null ? null : this.selectedFromCategory.CategoryID;
+        MyUtility.setSpinnerItems(this, this.spinnerFromCategory, DBCategory.class, respCollection, category -> {
+            this.selectedFromCategory = category;
+            this.setToCategories(this.allCategories.stream().filter(x -> x.Description != this.spinnerFromCategory.getSelectedItem()).collect(Collectors.toList()));
+        });
+        int index = 0;
+        if (previousCategoryID != null) {
+            for (int i = 0; i < respCollection.size(); i++) {
+                if (((DBCategory) respCollection.toArray()[i]).CategoryID == previousCategoryID) {
+                    index = i;
+                }
+            }
+        }
+        this.spinnerFromCategory.getOnItemSelectedListener().onItemSelected(null, null, 0, index);
+    }
+
+    private void setToCategories(Collection<DBCategory> respCollection) {
+        Integer previousCategoryID = this.selectedToCategory == null ? null : this.selectedToCategory.CategoryID;
+        MyUtility.setSpinnerItems(this, this.spinnerToCategory, DBCategory.class, respCollection, category -> {
+            this.selectedToCategory = category;
+//            this.setFromCategories(this.allCategories.stream().filter(x -> x.Description != this.spinnerToCategory.getSelectedItem()).collect(Collectors.toList()));
+        });
+        int index = 0;
+        if (previousCategoryID != null) {
+            for (int i = 0; i < respCollection.size(); i++) {
+                if (((DBCategory)respCollection.toArray()[i]).CategoryID == previousCategoryID) {
+                    index = i;
+                }
+            }
+        }
+        this.spinnerToCategory.getOnItemSelectedListener().onItemSelected(null, null, 0, index);
+    }
+
+    private void setFromAccounts(Collection<DBAccount> respCollection) {
+        Integer previousAccountID = this.selectedFromAccount == null ? null : this.selectedFromAccount.AccountID;
+        MyUtility.setSpinnerItems(this, this.spinnerFromAccount, DBAccount.class, respCollection, account -> {
+            this.selectedFromAccount = account;
+            this.setToAccounts(this.allAccounts.stream().filter(x -> x.Description != account.Description).collect(Collectors.toList()));
+        });
+        int index = 0;
+        if (previousAccountID != null) {
+            for (int i = 0; i < respCollection.size(); i++) {
+                if (((DBAccount) respCollection.toArray()[i]).AccountID == previousAccountID) {
+                    index = i;
+                }
+            }
+        }
+        this.spinnerFromAccount.getOnItemSelectedListener().onItemSelected(null, null, 0, index);
+    }
+
+    private void setToAccounts(Collection<DBAccount> respCollection) {
+        Integer previousAccountID = this.selectedToAccount== null ? null : this.selectedToAccount.AccountID;
+        MyUtility.setSpinnerItems(this, this.spinnerToAccount, DBAccount.class, respCollection, account -> {
+            this.selectedToAccount = account;
+//            this.setFromCategories(this.allCategories.stream().filter(x -> x.Description != this.spinnerToCategory.getSelectedItem()).collect(Collectors.toList()));
+        });
+        int index = 0;
+        if (previousAccountID != null) {
+            for (int i = 0; i < respCollection.size(); i++) {
+                if (((DBAccount)respCollection.toArray()[i]).AccountID == previousAccountID) {
+                    index = i;
+                }
+            }
+        }
+        this.spinnerToAccount.getOnItemSelectedListener().onItemSelected(null, null, 0, index);
     }
 
     public void clearFields() {
@@ -201,6 +271,8 @@ public class IncomeExpenseActivity extends AppCompatActivity {
      * @param view button view
      */
     public void btnSubmitClick(View view) {
+        System.out.println("---------------- Selected Category ----------------");
+        System.out.println(this.spinnerFromCategory.getSelectedItem());
         boolean allRequiredFields = true;
         allRequiredFields = allRequiredFields && !this.txtAmount.getText().toString().equals("");
         allRequiredFields = allRequiredFields && !this.txtDescription.getText().toString().equals("");
@@ -233,6 +305,7 @@ public class IncomeExpenseActivity extends AppCompatActivity {
                     this.sendToLastActivity();
                 },
                 x -> {
+                    this.loading(false);
                     if (x != null) {
                         MyUtility.okDialog(this, "Error", x.response);
                     } else {

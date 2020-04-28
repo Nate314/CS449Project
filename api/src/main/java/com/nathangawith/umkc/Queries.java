@@ -25,7 +25,8 @@ public class Queries {
 	public static final String INSERT_TRANSACTION = "INSERT INTO transactions (UserID, AccountID, CategoryID, Description, Amount, Date) VALUES (?, ?, ?, ?, ?, ?)";
 	public static final String GET_REGISTER_TOTAL = "SELECT SUM(amount) AS DOUBLE_RESPONSE FROM transactions WHERE userid = ?";
 	public static final String GET_TRANSACTIONS   =
-				"SELECT transactions.transactionid, transactions.userid, transactions.accountid, transactions.categoryid,"
+					"SELECT * FROM ("
+		+ "\n" + "SELECT transactions.transactionid, transactions.userid, transactions.accountid, transactions.categoryid,"
 		+ "\n\t" + "transactions.description, transactions.amount, transactions.date,"
 		+ "\n\t" + "accounts.description AS accountdescription, categories.description AS categorydescription,"
 		+ "\n\t" + "NULL AS TransferID, NULL AS AccountFromDescription, NULL AS AccountToDescription,"
@@ -37,12 +38,13 @@ public class Queries {
 		+ "\n\t" + "JOIN categories ON transactions.CategoryID = categories.CategoryID"
 		+ "\n" + "WHERE transactions.userid = ?"
 		+ "\n" + "UNION"
-		+ "\n" + "SELECT NULL AS transactionid, transfers.UserID, NULL AS accountid, NULL AS categoryid, fromTransaction.Description, toTransaction.Amount, toTransaction.Date, NULL AS accountdescription, NULL AS categorydescription,"
-		+ "\n" + "transfers.TransferID,"
-		+ "\n" + "fromAccount.Description AS AccountFromDescription, toAccount.Description AS AccountToDescription,"
-		+ "\n" + "fromCategory.Description AS CategoryFromDescription, toCategory.Description AS CategoryToDescription,"
-		+ "\n" + "fromAccount.AccountID AS AccountFromID, toAccount.AccountID AS AccountToID,"
-		+ "\n" + "fromCategory.CategoryID AS CategoryFromID, toCategory.CategoryID AS CategoryToID"
+		+ "\n" + "SELECT fromTransaction.TransactionID AS transactionid, transfers.UserID, NULL AS accountid, NULL AS categoryid,"
+		+ "\n\t" + "fromTransaction.Description, toTransaction.Amount, toTransaction.Date, NULL AS accountdescription, NULL AS categorydescription,"
+		+ "\n\t" + "transfers.TransferID,"
+		+ "\n\t" + "fromAccount.Description AS AccountFromDescription, toAccount.Description AS AccountToDescription,"
+		+ "\n\t" + "fromCategory.Description AS CategoryFromDescription, toCategory.Description AS CategoryToDescription,"
+		+ "\n\t" + "fromAccount.AccountID AS AccountFromID, toAccount.AccountID AS AccountToID,"
+		+ "\n\t" + "fromCategory.CategoryID AS CategoryFromID, toCategory.CategoryID AS CategoryToID"
 		+ "\n" + "FROM transfers"
 		+ "\n\t" + "LEFT JOIN transactions fromTransaction ON fromTransaction.TransactionID = transfers.TransactionFromID"
 		+ "\n\t" + "LEFT JOIN transactions toTransaction ON toTransaction.TransactionID = transfers.TransactionToID"
@@ -51,7 +53,7 @@ public class Queries {
 		+ "\n\t" + "LEFT JOIN accounts toAccount ON toTransaction.AccountID = toAccount.AccountID"
 		+ "\n\t" + "LEFT JOIN categories toCategory ON toTransaction.CategoryID = toCategory.CategoryID"
 		+ "\n" + "WHERE transfers.userid = ?"
-		+ "\n" + "ORDER BY Date DESC, transactionid DESC";
+		+ "\n" + ") resulting_table ORDER BY Date DESC, transactionid DESC";
 	public static final String GET_REPORT_SELECT_FROM_WHERE =
 				 "SELECT SUM(transactions.Amount) AS Amount, transactions.Date,"
 		+ "\n\t" + "accounts.Description AS AccountDescription, categories.Description AS CategoryDescription," 
