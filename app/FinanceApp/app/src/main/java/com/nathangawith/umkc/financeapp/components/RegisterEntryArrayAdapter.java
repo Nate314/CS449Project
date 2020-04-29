@@ -71,6 +71,13 @@ public class RegisterEntryArrayAdapter extends ArrayAdapter<RegisterEntry> {
         listItemView.findViewById(R.id.btnEdit).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                System.out.println(currentItem);
+                if (currentItem != null) {
+                    System.out.println(currentItem.getDescription());
+                    System.out.println(currentItem.getDate());
+                    System.out.println(currentItem.getAmount());
+                    System.out.println(currentItem.getTransactionID());
+                }
                 me.registerActivity.btnEditClick(currentItem);
             }
         });

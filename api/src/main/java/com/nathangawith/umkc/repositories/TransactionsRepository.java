@@ -13,6 +13,7 @@ import com.nathangawith.umkc.Algorithms;
 import com.nathangawith.umkc.Queries;
 import com.nathangawith.umkc.database.IDatabase;
 import com.nathangawith.umkc.dtos.DBTransaction;
+import com.nathangawith.umkc.dtos.DBTransfer;
 
 @Component("transactions_repository")
 public class TransactionsRepository implements ITransactionsRepository {
@@ -32,14 +33,6 @@ public class TransactionsRepository implements ITransactionsRepository {
 
 	@Override
 	public boolean insertTransfer(int userID, int fromID, int toID, boolean isAccountTransfer, String description, double amount, Date date) {
-		boolean success = true;
-		if (isAccountTransfer) {
-			success = success && this.insertTransaction(userID, fromID, -1, description, -1 * amount, date);
-			success = success && this.insertTransaction(userID, toID, -1, description, amount, date);
-		} else {
-			success = success && this.insertTransaction(userID, -1, fromID, description, -1 * amount, date);
-			success = success && this.insertTransaction(userID, -1, toID, description, amount, date);
-		}
 		List<String> params = Algorithms.params(userID);
 		Collection<DBTransaction> queryResult = DB.select(Queries.GET_FROM_TO_TRANSACTION_IDS, params, DBTransaction.class);
 		List<Integer> transactionIDs = queryResult.stream().map(transaction -> transaction.TransactionID).collect(Collectors.toList());
@@ -49,8 +42,48 @@ public class TransactionsRepository implements ITransactionsRepository {
 			int toTransactionID = transactionIDs.get(0);
 			int fromTransactionID = transactionIDs.get(1);
 			params = Algorithms.params(userID, fromTransactionID, toTransactionID);
-			success = success && DB.execute(Queries.INSERT_TRANSFER, params);
-			return success;
+			return DB.execute(Queries.INSERT_TRANSFER, params);
 		}
+	}
+	
+	private DBTransfer getDBTransferGivenTransactionID(int transactionID) {
+		String sql = "SELECT * FROM transfers WHERE TransactionFromID = ? OR TransactionToID = ?";
+		List<String> params = Algorithms.params(transactionID, transactionID);
+		return DB.selectFirst(sql, params, DBTransfer.class);
+	}
+
+	@Override
+	public boolean updateTransaction(int userID, int accountID, int categoryID, String description, double amount, Date date, int transactionID) {
+		String sql = "UPDATE transactions SET AccountID = ?, CategoryID = ?, Description = ?, Amount = ?, Date = ? WHERE UserID = ? AND TransactionID = ?";
+		List<String> params = Algorithms.params(accountID, categoryID, description, amount, Algorithms.dateToString(date), userID, transactionID);
+		return DB.execute(sql, params);
+	}
+
+	@Override
+	public boolean updateTransfer(int userID, int fromID, int toID, boolean isAccountTransfer, String description, double amount, Date date, int transactionID) {
+		return true;
+	}
+
+	@Override
+	public boolean deleteTransaction(int userID, int transactionID) {
+		String sql = "DELETE FROM transactions WHERE UserID = ? AND TransactionID = ?";
+		List<String> params = Algorithms.params(userID, transactionID);
+		return DB.execute(sql, params);
+	}
+
+	@Override
+	public boolean deleteTransfer(int userID, int transactionID) {
+		boolean success = true;
+		String sql;
+		List<String> params;
+		DBTransfer transfer = getDBTransferGivenTransactionID(transactionID);
+		if (transfer == null) return false;
+		sql = "DELETE FROM transfers WHERE UserID = ? AND TransferID = ?";
+		params = Algorithms.params(userID, transfer.TransferID);
+		success = success && DB.execute(sql, params);
+		sql = "DELETE FROM transactions WHERE UserID = ? AND TransactionID IN (?, ?)";
+		params = Algorithms.params(userID, transfer.TransactionFromID, transfer.TransactionToID);
+		success = success && DB.execute(sql, params);
+		return success;
 	}
 }

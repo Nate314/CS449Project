@@ -39,7 +39,7 @@ public class Algorithms {
                 	if (field.getType().getName().equals("java.util.List")) {
                 		result += String.format("\"%s\":%s,", field.getName(), toJSONArray((Collection<Object>) o));
                 	} else {
-                        String format = field.getType().isPrimitive() ? "%s" : "\"%s\"";
+                        String format = field.getType().isPrimitive() || field.getType().toString().toUpperCase().contains("INTEGER") ? "%s" : "\"%s\"";
                         String value = field.getName().toUpperCase().contains("DATE")
                         	? String.format(format, Algorithms.dateToString((Date) o)) : String.format(format, o.toString());
                     	result += String.format("\"%s\":%s,", field.getName(), value);

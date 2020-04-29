@@ -15,17 +15,19 @@ import com.nathangawith.umkc.financeapp.components.RegisterEntry;
 import com.nathangawith.umkc.financeapp.constants.MyConstants;
 import com.nathangawith.umkc.financeapp.constants.MyState;
 import com.nathangawith.umkc.financeapp.constants.MyUtility;
-import com.nathangawith.umkc.financeapp.dialogs.MyDialog;
 import com.nathangawith.umkc.financeapp.dtos.TransactionDto;
 import com.nathangawith.umkc.financeapp.http.MyApi;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class RegisterActivity extends AppCompatActivity {
 
     private TextView lblTotal;
     private SwipeRefreshLayout swipeRefresh;
     private ListView listTransactions;
+    private List<TransactionDto> transactions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,10 +50,12 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void init() {
+        MyState.EDITING_TRANSACTION = null;
         MyApi.getTotal(getApplicationContext(), resp -> {
             this.lblTotal.setText(String.format("Total: %s", resp.response));
         }, data -> MyUtility.okDialog(this, "Error", data.response));
         MyApi.getTransactions(getApplicationContext(), respCollection -> {
+            this.transactions = respCollection.stream().collect(Collectors.toList());
             ArrayList<RegisterEntry> transactionsList = new ArrayList<RegisterEntry>();
             for (TransactionDto transaction : respCollection) {
                 transactionsList.add(new RegisterEntry(transaction));
@@ -107,10 +111,28 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public void btnEditClick(RegisterEntry entry) {
-        MyUtility.okDialog(this, "Not Yet Implemented", "");
+        MyState.SCREEN = entry.getTransactionType();
+        MyState.LAST_SCREEN = MyConstants.REGISTER;
+        TransactionDto editing_transaction = this.transactions.stream().filter(x -> x.TransactionID == entry.getTransactionID()).findFirst().orElse(null);
+        if (editing_transaction != null) {
+            MyState.EDITING_TRANSACTION = editing_transaction;
+            MyUtility.goToActivity(this, IncomeExpenseActivity.class);
+        } else {
+            MyUtility.okDialog(this, "ERROR", "Could not find transaction to edit");
+        }
     }
 
     public void btnDeleteClick(RegisterEntry entry) {
-        MyUtility.okDialog(this, "Not Yet Implemented", "");
+        MyUtility.yesnoDialog(this, "Are you sure you want to delete this transaction?", "", yesNoResponse -> {
+            if (yesNoResponse) {
+                MyApi.deleteTransaction(this, entry.getTransactionType(), entry.getTransactionID(),
+                    x -> {
+                        MyUtility.okDialog(this, "SUCCESS");
+                        this.init();
+                    },
+                    x -> MyUtility.okDialog(this, "ERROR")
+                );
+            }
+        });
     }
 }

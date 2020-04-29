@@ -30,7 +30,10 @@ public class Messages {
 			+ " Would you like to transfer the balance to another account before deleting this category?";
 	public static final String TRANSACTION_CREATED_SUCCESSFULLY = "Success";
 	public static final String TRANSACTION_CREATION_FAILED      = "Unable to create transaction";
-	
+	public static final String TRANSACTION_EDITED_SUCCESSFULLY  = "Success";
+	public static final String TRANSACTION_EDIT_FAILED          = "Unable to edit transaction";
+	public static final String TRANSACTION_DELETED_SUCCESSFULLY = "Success";
+	public static final String TRANSACTION_DELETE_FAILED        = "Unable to delete transaction";
 	public static final String ACCOUNT_USED_IN_TRANSACTIONS     = "This account has been used for some transactions. Are you sure you want to delete it?";
 	public static final String CATEGORY_USED_IN_TRANSACTIONS    = "This category has been used for some transactions. Are you sure you want to delete it?";
 }

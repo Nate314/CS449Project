@@ -1,11 +1,16 @@
 package com.nathangawith.umkc.financeapp.components;
 
+import android.provider.SyncStateContract;
+
 import com.nathangawith.umkc.financeapp.R;
+import com.nathangawith.umkc.financeapp.constants.MyConstants;
 import com.nathangawith.umkc.financeapp.dtos.TransactionDto;
 
 public class RegisterEntry {
 
     private int imgResID;
+    private int transactionID;
+    private String transactionType;
     private String description;
     private String amount;
     private String date;
@@ -26,6 +31,15 @@ public class RegisterEntry {
     public RegisterEntry(TransactionDto transaction) {
         this.imgResID = transaction.IsTransfer ? R.drawable.transfer_blue
                 : (transaction.IsIncome ? R.drawable.income_green : R.drawable.expense_red);
+        this.transactionType = transaction.IsTransfer ?
+                (transaction.AccountDescription != null ? MyConstants.TRANSFER_ACCOUNT : MyConstants.TRANSFER_CATEGORY)
+                : (transaction.IsIncome ? MyConstants.INCOME : MyConstants.EXPENSE);
+        System.out.println(transaction);
+        System.out.println(transaction.Description);
+        System.out.println(transaction.TransactionID);
+        if (transaction.TransactionID != null) {
+            this.transactionID = transaction.TransactionID;
+        }
         this.description = transaction.Description;
         this.amount = this.stringifyTransactionAmount(transaction.Amount);
         this.date = transaction.Date;
@@ -51,6 +65,8 @@ public class RegisterEntry {
     }
 
     public int getImgResID() { return this.imgResID; }
+    public int getTransactionID() { return this.transactionID; }
+    public String getTransactionType() { return this.transactionType; }
     public String getDescription() { return this.description; }
     public String getAmount() { return this.amount; }
     public String getDate() { return this.date; }

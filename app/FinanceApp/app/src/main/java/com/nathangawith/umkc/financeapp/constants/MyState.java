@@ -1,10 +1,13 @@
 package com.nathangawith.umkc.financeapp.constants;
 
+import com.nathangawith.umkc.financeapp.dtos.TransactionDto;
+
 public class MyState {
     public static String ROOT_API_URL;
     public static String TOKEN;
     public static String SCREEN;
     public static String LAST_SCREEN;
+    public static TransactionDto EDITING_TRANSACTION = null;
     public static String REPORT_SELECTED_START_DATE;
     public static String REPORT_SELECTED_END_DATE;
     public static String REPORT_SELECTED_TYPE;

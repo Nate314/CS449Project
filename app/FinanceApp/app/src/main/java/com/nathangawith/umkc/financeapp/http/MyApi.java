@@ -105,7 +105,12 @@ public class MyApi {
                     T resp = respType.newInstance();
                     JSONObject json = jsonArray.getJSONObject(i);
                     for (Field field : resp.getClass().getFields()) {
+                        System.out.println(json.toString());
                         try {
+                            if (field.getName() == "TransactionID") {
+                                System.out.println(field.getName());
+                                System.out.println(json.get(field.getName()));
+                            }
                             Object o = json.get(field.getName());
                             field.set(resp, o);
                         } catch (Exception ex) {
@@ -233,7 +238,8 @@ public class MyApi {
                 ByteArrayEntity entity = new ByteArrayEntity(jsonObjectString.getBytes("UTF-8"));
                 System.out.println("-------- Request: --------");
                 System.out.println(jsonObjectString);
-                MyHttpClient.post(context, "/transactions/add?transactionType=" + type, entity, parse(resp, func), x -> {}, x -> {}, parse(resp, errorFunc));
+                String url = String.format("/transactions/add?transactionType=%s", type);
+                MyHttpClient.post(context, url, entity, parse(resp, func), x -> {}, x -> {}, parse(resp, errorFunc));
             } catch (UnsupportedEncodingException ex) {
                 ex.printStackTrace();
             }
@@ -241,6 +247,42 @@ public class MyApi {
             resp.response = "Only Income/Expense/Transfer[Account/Category] are valid options";
             parse(resp, errorFunc);
         }
+    }
+
+    public static void putTransaction(Context context, String type, TransactionRequest transaction, Consumer<GenericResponse> func, Consumer<GenericResponse> errorFunc) {
+        GenericResponse resp = new GenericResponse();
+        if (type.equals(MyConstants.INCOME) || type.equals(MyConstants.EXPENSE) || type.equals(MyConstants.TRANSFER_ACCOUNT)|| type.equals(MyConstants.TRANSFER_CATEGORY)) {
+            try {
+                String jsonObjectString = String.format("{\"%s\":%s,\"%s\":%s,\"%s\":%s,\"%s\":\"%s\",\"%s\":%s,\"%s\":\"%s\",\"%s\":\"%s\",\"%s\":\"%s\",\"%s\":\"%s\",\"%s\":\"%s\"}",
+                        "TransactionID", transaction.TransactionID,
+                        "AccountID", transaction.AccountID,
+                        "CategoryID", transaction.CategoryID,
+                        "AccountToID", transaction.AccountToID,
+                        "AccountFromID", transaction.AccountFromID,
+                        "CategoryToID", transaction.CategoryToID,
+                        "CategoryFromID", transaction.CategoryFromID,
+                        "Description", transaction.Description == null ? null : transaction.Description.substring(0, Math.min(transaction.Description.length(), 20)).trim(),
+                        "Amount", transaction.Amount,
+                        "Date", dateToString(transaction.Date));
+                ByteArrayEntity entity = new ByteArrayEntity(jsonObjectString.getBytes("UTF-8"));
+                System.out.println("-------- Request: --------");
+                System.out.println(jsonObjectString);
+
+                String url = String.format("/transactions/edit?transactionType=%s", type);
+                MyHttpClient.put(context, url, entity, parse(resp, func), x -> {}, x -> {}, parse(resp, errorFunc));
+            } catch (UnsupportedEncodingException ex) {
+                ex.printStackTrace();
+            }
+        } else {
+            resp.response = "Only Income/Expense/Transfer[Account/Category] are valid options";
+            parse(resp, errorFunc);
+        }
+    }
+
+    public static void deleteTransaction(Context context, String type, int transactionID, Consumer<GenericResponse> func, Consumer<GenericResponse> errorFunc) {
+        GenericResponse resp = new GenericResponse();
+        String url = String.format("/transactions/remove?transactionType=%s&transactionID=%d", type, transactionID);
+        MyHttpClient.delete(context, url, parse(resp, func), x -> {}, x -> {}, parse(resp, errorFunc));
     }
 
     public static void getTotal(Context context, Consumer<GenericResponse> func, Consumer<GenericResponse> errorFunc) {

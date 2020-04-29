@@ -28,6 +28,7 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     private void init() {
+        MyState.EDITING_TRANSACTION = null;
         MyApi.getTotal(getApplicationContext(), resp -> {
             this.lblTotal.setText(String.format("Total: %s", resp.response));
         }, data -> MyUtility.okDialog(this, "Error", data.response));

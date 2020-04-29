@@ -23,10 +23,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.function.Consumer;
 
-import androidx.annotation.Size;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.FragmentManager;
 
 public class MyUtility {
 
@@ -71,7 +68,9 @@ public class MyUtility {
             MyUtility.initializeSpinner(context, spinner, descriptions, new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    onSelection.accept(respArrayList.get((int) id));
+                    if (respArrayList.size() > id) {
+                        onSelection.accept(respArrayList.get((int) id));
+                    }
                 }
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) { }
@@ -83,6 +82,10 @@ public class MyUtility {
 
     public static void okDialog(AppCompatActivity activity, String title, String text) {
         new MyDialog(title, text).show(activity.getSupportFragmentManager(), null);
+    }
+
+    public static void okDialog(AppCompatActivity activity, String title) {
+        MyUtility.okDialog(activity, title, "");
     }
 
     public static void yesnoDialog(AppCompatActivity activity, String title, String text, Consumer<Boolean> yesNoConsumer) {
@@ -132,6 +135,17 @@ public class MyUtility {
         cents = cents.length() <= 1 ? cents + "0" : cents;
         cents = cents.length() <= 1 ? cents + "0" : cents;
         return String.format("%s$%s.%s", negativeBalance ? "-" : "", dollars, cents);
+    }
+
+    /**
+     * @param date in the form YYYY-MM-DD
+     * @return date in the form MM/DD/YYYY
+     */
+    public static String sqlDateToJavaDate(String date) throws Exception {
+        String result = "";
+        String[] parts = date.split("-");
+        if (parts.length != 3) throw new Exception("Date passed should be in the form YYYY-MM-DD");
+        return String.format("%s/%s/%s", parts[1], parts[2], parts[0]);
     }
 
 }

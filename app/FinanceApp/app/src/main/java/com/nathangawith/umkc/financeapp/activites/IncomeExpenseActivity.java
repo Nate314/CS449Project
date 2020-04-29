@@ -18,14 +18,18 @@ import com.nathangawith.umkc.financeapp.constants.MyState;
 import com.nathangawith.umkc.financeapp.constants.MyUtility;
 import com.nathangawith.umkc.financeapp.dtos.DBAccount;
 import com.nathangawith.umkc.financeapp.dtos.DBCategory;
+import com.nathangawith.umkc.financeapp.dtos.GenericResponse;
 import com.nathangawith.umkc.financeapp.dtos.TransactionRequest;
 import com.nathangawith.umkc.financeapp.http.MyApi;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.OptionalInt;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -115,25 +119,28 @@ public class IncomeExpenseActivity extends AppCompatActivity {
             this.lblLabel2.setVisibility(View.VISIBLE);
             this.spinnerCategory.setVisibility(View.VISIBLE);
             this.spinnerAccount.setVisibility(View.VISIBLE);
-            MyApi.getAllAccounts(getApplicationContext(),
-                    respCollection -> MyUtility.setSpinnerItems(this, this.spinnerAccount, DBAccount.class, respCollection, account -> this.selectedAccount = account),
-                    x -> MyUtility.okDialog(this, "Error", x.response));
-            MyApi.getAllCategories(getApplicationContext(), income,
-                    respCollection -> MyUtility.setSpinnerItems(this, this.spinnerCategory, DBCategory.class, respCollection, category -> this.selectedCategory = category),
-                    x -> MyUtility.okDialog(this, "Error", x.response));
+            MyApi.getAllCategories(getApplicationContext(), income, categories -> {
+                this.allCategories = categories;
+                MyUtility.setSpinnerItems(this, this.spinnerCategory, DBCategory.class, categories, category -> this.selectedCategory = category);
+                MyApi.getAllAccounts(getApplicationContext(), accounts -> {
+                    this.allAccounts = accounts;
+                    MyUtility.setSpinnerItems(this, this.spinnerAccount, DBAccount.class, accounts, account -> this.selectedAccount = account);
+                    this.setFieldsIfInEditMode();
+                }, x -> MyUtility.okDialog(this, "Error", x.response));
+            }, x -> MyUtility.okDialog(this, "Error", x.response));
         } else if (MyState.SCREEN.equals(MyConstants.TRANSFER_ACCOUNT)) {
             this.lblScreenName.setText("Account Transfer");
             this.lblLabel3.setVisibility(View.VISIBLE);
             this.lblLabel4.setVisibility(View.VISIBLE);
             this.spinnerToAccount.setVisibility(View.VISIBLE);
             this.spinnerFromAccount.setVisibility(View.VISIBLE);
-            MyApi.getAllAccounts(getApplicationContext(),
-                    respCollection -> {
-                        this.allAccounts = respCollection;
-                        this.setFromAccounts(respCollection);
-                        this.setToAccounts(respCollection);
-                    },
-                    x -> MyUtility.okDialog(this, "Error", x.response));
+            MyApi.getAllAccounts(getApplicationContext(), respCollection -> {
+                this.allAccounts = respCollection;
+                this.setFromAccounts(respCollection);
+                this.setToAccounts(respCollection);
+                this.setFieldsIfInEditMode();
+            },
+            x -> MyUtility.okDialog(this, "Error", x.response));
         } else if (MyState.SCREEN.equals(MyConstants.TRANSFER_CATEGORY)) {
             this.lblScreenName.setText("Category Transfer");
             this.lblLabel5.setVisibility(View.VISIBLE);
@@ -144,8 +151,91 @@ public class IncomeExpenseActivity extends AppCompatActivity {
                 this.allCategories = respCollection;
                 this.setFromCategories(respCollection);
                 this.setToCategories(respCollection);
+                this.setFieldsIfInEditMode();
             },
             x -> MyUtility.okDialog(this, "Error", x.response));
+        }
+    }
+
+    private void setFieldsIfInEditMode() {
+        int i;
+        Iterator<DBAccount> accountIterator;
+        Iterator<DBCategory> categoryIterator;
+        if (MyState.EDITING_TRANSACTION != null) {
+//            this.btnSubmit.setText("UPDATE");
+            this.txtDescription.setText(MyState.EDITING_TRANSACTION.Description);
+            this.txtAmount.setText(Math.abs(MyState.EDITING_TRANSACTION.Amount) + "");
+            try {
+                this.lblDate.setText(MyUtility.sqlDateToJavaDate(MyState.EDITING_TRANSACTION.Date));
+            } catch (Exception e) {
+                MyUtility.okDialog(this, "Could not parse date");
+            }
+            switch (MyState.SCREEN) {
+                case MyConstants.INCOME:
+                case MyConstants.EXPENSE:
+                    int accountIndex = -1, categoryIndex = -1;
+                    i = 0;
+                    accountIterator = this.allAccounts.iterator();
+                    for (DBAccount account = accountIterator.next(); accountIterator.hasNext();)
+                        if (account.AccountID == MyState.EDITING_TRANSACTION.AccountID) {
+                            accountIndex = i;
+                            break;
+                        }
+                    i = 0;
+                    categoryIterator = this.allCategories.iterator();
+                    for (DBCategory category = categoryIterator.next(); categoryIterator.hasNext();)
+                        if (category.CategoryID == MyState.EDITING_TRANSACTION.CategoryID) {
+                            categoryIndex = i;
+                            break;
+                        }
+                    if (accountIndex == -1) {
+                        MyUtility.okDialog(this, "Could not find Account from the original transaction");
+                    } else {
+                        this.spinnerAccount.getOnItemSelectedListener().onItemSelected(null, null, 0, accountIndex);
+                    }
+                    if (categoryIndex == -1) {
+                        MyUtility.okDialog(this, "Could not find Category from the original transaction");
+                    } else {
+                        this.spinnerCategory.getOnItemSelectedListener().onItemSelected(null, null, 0, categoryIndex);
+                    }
+                    break;
+                case MyConstants.TRANSFER_ACCOUNT:
+                    int accountFromIndex = -1, accountToIndex = -1;
+                    i = 0;
+                    accountIterator = this.allAccounts.iterator();
+                    for (DBAccount account = accountIterator.next(); accountIterator.hasNext();)
+                        if (account.AccountID == MyState.EDITING_TRANSACTION.AccountFromID) accountFromIndex = i;
+                        else if (account.AccountID == MyState.EDITING_TRANSACTION.AccountToID) accountToIndex = i;
+                    if (accountFromIndex == -1) {
+                        MyUtility.okDialog(this, "Could not find From Account from the original transaction");
+                    } else {
+                        this.spinnerFromAccount.getOnItemSelectedListener().onItemSelected(null, null, 0, accountFromIndex);
+                    }
+                    if (accountToIndex == -1) {
+                        MyUtility.okDialog(this, "Could not find To Account from the original transaction");
+                    } else {
+                        this.spinnerToAccount.getOnItemSelectedListener().onItemSelected(null, null, 0, accountToIndex);
+                    }
+                    break;
+                case MyConstants.TRANSFER_CATEGORY:
+                    int categoryFromIndex = -1, categoryToIndex = -1;
+                    i = 0;
+                    categoryIterator = this.allCategories.iterator();
+                    for (DBCategory category = categoryIterator.next(); categoryIterator.hasNext();)
+                        if (category.CategoryID == MyState.EDITING_TRANSACTION.CategoryToID) accountFromIndex = i;
+                        else if (category.CategoryID == MyState.EDITING_TRANSACTION.CategoryToID) accountToIndex = i;
+                    if (categoryFromIndex == -1) {
+                        MyUtility.okDialog(this, "Could not find From Category from the original transaction");
+                    } else {
+                        this.spinnerFromCategory.getOnItemSelectedListener().onItemSelected(null, null, 0, categoryFromIndex);
+                    }
+                    if (categoryToIndex == -1) {
+                        MyUtility.okDialog(this, "Could not find To Category from the original transaction");
+                    } else {
+                        this.spinnerToCategory.getOnItemSelectedListener().onItemSelected(null, null, 0, categoryToIndex);
+                    }
+                    break;
+            }
         }
     }
 
@@ -259,6 +349,7 @@ public class IncomeExpenseActivity extends AppCompatActivity {
     }
 
     private void sendToLastActivity() {
+        MyState.EDITING_TRANSACTION = null;
         if (MyState.LAST_SCREEN == MyConstants.MENU) {
             startActivity(new Intent(this, MenuActivity.class));
         } else if (MyState.LAST_SCREEN == MyConstants.REGISTER) {
@@ -289,6 +380,7 @@ public class IncomeExpenseActivity extends AppCompatActivity {
         }
         if (allRequiredFields) {
             TransactionRequest transaction = new TransactionRequest();
+            transaction.TransactionID = MyState.EDITING_TRANSACTION == null ? -1 : MyState.EDITING_TRANSACTION.TransactionID;
             transaction.AccountID = this.selectedAccount == null ? -1 : this.selectedAccount.AccountID;
             transaction.CategoryID = this.selectedCategory == null ? -1 : this.selectedCategory.CategoryID;
             transaction.AccountFromID = this.selectedFromAccount == null ? -1 : this.selectedFromAccount.AccountID;
@@ -299,19 +391,24 @@ public class IncomeExpenseActivity extends AppCompatActivity {
             transaction.Description = this.txtDescription.getText().toString();
             transaction.Date = new Date(this.lblDate.getText().toString());
             this.loading(true);
-            MyApi.postTransaction(getApplicationContext(), MyState.SCREEN, transaction, x -> {
-                    this.loading(false);
-                    this.clearFields();
-                    this.sendToLastActivity();
-                },
-                x -> {
-                    this.loading(false);
-                    if (x != null) {
-                        MyUtility.okDialog(this, "Error", x.response);
-                    } else {
-                        System.out.println("Error Response was null");
-                    }
-                });
+            Consumer<GenericResponse> okFunc = x -> {
+                this.loading(false);
+                this.clearFields();
+                this.sendToLastActivity();
+            };
+            Consumer<GenericResponse> errFunc = x -> {
+                this.loading(false);
+                if (x != null) {
+                    MyUtility.okDialog(this, "Error", x.response);
+                } else {
+                    System.out.println("Error Response was null");
+                }
+            };
+            if (MyState.EDITING_TRANSACTION == null) {
+                MyApi.postTransaction(getApplicationContext(), MyState.SCREEN, transaction, okFunc, errFunc);
+            } else {
+                MyApi.putTransaction(getApplicationContext(), MyState.SCREEN, transaction, okFunc, errFunc);
+            }
         } else {
             MyUtility.okDialog(this, "Enter all required Fields", "");
         }
