@@ -32,7 +32,7 @@ public class RegisterEntry {
         this.imgResID = transaction.IsTransfer ? R.drawable.transfer_blue
                 : (transaction.IsIncome ? R.drawable.income_green : R.drawable.expense_red);
         this.transactionType = transaction.IsTransfer ?
-                (transaction.AccountDescription != null ? MyConstants.TRANSFER_ACCOUNT : MyConstants.TRANSFER_CATEGORY)
+                (transaction.AccountFromDescription != null ? MyConstants.TRANSFER_ACCOUNT : MyConstants.TRANSFER_CATEGORY)
                 : (transaction.IsIncome ? MyConstants.INCOME : MyConstants.EXPENSE);
         System.out.println(transaction);
         System.out.println(transaction.Description);

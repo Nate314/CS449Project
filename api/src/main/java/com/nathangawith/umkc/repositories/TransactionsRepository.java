@@ -46,7 +46,8 @@ public class TransactionsRepository implements ITransactionsRepository {
 		}
 	}
 	
-	private DBTransfer getDBTransferGivenTransactionID(int transactionID) {
+	@Override
+	public DBTransfer selectTransfer(int transactionID) {
 		String sql = "SELECT * FROM transfers WHERE TransactionFromID = ? OR TransactionToID = ?";
 		List<String> params = Algorithms.params(transactionID, transactionID);
 		return DB.selectFirst(sql, params, DBTransfer.class);
@@ -54,14 +55,11 @@ public class TransactionsRepository implements ITransactionsRepository {
 
 	@Override
 	public boolean updateTransaction(int userID, int accountID, int categoryID, String description, double amount, Date date, int transactionID) {
+		String accID = accountID == -1 ? (String) null : accountID + "";
+		String catID = categoryID == -1 ? (String) null : categoryID + "";
 		String sql = "UPDATE transactions SET AccountID = ?, CategoryID = ?, Description = ?, Amount = ?, Date = ? WHERE UserID = ? AND TransactionID = ?";
-		List<String> params = Algorithms.params(accountID, categoryID, description, amount, Algorithms.dateToString(date), userID, transactionID);
+		List<String> params = Algorithms.params(accID, catID, description, amount, Algorithms.dateToString(date), userID, transactionID);
 		return DB.execute(sql, params);
-	}
-
-	@Override
-	public boolean updateTransfer(int userID, int fromID, int toID, boolean isAccountTransfer, String description, double amount, Date date, int transactionID) {
-		return true;
 	}
 
 	@Override
@@ -76,7 +74,7 @@ public class TransactionsRepository implements ITransactionsRepository {
 		boolean success = true;
 		String sql;
 		List<String> params;
-		DBTransfer transfer = getDBTransferGivenTransactionID(transactionID);
+		DBTransfer transfer = this.selectTransfer(transactionID);
 		if (transfer == null) return false;
 		sql = "DELETE FROM transfers WHERE UserID = ? AND TransferID = ?";
 		params = Algorithms.params(userID, transfer.TransferID);

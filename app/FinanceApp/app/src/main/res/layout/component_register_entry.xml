@@ -83,7 +83,7 @@
             android:id="@+id/lblLabel1"
             android:text="Account"
             android:textStyle="normal"
-            android:textSize="20dp"
+            android:textSize="10dp"
             android:textColor="@color/almostblack" />
 
         <TextView
@@ -122,7 +122,7 @@
             android:text="Category"
             android:textStyle="normal"
             android:textAlignment="gravity"
-            android:textSize="20dp"
+            android:textSize="10dp"
             android:textColor="@color/almostblack" />
 
         <TextView

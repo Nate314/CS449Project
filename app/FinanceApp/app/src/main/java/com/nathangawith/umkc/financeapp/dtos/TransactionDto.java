@@ -1,7 +1,5 @@
 package com.nathangawith.umkc.financeapp.dtos;
 
-import java.util.Date;
-
 public class TransactionDto {
     public boolean IsIncome;
     public boolean IsTransfer;

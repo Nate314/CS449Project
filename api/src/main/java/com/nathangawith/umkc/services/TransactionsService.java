@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import com.nathangawith.umkc.dtos.DBTransfer;
 import com.nathangawith.umkc.repositories.ITransactionsRepository;
 
 @Component("transactions_service")
@@ -46,7 +47,16 @@ public class TransactionsService implements ITransactionsService {
 
 	@Override
 	public boolean editTransfer(int userID, int fromID, int toID, boolean isAccountTransfer, String description, double amount, Date date, int transactionID) {
-		return mTransactionsRepository.updateTransfer(userID, fromID, toID, isAccountTransfer, description, amount, date, transactionID);
+		DBTransfer transfer = mTransactionsRepository.selectTransfer(transactionID);
+		boolean success = transfer != null;
+		if (isAccountTransfer) {
+			success = success && mTransactionsRepository.updateTransaction(userID, fromID, -1, description, -1 * amount, date, transfer.TransactionFromID);
+			success = success && mTransactionsRepository.updateTransaction(userID, toID, -1, description, amount, date, transfer.TransactionToID);
+		} else {
+			success = success && mTransactionsRepository.updateTransaction(userID, -1, fromID, description, -1 * amount, date, transfer.TransactionFromID);
+			success = success && mTransactionsRepository.updateTransaction(userID, -1, toID, description, amount, date, transfer.TransactionToID);
+		}
+		return success;
 	}
 
     @Override

@@ -64,7 +64,10 @@ public class MyUtility {
         try {
             ArrayList<T> respArrayList = new ArrayList<T>(respCollection);
             ArrayList<String> descriptions = new ArrayList<String>();
-            for (T x : respArrayList) descriptions.add(type.getField("Description").get(x).toString());
+            for (T x : respArrayList) {
+                System.out.println(x);
+                descriptions.add(type.getField("Description").get(x).toString());
+            }
             MyUtility.initializeSpinner(context, spinner, descriptions, new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
