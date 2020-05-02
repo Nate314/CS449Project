@@ -85,7 +85,8 @@ Stretch Goals:
 | ~~9~~ | ~~Create Account/Category Transfer screens with: - Same fields as Income/Expense screen - And To/From account/category dropdowns~~ | ~~5~~ | ~~2.1~~ | ~~Sprint5~~ |
 | 19 | Edit/Delete income/expense/transfers from register screen | 5 | 2.3 | Sprint6 |
 | 20 | Fix all bugs found in Sprint5 | 3.5 | 2.3 | Sprint6 |
-| 18 | Allow the user to edit their first/last name from the settings screen | 1.5 | 2.4 | Sprint6 |
+| 21 | Add Side Navigation Menu | 1.5 | 2.4 | Sprint6 |
+| 18 | Allow the user to edit their first/last name from the settings screen | 1.5 | 2.4 | TODO |
 | 10 | Integrate Google authentication | 4 | 3.0 | TODO |
 | 11 | Filter Register based on Category, Description, Amount, etc. | 3 | 4.0 | TODO |
 | 12 | Filter Reports based on specific categories/accounts | 4 | 4.1 | TODO |
@@ -379,7 +380,8 @@ Sprint Backlog
 | 20.4 | Put ("From {ACCOUNT}") on next line |  |  |
 | 20.5 | No transactions over 1 million dollars |  |  |
 | 20.6 | Modify Messages |  |  |
-| 18 | Allow the user to edit their first/last name from the settings screen | 1:30 |  |
+| 21 | Add Side Navigation Menu | 1:30 |  |
+| ~~18~~ | ~~Allow the user to edit their first/last name from the settings screen~~ | ~~1:30~~ |  |
 | --- | --- | --- | --- |
 |  | Total | 10:00 |  |
 

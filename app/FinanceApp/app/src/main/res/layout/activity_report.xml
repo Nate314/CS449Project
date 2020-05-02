@@ -14,21 +14,12 @@
         android:orientation="vertical"
         tools:context=".activites.ReportActivity">
 
-        <Button
-            android:id="@+id/btnBack"
-            android:onClick="btnBackClick"
-            android:text="Back"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center" />
-
         <TextView
             android:id="@+id/lblScreenName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="45dp"
+            android:layout_marginTop="20dp"
             android:gravity="center"
             android:text="Report"
             android:textColor="@color/colorPrimaryDark"
@@ -155,16 +146,14 @@
                         android:id="@+id/radioBtnMonth"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
-                        android:text="Month"
-                        android:onClick="radioBtnClick">
+                        android:text="Month">
                     </RadioButton>
 
                     <RadioButton
                         android:id="@+id/radioBtnYear"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
-                        android:text="Year"
-                        android:onClick="radioBtnClick">
+                        android:text="Year">
                     </RadioButton>
 
                 </RadioGroup>
@@ -200,16 +189,14 @@
                         android:id="@+id/radioBtnCategory"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
-                        android:text="Category"
-                        android:onClick="radioBtnClick">
+                        android:text="Category">
                     </RadioButton>
 
                     <RadioButton
                         android:id="@+id/radioBtnAccount"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
-                        android:text="Account"
-                        android:onClick="radioBtnClick">
+                        android:text="Account">
                     </RadioButton>
 
                 </RadioGroup>
@@ -220,7 +207,6 @@
 
         <Button
             android:id="@+id/btnSubmit"
-            android:onClick="btnSubmitClick"
             android:text="Submit"
             android:layout_marginTop="50dp"
             android:layout_width="fill_parent"

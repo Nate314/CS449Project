@@ -1,6 +1,9 @@
 package com.nathangawith.umkc.financeapp.activites;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
@@ -8,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -23,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nathangawith.umkc.financeapp.R;
+import com.nathangawith.umkc.financeapp.constants.MyConstants;
 import com.nathangawith.umkc.financeapp.constants.MyState;
 import com.nathangawith.umkc.financeapp.constants.MyUtility;
 import com.nathangawith.umkc.financeapp.dtos.ReportRequest;
@@ -31,6 +36,7 @@ import com.nathangawith.umkc.financeapp.dtos.TransactionDto;
 import com.nathangawith.umkc.financeapp.http.MyApi;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -38,7 +44,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class ReportActivity extends AppCompatActivity {
+public class ReportActivity extends Fragment implements IBackNavigable {
 
     private TableLayout tableLayout;
     private Button btnSelectStartDate;
@@ -51,21 +57,45 @@ public class ReportActivity extends AppCompatActivity {
     private TextView lblLabel2;
     private Button btnSubmit;
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_report);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.activity_report, container, false);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        View view = getView();
         // initialize fields to ui elements
-        this.tableLayout = findViewById(R.id.tableReport);
-        this.btnSelectStartDate = findViewById(R.id.btnSelectStartDate);
-        this.lblStartDate = findViewById(R.id.lblStartDate);
-        this.btnSelectEndDate = findViewById(R.id.btnSelectEndDate);
-        this.lblEndDate = findViewById(R.id.lblEndDate);
-        this.radioGrpBreakpoint = findViewById(R.id.radioGrpBreakpoint);
-        this.radioGrpType = findViewById(R.id.radioGrpType);
-        this.lblLabel1 = findViewById(R.id.lblLabel1);
-        this.lblLabel2 = findViewById(R.id.lblLabel2);
-        this.btnSubmit = findViewById(R.id.btnSubmit);
+        this.tableLayout = view.findViewById(R.id.tableReport);
+        this.btnSelectStartDate = view.findViewById(R.id.btnSelectStartDate);
+        this.lblStartDate = view.findViewById(R.id.lblStartDate);
+        this.btnSelectEndDate = view.findViewById(R.id.btnSelectEndDate);
+        this.lblEndDate = view.findViewById(R.id.lblEndDate);
+        this.radioGrpBreakpoint = view.findViewById(R.id.radioGrpBreakpoint);
+        this.radioGrpType = view.findViewById(R.id.radioGrpType);
+        this.lblLabel1 = view.findViewById(R.id.lblLabel1);
+        this.lblLabel2 = view.findViewById(R.id.lblLabel2);
+        this.btnSubmit = view.findViewById(R.id.btnSubmit);
+        ReportActivity me = this;
+        Arrays.asList(new RadioButton[] {
+                view.findViewById(R.id.radioBtnAccount), view.findViewById(R.id.radioBtnCategory),
+                view.findViewById(R.id.radioBtnMonth), view.findViewById(R.id.radioBtnYear)
+        }).forEach(radioButton -> {
+            radioButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    me.radioBtnClick(v);
+                }
+            });
+        });
+        this.btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                me.btnSubmitClick(null);
+            }
+        });
         // initialize component
         this.init();
     }
@@ -77,8 +107,8 @@ public class ReportActivity extends AppCompatActivity {
         MyState.REPORT_SELECTED_TYPE = null;
         MyState.REPORT_SELECTED_BREAKPOINT = null;
         // initialize on click listeners
-        this.btnSelectStartDate.setOnClickListener(v -> MyUtility.btnDateClick(this, this.lblStartDate));
-        this.btnSelectEndDate.setOnClickListener(v -> MyUtility.btnDateClick(this, this.lblEndDate));
+        this.btnSelectStartDate.setOnClickListener(v -> MyUtility.btnDateClick(getContext(), this.lblStartDate));
+        this.btnSelectEndDate.setOnClickListener(v -> MyUtility.btnDateClick(getContext(), this.lblEndDate));
     }
 
     /**
@@ -88,10 +118,10 @@ public class ReportActivity extends AppCompatActivity {
      * @return TextView for a cell
      */
     private TextView getCellTextView(String content, boolean title, int color) {
-        TextView textView = new TextView(this);
+        TextView textView = new TextView(getContext());
         textView.setText(String.format("    %s    ", content));
         textView.setTextSize(20);
-        textView.setBackground(getDrawable(R.drawable.border));
+        textView.setBackground(getContext().getDrawable(R.drawable.border));
         textView.setTextColor(color);
         if (title) textView.setTypeface(null, Typeface.BOLD);
         return textView;
@@ -104,7 +134,7 @@ public class ReportActivity extends AppCompatActivity {
      * @return TextView for a cell
      */
     private TextView getCellTextView(String content, boolean title) {
-        return this.getCellTextView(content, title, getColor(R.color.black));
+        return this.getCellTextView(content, title, getContext().getColor(R.color.black));
     }
 
     /**
@@ -116,14 +146,14 @@ public class ReportActivity extends AppCompatActivity {
         List<TransactionDto> cells = report.Cells;
         boolean categoryType = report.Type.equals("Category");
         boolean monthBreakpoint = report.Breakpoint.equals("Month");
-        TableRow header = new TableRow(this);
+        TableRow header = new TableRow(getContext());
         int dateCharacters = 4 + (monthBreakpoint ? 1 + 2 : 0);
         List<String> rows = cells.stream().map(x -> x.Date.substring(0, dateCharacters)).distinct().collect(Collectors.toList());
         List<String> columns = cells.stream().map(x -> categoryType ? x.CategoryDescription : x.AccountDescription).distinct().filter(x -> x != null).collect(Collectors.toList());
         System.out.println("---------------- columns ----------------");
         System.out.println(columns);
         // populate header
-        header.addView(new TextView(this));
+        header.addView(new TextView(getContext()));
         columns.forEach(col -> header.addView(this.getCellTextView(col, true)));
         header.addView(this.getCellTextView("Total", true));
         // populate rows
@@ -131,7 +161,7 @@ public class ReportActivity extends AppCompatActivity {
         List<Double> totals = new ArrayList<Double>();
         columns.stream().forEach(x -> totals.add(new Double(0)));
         rows.forEach(row -> {
-            TableRow tableRow = new TableRow(this);
+            TableRow tableRow = new TableRow(getContext());
             tableRow.addView(this.getCellTextView(row, true));
             double total = 0;
             for (int i = 0; i < columns.size(); i++) {
@@ -139,16 +169,16 @@ public class ReportActivity extends AppCompatActivity {
                 List<TransactionDto> candidateCells = cells.stream().filter(x -> x.Date.substring(0, dateCharacters).equals(row)
                     && coalesce.apply(categoryType ? x.CategoryDescription : x.AccountDescription, "                ").equals(col)).collect(Collectors.toList());
                 double cell = candidateCells.size() > 0 ? candidateCells.get(0).Amount : 0;
-                tableRow.addView(this.getCellTextView(MyUtility.formatAsMoney(cell), false, getColor(cell >= 0 ? R.color.green : R.color.red)));
+                tableRow.addView(this.getCellTextView(MyUtility.formatAsMoney(cell), false, getContext().getColor(cell >= 0 ? R.color.green : R.color.red)));
                 totals.set(i, totals.get(i) + cell);
                 total += cell;
             }
-            tableRow.addView(this.getCellTextView(MyUtility.formatAsMoney(total), false, getColor(total >= 0 ? R.color.green : R.color.red)));
+            tableRow.addView(this.getCellTextView(MyUtility.formatAsMoney(total), false, getContext().getColor(total >= 0 ? R.color.green : R.color.red)));
             tableRows.add(tableRow);
         });
-        TableRow totalRow = new TableRow(this);
+        TableRow totalRow = new TableRow(getContext());
         totalRow.addView(this.getCellTextView("Total", true));
-        totals.forEach(total -> totalRow.addView(this.getCellTextView(MyUtility.formatAsMoney(total), false, getColor(total >= 0 ? R.color.green : R.color.red))));
+        totals.forEach(total -> totalRow.addView(this.getCellTextView(MyUtility.formatAsMoney(total), false, getContext().getColor(total >= 0 ? R.color.green : R.color.red))));
         totalRow.addView(this.getCellTextView("", true));
         tableRows.add(totalRow);
         /// build table
@@ -187,8 +217,8 @@ public class ReportActivity extends AppCompatActivity {
      * @param view radio button that was clicked
      */
     public void radioBtnClick(View view) {
-        RadioButton radioBtnBreakpoint = findViewById(this.radioGrpBreakpoint.getCheckedRadioButtonId());
-        RadioButton radioBtnType = findViewById(this.radioGrpType.getCheckedRadioButtonId());
+        RadioButton radioBtnBreakpoint = getView().findViewById(this.radioGrpBreakpoint.getCheckedRadioButtonId());
+        RadioButton radioBtnType = getView().findViewById(this.radioGrpType.getCheckedRadioButtonId());
         MyState.REPORT_SELECTED_BREAKPOINT = radioBtnBreakpoint == null ? null : radioBtnBreakpoint.getText().toString();
         MyState.REPORT_SELECTED_TYPE = radioBtnType == null ? null : radioBtnType.getText().toString();
     }
@@ -209,25 +239,22 @@ public class ReportActivity extends AppCompatActivity {
                 MyState.REPORT_SELECTED_END_DATE, MyState.REPORT_SELECTED_BREAKPOINT, MyState.REPORT_SELECTED_TYPE);
         System.out.println(values);
         if (allRequiredFields) {
-            MyApi.postReport(this,
+            MyApi.postReport(getContext(),
                 new Date(MyState.REPORT_SELECTED_START_DATE),
                 new Date(MyState.REPORT_SELECTED_END_DATE),
                 MyState.REPORT_SELECTED_BREAKPOINT,
-                MyState.REPORT_SELECTED_TYPE, x -> this.buildTable(x), x -> MyUtility.okDialog(this, "ERROR", x.response));
+                MyState.REPORT_SELECTED_TYPE, x -> this.buildTable(x), x -> MyUtility.okDialog(getFragmentManager(), "ERROR", x.response));
         } else {
-            MyUtility.okDialog(this, "Not all required fields have been entered", values);
+            MyUtility.okDialog(getFragmentManager(), "Not all required fields have been entered", values);
         }
     }
 
-    /**
-     * when the back button is clicked
-     * @param view button view
-     */
-    public void btnBackClick(View view) {
+    @Override
+    public void onBackClick() {
         if (this.isInTableView()) {
             this.toggleTableView();
         } else {
-            startActivity(new Intent(this, MenuActivity.class));
+            MyState.GOTO = MyConstants.MENU;
         }
     }
 }

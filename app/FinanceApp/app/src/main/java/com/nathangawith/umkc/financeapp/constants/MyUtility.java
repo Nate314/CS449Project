@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -24,6 +26,7 @@ import java.util.Collection;
 import java.util.function.Consumer;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 public class MyUtility {
 
@@ -83,6 +86,14 @@ public class MyUtility {
         }
     }
 
+    public static void okDialog(FragmentManager fragmentManager, String title, String text) {
+        new MyDialog(title, text).show(fragmentManager, null);
+    }
+
+    public static void okDialog(FragmentManager fragmentManager, String title) {
+        MyUtility.okDialog(fragmentManager, title, "");
+    }
+
     public static void okDialog(AppCompatActivity activity, String title, String text) {
         new MyDialog(title, text).show(activity.getSupportFragmentManager(), null);
     }
@@ -95,8 +106,16 @@ public class MyUtility {
         new MyDialog(title, text, new String[]{"YES", "NO"}, btnText -> yesNoConsumer.accept(btnText.equals("YES"))).show(activity.getSupportFragmentManager(), null);
     }
 
+    public static void yesnoDialog(FragmentManager fragmentManager, String title, String text, Consumer<Boolean> yesNoConsumer) {
+        new MyDialog(title, text, new String[]{"YES", "NO"}, btnText -> yesNoConsumer.accept(btnText.equals("YES"))).show(fragmentManager, null);
+    }
+
     public static <T> void goToActivity(Activity thisActivity, Class<T> nextActivity) {
         thisActivity.startActivity(new Intent(thisActivity, nextActivity));
+    }
+
+    public static void goToFragment(MenuItem menuItem) {
+        MyState.NAVIGATION_LISTENER.onNavigationItemSelected(menuItem);
     }
 
     /**

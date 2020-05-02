@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/nav_login"
+            android:icon="@drawable/logout_black"
+            android:title="Logout" />
+        <item android:id="@+id/nav_menu"
+            android:icon="@drawable/menu_black"
+            android:title="Menu" />
+        <item android:id="@+id/nav_income"
+            android:icon="@drawable/income_black"
+            android:title="Income" />
+        <item android:id="@+id/nav_expense"
+            android:icon="@drawable/expense_black"
+            android:title="Expense" />
+        <item android:id="@+id/nav_account_transfer"
+            android:icon="@drawable/transfer_black"
+            android:title="Account Transfer" />
+        <item android:id="@+id/nav_category_transfer"
+            android:icon="@drawable/transfer_black"
+            android:title="Category Transfer" />
+        <item android:id="@+id/nav_register"
+            android:icon="@drawable/register_black"
+            android:title="Register" />
+        <item android:id="@+id/nav_report"
+            android:icon="@drawable/report_black"
+            android:title="Report" />
+        <item android:id="@+id/nav_settings"
+            android:icon="@drawable/settings_black"
+            android:title="Settings" />
+    </group>
+</menu>
+<!--    https://www.youtube.com/watch?v=fGcMLu1GJEc-->

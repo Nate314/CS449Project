@@ -14,17 +14,6 @@
         android:orientation="vertical"
         tools:context=".activites.SettingsActivity">
 
-        <Button
-            android:id="@+id/btnBack"
-            android:width="10000dp"
-            android:onClick="btnBackClick"
-            android:text="Back"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_gravity="center"
-            android:gravity="center" />
-
         <TextView
             android:id="@+id/lblScreenName"
             android:layout_marginRight="10dp"
@@ -140,7 +129,6 @@
         <Button
             android:id="@+id/btnAdd"
             android:width="10dp"
-            android:onClick="btnAddClick"
             android:text="+"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

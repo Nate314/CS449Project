@@ -12,12 +12,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activites.ReportActivity" android:configChanges="orientation|screenSize" />
-        <activity android:name=".activites.RegisterActivity" android:configChanges="orientation|screenSize" />
-        <activity android:name=".activites.IncomeExpenseActivity" android:configChanges="orientation|screenSize" />
-        <activity android:name=".activites.MenuActivity" android:configChanges="orientation|screenSize" />
-        <activity android:name=".activites.SettingsActivity" android:configChanges="orientation|screenSize" />
-        <activity android:name=".activites.LoginActivity" android:configChanges="orientation|screenSize">
+<!--        <activity android:name=".activites.ReportActivity" android:configChanges="orientation|screenSize" android:noHistory="true" />-->
+<!--        <activity android:name=".activites.RegisterActivity" android:configChanges="orientation|screenSize" android:noHistory="true" />-->
+<!--        <activity android:name=".activites.IncomeExpenseActivity" android:configChanges="orientation|screenSize" android:noHistory="true" />-->
+<!--        <activity android:name=".activites.MenuActivity" android:configChanges="orientation|screenSize" android:noHistory="true" />-->
+<!--        <activity android:name=".activites.SettingsActivity" android:configChanges="orientation|screenSize" android:noHistory="true" />-->
+        <activity android:name=".activites.MainActivity" android:configChanges="orientation|screenSize" android:noHistory="true" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activites.LoginActivity" android:configChanges="orientation|screenSize" android:noHistory="true" android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

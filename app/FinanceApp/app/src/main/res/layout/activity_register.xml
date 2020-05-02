@@ -8,21 +8,12 @@
     android:orientation="vertical"
     tools:context=".activites.RegisterActivity">
 
-    <Button
-        android:id="@+id/btnBack"
-        android:onClick="btnBackClick"
-        android:text="Back"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center" />
-
     <TextView
         android:id="@+id/lblScreenName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="45dp"
+        android:layout_marginTop="20dp"
         android:gravity="center"
         android:text="Register"
         android:textColor="@color/colorPrimaryDark"
@@ -33,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="95dp"
+        android:layout_marginTop="70dp"
         android:gravity="center"
         android:text="Total: $"
         android:textColor="@color/colorPrimaryDark"
@@ -46,7 +37,7 @@
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
-        android:layout_marginTop="125dp"
+        android:layout_marginTop="120dp"
         android:fillViewport="true">
 
         <!--
@@ -84,7 +75,6 @@
             android:id="@+id/btnFloatingIncome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="btnFloatingIncomeClick"
             app:fab_colorNormal="@color/colorPrimary"
             app:fab_colorPressed="@color/colorPrimary"
             app:fab_icon="@drawable/income_white"
@@ -95,7 +85,6 @@
             android:id="@+id/btnFloatingExpense"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="btnFloatingExpenseClick"
             app:fab_colorNormal="@color/colorPrimary"
             app:fab_colorPressed="@color/colorPrimary"
             app:fab_icon="@drawable/expense_white"
@@ -106,7 +95,6 @@
             android:id="@+id/btnFloatingAccountTransfer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="btnFloatingAccountTransferClick"
             app:fab_colorNormal="@color/colorPrimary"
             app:fab_colorPressed="@color/colorPrimary"
             app:fab_icon="@drawable/transfer_white"
@@ -117,7 +105,6 @@
             android:id="@+id/btnFloatingCategoryTransfer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="btnFloatingCategoryTransferClick"
             app:fab_colorNormal="@color/colorPrimary"
             app:fab_colorPressed="@color/colorPrimary"
             app:fab_icon="@drawable/transfer_white"

@@ -1,29 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:fillViewport="false">
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:context=".activites.MenuActivity">
 
-        <TextView
-            android:id="@+id/lblScreenName"
-            android:text="Menu"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="36sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:layout_gravity="center"
-            android:gravity="center" />
+        <!--        <TextView-->
+        <!--            android:id="@+id/lblScreenName"-->
+        <!--            android:text="Menu"-->
+        <!--            android:textColor="@color/colorPrimaryDark"-->
+        <!--            android:textSize="36sp"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginTop="20dp"-->
+        <!--            android:layout_gravity="center"-->
+        <!--            android:gravity="center" />-->
 
         <TextView
             android:id="@+id/lblTotal"
@@ -36,79 +35,112 @@
             android:layout_gravity="center"
             android:gravity="center" />
 
-        <Button
-            android:id="@+id/btnIncome"
-            android:onClick="btnIncomeClick"
-            android:text="Income"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:layout_gravity="center"
-            android:gravity="center" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="right"
+            android:layout_gravity="right"
+            android:layout_marginTop="10dp">
 
-        <Button
-            android:id="@+id/btnExpense"
-            android:onClick="btnExpenseClick"
-            android:text="Expense"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_gravity="center"
-            android:gravity="center" />
+            <Button
+                android:id="@+id/btnIncome"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/income_green"
+                android:text="Income"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center" />
 
-        <Button
-            android:id="@+id/btnAccountTransfer"
-            android:onClick="btnAccountTransferClick"
-            android:text="Account Transfer"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_gravity="center"
-            android:gravity="center" />
+            <Button
+                android:id="@+id/btnExpense"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/expense_red"
+                android:text="Expense"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center" />
 
-        <Button
-            android:id="@+id/btnCategoryTransfer"
-            android:onClick="btnCategoryTransferClick"
-            android:text="Category Transfer"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_gravity="center"
-            android:gravity="center" />
+        </LinearLayout>
 
-        <Button
-            android:id="@+id/btnRegister"
-            android:onClick="btnRegisterClick"
-            android:text="Register"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_gravity="center"
-            android:gravity="center" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="right"
+            android:layout_gravity="right"
+            android:layout_marginTop="10dp">
 
-        <Button
-            android:id="@+id/btnReport"
-            android:onClick="btnReportClick"
-            android:text="Report"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_gravity="center"
-            android:gravity="center" />
+            <Button
+                android:id="@+id/btnAccountTransfer"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/transfer_blue"
+                android:text="Account Transfer"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center" />
+
+            <Button
+                android:id="@+id/btnCategoryTransfer"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/transfer_blue"
+                android:text="Category Transfer"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="right"
+            android:layout_gravity="right"
+            android:layout_marginTop="10dp">
+
+            <Button
+                android:id="@+id/btnRegister"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/register_black"
+                android:text="Register"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center" />
+
+            <Button
+                android:id="@+id/btnReport"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/report_black"
+                android:text="Report"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center" />
+
+        </LinearLayout>
 
         <Button
             android:id="@+id/btnSettings"
-            android:onClick="btnSettingsClick"
+            android:drawableTop="@drawable/settings_black"
             android:text="Settings"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:layout_gravity="center"
-            android:gravity="center" />
+            android:gravity="center"
+            android:layout_marginTop="20dp" />
 
         <Button
             android:id="@+id/btnLogOut"
-            android:onClick="btnLogOutClick"
+            android:drawableTop="@drawable/logout_black"
             android:text="Log Out"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

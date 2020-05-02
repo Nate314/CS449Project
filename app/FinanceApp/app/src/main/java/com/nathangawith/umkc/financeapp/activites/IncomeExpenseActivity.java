@@ -1,11 +1,13 @@
 package com.nathangawith.umkc.financeapp.activites;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -22,19 +24,13 @@ import com.nathangawith.umkc.financeapp.dtos.GenericResponse;
 import com.nathangawith.umkc.financeapp.dtos.TransactionRequest;
 import com.nathangawith.umkc.financeapp.http.MyApi;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.OptionalInt;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
-public class IncomeExpenseActivity extends AppCompatActivity {
+public class IncomeExpenseActivity extends Fragment implements IBackNavigable {
 
     // ui elements
     private TextView lblScreenName;
@@ -67,31 +63,44 @@ public class IncomeExpenseActivity extends AppCompatActivity {
     private Collection<DBCategory> allCategories = null;
     private Collection<DBAccount> allAccounts = null;
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_income_expense);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.activity_income_expense, container, false);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        View view = getView();
         // initialize fields to ui elements
-        this.txtAmount = findViewById(R.id.txtAmount);
-        this.txtDescription = findViewById(R.id.txtDescription);
-        this.spinnerAccount = findViewById(R.id.spinnerAccount);
-        this.spinnerCategory = findViewById(R.id.spinnerCategory);
-        this.spinnerFromAccount = findViewById(R.id.spinnerFromAccount);
-        this.spinnerToAccount = findViewById(R.id.spinnerToAccount);
-        this.spinnerFromCategory = findViewById(R.id.spinnerFromCategory);
-        this.spinnerToCategory = findViewById(R.id.spinnerToCategory);
-        this.btnSelectDate = findViewById(R.id.btnSelectDate);
-        this.lblDate = findViewById(R.id.lblDate);
-        this.btnSubmit = findViewById(R.id.btnSubmit);
-        this.progressBar = findViewById(R.id.progressBar);
-        this.lblScreenName = findViewById(R.id.lblScreenName);
-        this.lblLabel1 = findViewById(R.id.lblLabel1);
-        this.lblLabel2 = findViewById(R.id.lblLabel2);
-        this.lblLabel3 = findViewById(R.id.lblLabel3);
-        this.lblLabel4 = findViewById(R.id.lblLabel4);
-        this.lblLabel5 = findViewById(R.id.lblLabel5);
-        this.lblLabel6 = findViewById(R.id.lblLabel6);
-        this.btnSelectDate.setOnClickListener(v -> MyUtility.btnDateClick(this, this.lblDate));
+        this.txtAmount = view.findViewById(R.id.txtAmount);
+        this.txtDescription = view.findViewById(R.id.txtDescription);
+        this.spinnerAccount = view.findViewById(R.id.spinnerAccount);
+        this.spinnerCategory = view.findViewById(R.id.spinnerCategory);
+        this.spinnerFromAccount = view.findViewById(R.id.spinnerFromAccount);
+        this.spinnerToAccount = view.findViewById(R.id.spinnerToAccount);
+        this.spinnerFromCategory = view.findViewById(R.id.spinnerFromCategory);
+        this.spinnerToCategory = view.findViewById(R.id.spinnerToCategory);
+        this.btnSelectDate = view.findViewById(R.id.btnSelectDate);
+        this.lblDate = view.findViewById(R.id.lblDate);
+        this.btnSubmit = view.findViewById(R.id.btnSubmit);
+        this.progressBar = view.findViewById(R.id.progressBar);
+        this.lblScreenName = view.findViewById(R.id.lblScreenName);
+        this.lblLabel1 = view.findViewById(R.id.lblLabel1);
+        this.lblLabel2 = view.findViewById(R.id.lblLabel2);
+        this.lblLabel3 = view.findViewById(R.id.lblLabel3);
+        this.lblLabel4 = view.findViewById(R.id.lblLabel4);
+        this.lblLabel5 = view.findViewById(R.id.lblLabel5);
+        this.lblLabel6 = view.findViewById(R.id.lblLabel6);
+        this.btnSelectDate.setOnClickListener(v -> MyUtility.btnDateClick(getContext(), this.lblDate));
+        IncomeExpenseActivity me = this;
+        this.btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                me.btnSubmitClick(v);
+            }
+        });
         this.init();
     }
 
@@ -119,12 +128,12 @@ public class IncomeExpenseActivity extends AppCompatActivity {
             this.lblLabel2.setVisibility(View.VISIBLE);
             this.spinnerCategory.setVisibility(View.VISIBLE);
             this.spinnerAccount.setVisibility(View.VISIBLE);
-            MyApi.getAllCategories(getApplicationContext(), income, categories -> {
+            MyApi.getAllCategories(getContext(), income, categories -> {
                 if (MyState.EDITING_TRANSACTION != null) {
                     DBCategory previouslySelectedCategory = categories.stream().filter(x -> x.CategoryID == MyState.EDITING_TRANSACTION.CategoryID).findFirst().orElse(null);
                     List<DBCategory> previouslyNotSelectedCategories = categories.stream().filter(x -> x.CategoryID != MyState.EDITING_TRANSACTION.CategoryID).collect(Collectors.toList());
                     if (previouslySelectedCategory == null) {
-                        MyUtility.okDialog(this, "Category not found");
+                        MyUtility.okDialog(getFragmentManager(), "Category not found");
                         previouslySelectedCategory = previouslyNotSelectedCategories.get(0);
                         previouslyNotSelectedCategories.remove(0);
                     }
@@ -132,13 +141,13 @@ public class IncomeExpenseActivity extends AppCompatActivity {
                     categories = previouslyNotSelectedCategories;
                 }
                 this.allCategories = categories;
-                MyUtility.setSpinnerItems(this, this.spinnerCategory, DBCategory.class, categories, category -> this.selectedCategory = category);
-                MyApi.getAllAccounts(getApplicationContext(), accounts -> {
+                MyUtility.setSpinnerItems(getContext(), this.spinnerCategory, DBCategory.class, categories, category -> this.selectedCategory = category);
+                MyApi.getAllAccounts(getContext(), accounts -> {
                     if (MyState.EDITING_TRANSACTION != null) {
                         DBAccount previouslySelectedAccount = accounts.stream().filter(x -> x.AccountID == MyState.EDITING_TRANSACTION.AccountID).findFirst().orElse(null);
                         List<DBAccount> previouslyNotSelectedAccounts = accounts.stream().filter(x -> x.AccountID != MyState.EDITING_TRANSACTION.AccountID).collect(Collectors.toList());
                         if (previouslySelectedAccount == null) {
-                            MyUtility.okDialog(this, "Account not found");
+                            MyUtility.okDialog(getFragmentManager(), "Account not found");
                             previouslySelectedAccount = previouslyNotSelectedAccounts.get(0);
                             previouslyNotSelectedAccounts.remove(0);
                         }
@@ -146,27 +155,27 @@ public class IncomeExpenseActivity extends AppCompatActivity {
                         accounts = previouslyNotSelectedAccounts;
                     }
                     this.allAccounts = accounts;
-                    MyUtility.setSpinnerItems(this, this.spinnerAccount, DBAccount.class, accounts, account -> this.selectedAccount = account);
-                }, x -> MyUtility.okDialog(this, "Error", x.response));
-            }, x -> MyUtility.okDialog(this, "Error", x.response));
+                    MyUtility.setSpinnerItems(getContext(), this.spinnerAccount, DBAccount.class, accounts, account -> this.selectedAccount = account);
+                }, x -> MyUtility.okDialog(getFragmentManager(), "Error", x.response));
+            }, x -> MyUtility.okDialog(getFragmentManager(), "Error", x.response));
         } else if (MyState.SCREEN.equals(MyConstants.TRANSFER_ACCOUNT)) {
             this.lblScreenName.setText("Account Transfer");
             this.lblLabel3.setVisibility(View.VISIBLE);
             this.lblLabel4.setVisibility(View.VISIBLE);
             this.spinnerToAccount.setVisibility(View.VISIBLE);
             this.spinnerFromAccount.setVisibility(View.VISIBLE);
-            MyApi.getAllAccounts(getApplicationContext(), respCollection -> {
+            MyApi.getAllAccounts(getContext(), respCollection -> {
                 if (MyState.EDITING_TRANSACTION != null) {
                     DBAccount previouslySelectedFromAccount = respCollection.stream().filter(x -> x.AccountID == MyState.EDITING_TRANSACTION.AccountFromID).findFirst().orElse(null);
                     DBAccount previouslySelectedToAccount = respCollection.stream().filter(x -> x.AccountID == MyState.EDITING_TRANSACTION.AccountToID).findFirst().orElse(null);
                     List<DBAccount> previouslyNotSelectedAccounts = respCollection.stream().filter(x -> x.AccountID != MyState.EDITING_TRANSACTION.AccountFromID && x.AccountID != MyState.EDITING_TRANSACTION.AccountToID).collect(Collectors.toList());
                     if (previouslySelectedToAccount == null) {
-                        MyUtility.okDialog(this, "To Account not found");
+                        MyUtility.okDialog(getFragmentManager(), "To Account not found");
                     } else {
                         previouslyNotSelectedAccounts.add(0, previouslySelectedToAccount);
                     }
                     if (previouslySelectedFromAccount == null) {
-                        MyUtility.okDialog(this, "From Account not found");
+                        MyUtility.okDialog(getFragmentManager(), "From Account not found");
                     } else {
                         previouslyNotSelectedAccounts.add(0, previouslySelectedFromAccount);
                     }
@@ -176,25 +185,25 @@ public class IncomeExpenseActivity extends AppCompatActivity {
                 this.setFromAccounts(respCollection);
                 this.setToAccounts(respCollection);
             },
-            x -> MyUtility.okDialog(this, "Error", x.response));
+            x -> MyUtility.okDialog(getFragmentManager(), "Error", x.response));
         } else if (MyState.SCREEN.equals(MyConstants.TRANSFER_CATEGORY)) {
             this.lblScreenName.setText("Category Transfer");
             this.lblLabel5.setVisibility(View.VISIBLE);
             this.lblLabel6.setVisibility(View.VISIBLE);
             this.spinnerFromCategory.setVisibility(View.VISIBLE);
             this.spinnerToCategory.setVisibility(View.VISIBLE);
-            MyApi.getAllIncomeAndExpenseCategories(getApplicationContext(), respCollection -> {
+            MyApi.getAllIncomeAndExpenseCategories(getContext(), respCollection -> {
                 if (MyState.EDITING_TRANSACTION != null) {
                     DBCategory previouslySelectedFromCategory = respCollection.stream().filter(x -> x.CategoryID == MyState.EDITING_TRANSACTION.CategoryFromID).findFirst().orElse(null);
                     DBCategory previouslySelectedToCategory = respCollection.stream().filter(x -> x.CategoryID == MyState.EDITING_TRANSACTION.CategoryToID).findFirst().orElse(null);
                     List<DBCategory> previouslyNotSelectedCategories = respCollection.stream().filter(x -> x.CategoryID != MyState.EDITING_TRANSACTION.CategoryFromID && x.CategoryID != MyState.EDITING_TRANSACTION.CategoryToID).collect(Collectors.toList());
                     if (previouslySelectedToCategory == null) {
-                        MyUtility.okDialog(this, "To Category not found");
+                        MyUtility.okDialog(getFragmentManager(), "To Category not found");
                     } else {
                         previouslyNotSelectedCategories.add(0, previouslySelectedToCategory);
                     }
                     if (previouslySelectedFromCategory == null) {
-                        MyUtility.okDialog(this, "From Category not found");
+                        MyUtility.okDialog(getFragmentManager(), "From Category not found");
                     } else {
                         previouslyNotSelectedCategories.add(0, previouslySelectedFromCategory);
                     }
@@ -204,7 +213,7 @@ public class IncomeExpenseActivity extends AppCompatActivity {
                 this.setFromCategories(respCollection);
                 this.setToCategories(respCollection);
             },
-            x -> MyUtility.okDialog(this, "Error", x.response));
+            x -> MyUtility.okDialog(getFragmentManager(), "Error", x.response));
         }
         if (MyState.EDITING_TRANSACTION != null) {
             this.btnSubmit.setText("UPDATE");
@@ -213,7 +222,7 @@ public class IncomeExpenseActivity extends AppCompatActivity {
             try {
                 this.lblDate.setText(MyUtility.sqlDateToJavaDate(MyState.EDITING_TRANSACTION.Date));
             } catch (Exception e) {
-                MyUtility.okDialog(this, "Could not parse date");
+                MyUtility.okDialog(getFragmentManager(), "Could not parse date");
             }
         }
     }
@@ -223,7 +232,7 @@ public class IncomeExpenseActivity extends AppCompatActivity {
 
     private void setFromCategories(Collection<DBCategory> respCollection) {
         Integer previousCategoryID = this.selectedFromCategory == null ? null : this.selectedFromCategory.CategoryID;
-        MyUtility.setSpinnerItems(this, this.spinnerFromCategory, DBCategory.class, respCollection, category -> {
+        MyUtility.setSpinnerItems(getContext(), this.spinnerFromCategory, DBCategory.class, respCollection, category -> {
             this.selectedFromCategory = category;
             this.setToCategories(this.allCategories.stream().filter(x -> x.Description != this.spinnerFromCategory.getSelectedItem()).collect(Collectors.toList()));
             if (this.fromCategorySelectedCounter  == 0) {
@@ -243,7 +252,7 @@ public class IncomeExpenseActivity extends AppCompatActivity {
 
     private void setToCategories(Collection<DBCategory> respCollection) {
         Integer previousCategoryID = this.selectedToCategory == null ? null : this.selectedToCategory.CategoryID;
-        MyUtility.setSpinnerItems(this, this.spinnerToCategory, DBCategory.class, respCollection, category -> {
+        MyUtility.setSpinnerItems(getContext(), this.spinnerToCategory, DBCategory.class, respCollection, category -> {
             this.selectedToCategory = category;
 //            this.setFromCategories(this.allCategories.stream().filter(x -> x.Description != this.spinnerToCategory.getSelectedItem()).collect(Collectors.toList()));
             if (this.toCategorySelectedCounter == 0) {
@@ -266,7 +275,7 @@ public class IncomeExpenseActivity extends AppCompatActivity {
 
     private void setFromAccounts(Collection<DBAccount> respCollection) {
         Integer previousAccountID = this.selectedFromAccount == null ? null : this.selectedFromAccount.AccountID;
-        MyUtility.setSpinnerItems(this, this.spinnerFromAccount, DBAccount.class, respCollection, account -> {
+        MyUtility.setSpinnerItems(getContext(), this.spinnerFromAccount, DBAccount.class, respCollection, account -> {
             this.selectedFromAccount = account;
             this.setToAccounts(this.allAccounts.stream().filter(x -> x.Description != account.Description).collect(Collectors.toList()));
             if (this.fromAccountSelectedCounter == 0) {
@@ -286,7 +295,7 @@ public class IncomeExpenseActivity extends AppCompatActivity {
 
     private void setToAccounts(Collection<DBAccount> respCollection) {
         Integer previousAccountID = this.selectedToAccount== null ? null : this.selectedToAccount.AccountID;
-        MyUtility.setSpinnerItems(this, this.spinnerToAccount, DBAccount.class, respCollection, account -> {
+        MyUtility.setSpinnerItems(getContext(), this.spinnerToAccount, DBAccount.class, respCollection, account -> {
             this.selectedToAccount = account;
 //            this.setFromCategories(this.allCategories.stream().filter(x -> x.Description != this.spinnerToCategory.getSelectedItem()).collect(Collectors.toList()));
             if (this.toAccountSelectedCounter == 0) {
@@ -347,10 +356,11 @@ public class IncomeExpenseActivity extends AppCompatActivity {
 
     private void sendToLastActivity() {
         MyState.EDITING_TRANSACTION = null;
+        System.out.println(MyState.LAST_SCREEN);
         if (MyState.LAST_SCREEN == MyConstants.MENU) {
-            startActivity(new Intent(this, MenuActivity.class));
+            MyState.GOTO = MyConstants.MENU;
         } else if (MyState.LAST_SCREEN == MyConstants.REGISTER) {
-            startActivity(new Intent(this, RegisterActivity.class));
+            MyState.GOTO = MyConstants.REGISTER;
         }
     }
 
@@ -396,18 +406,23 @@ public class IncomeExpenseActivity extends AppCompatActivity {
             Consumer<GenericResponse> errFunc = x -> {
                 this.loading(false);
                 if (x != null) {
-                    MyUtility.okDialog(this, "Error", x.response);
+                    MyUtility.okDialog(getFragmentManager(), "Error", x.response);
                 } else {
                     System.out.println("Error Response was null");
                 }
             };
             if (MyState.EDITING_TRANSACTION == null) {
-                MyApi.postTransaction(getApplicationContext(), MyState.SCREEN, transaction, okFunc, errFunc);
+                MyApi.postTransaction(getContext(), MyState.SCREEN, transaction, okFunc, errFunc);
             } else {
-                MyApi.putTransaction(getApplicationContext(), MyState.SCREEN, transaction, okFunc, errFunc);
+                MyApi.putTransaction(getContext(), MyState.SCREEN, transaction, okFunc, errFunc);
             }
         } else {
-            MyUtility.okDialog(this, "Enter all required Fields", "");
+            MyUtility.okDialog(getFragmentManager(), "Enter all required Fields", "");
         }
+    }
+
+    @Override
+    public void onBackClick() {
+        this.sendToLastActivity();
     }
 }

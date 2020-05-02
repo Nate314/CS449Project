@@ -7,6 +7,7 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.nathangawith.umkc.financeapp.constants.MyState;
+import com.nathangawith.umkc.financeapp.constants.MyUtility;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,10 +25,14 @@ public class MyHttpClient {
     private static AsyncHttpClient client = new AsyncHttpClient();
 
     public static void get(Context context, String url, Consumer<JSONObject> obCallback, Consumer<JSONArray> arrCallback, Consumer<Throwable> errCallback, Consumer<JSONObject> errObCallback) {
-        url = getAbsoluteUrl(url);
-        System.out.println("Sending request to: " + url);
-        client.addHeader("Authorization", String.format("Bearer %s", MyState.TOKEN));
-        client.get(context, url, null, getHandler(obCallback, arrCallback, errCallback, errObCallback));
+        try {
+            url = getAbsoluteUrl(url);
+            System.out.println("Sending request to: " + url);
+            client.addHeader("Authorization", String.format("Bearer %s", MyState.TOKEN));
+            client.get(context, url, null, getHandler(obCallback, arrCallback, errCallback, errObCallback));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     public static void post(Context context, String url, ByteArrayEntity entity, Consumer<JSONObject> obCallback, Consumer<JSONArray> arrCallback, Consumer<Throwable> errCallback, Consumer<JSONObject> errObCallback) {
@@ -65,10 +70,14 @@ public class MyHttpClient {
 //    }
 
     public static void delete(Context context, String url, Consumer<JSONObject> obCallback, Consumer<JSONArray> arrCallback, Consumer<Throwable> errCallback, Consumer<JSONObject> errObCallback) {
-        url = getAbsoluteUrl(url);
-        System.out.println("Sending request to: " + url);
-        client.addHeader("Authorization", String.format("Bearer %s", MyState.TOKEN));
-        client.delete(context, url, null, getHandler(obCallback, arrCallback, errCallback, errObCallback));
+        try {
+            url = getAbsoluteUrl(url);
+            System.out.println("Sending request to: " + url);
+            client.addHeader("Authorization", String.format("Bearer %s", MyState.TOKEN));
+            client.delete(context, url, null, getHandler(obCallback, arrCallback, errCallback, errObCallback));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
 //    public static void delete(Context context, String url, ByteArrayEntity entity, AsyncHttpResponseHandler responseHandler) {
@@ -79,8 +88,12 @@ public class MyHttpClient {
 //        client.delete(context, url, entity, "application/json", responseHandler);
 //    }
 
-    private static String getAbsoluteUrl(String relativeUrl) {
-        return MyState.ROOT_API_URL + relativeUrl;
+    private static String getAbsoluteUrl(String relativeUrl) throws Exception {
+        if (MyState.ROOT_API_URL == null) {
+            throw new Exception("null API url");
+        } else {
+            return MyState.ROOT_API_URL + relativeUrl;
+        }
     }
 
     private static AsyncHttpResponseHandler getHandler(Consumer<JSONObject> obCallback, Consumer<JSONArray> arrCallback, Consumer<Throwable> errCallback, Consumer<JSONObject> errObCallback) {

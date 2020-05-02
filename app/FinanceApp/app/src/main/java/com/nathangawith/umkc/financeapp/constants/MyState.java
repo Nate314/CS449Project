@@ -1,5 +1,7 @@
 package com.nathangawith.umkc.financeapp.constants;
 
+import com.google.android.material.navigation.NavigationView;
+import com.nathangawith.umkc.financeapp.activites.IBackNavigable;
 import com.nathangawith.umkc.financeapp.dtos.TransactionDto;
 
 public class MyState {
@@ -12,4 +14,7 @@ public class MyState {
     public static String REPORT_SELECTED_END_DATE;
     public static String REPORT_SELECTED_TYPE;
     public static String REPORT_SELECTED_BREAKPOINT;
+    public static NavigationView.OnNavigationItemSelectedListener NAVIGATION_LISTENER;
+    public static String GOTO;
+    public static IBackNavigable CURRENT_FRAGMENT = null;
 }

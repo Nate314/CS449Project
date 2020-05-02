@@ -2,9 +2,10 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:fillViewport="false">
+    android:fillViewport="true"
+    android:background="@color/colorAccent">
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -13,17 +14,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:context=".activites.LoginActivity">
-
-<!--        <TextView-->
-<!--            android:id="@+id/lblAppName"-->
-<!--            android:text="FinanceApp"-->
-<!--            android:textColor="@color/colorPrimaryDark"-->
-<!--            android:textSize="36sp"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="50dp"-->
-<!--            android:layout_gravity="center"-->
-<!--            android:gravity="center" />-->
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imgTransaction"
@@ -37,7 +27,7 @@
         <TextView
             android:id="@+id/lblLabel1"
             android:text="API URL:"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="@color/black"
             android:textSize="14sp"
             android:layout_marginTop="50dp"
             android:layout_marginLeft="10dp"
@@ -56,7 +46,7 @@
             android:gravity="center" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:textColorHint="@color/colorPrimaryDark"
+            android:textColorHint="@color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
@@ -75,7 +65,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:textColorHint="@color/colorPrimaryDark"
+            android:textColorHint="@color/black"
             app:passwordToggleEnabled="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -99,7 +89,9 @@
             android:id="@+id/btnLogin"
             android:width="10000dp"
             android:onClick="btnLoginClick"
+            android:background="@color/colorPrimaryDark"
             android:text="Login"
+            android:textColor="@color/colorAccent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"

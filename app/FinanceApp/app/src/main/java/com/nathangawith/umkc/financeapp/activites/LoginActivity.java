@@ -1,10 +1,16 @@
 package com.nathangawith.umkc.financeapp.activites;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -33,8 +39,7 @@ public class LoginActivity extends AppCompatActivity {
     private ArrayList<String> spinnerApiUrlOptions;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        // create layout
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         // initialize fields to ui elements
@@ -108,7 +113,7 @@ public class LoginActivity extends AppCompatActivity {
         if (username != null && password != null) {
             username = username.toLowerCase();
             this.loading(true);
-            MyApi.postLogin(getApplicationContext(), new TokenResponseDto(), username, password, resp -> {
+            MyApi.postLogin(this, new TokenResponseDto(), username, password, resp -> {
                 this.loading(false);
                 this.lblToken.setText(resp.token);
                 if (resp.token.equals("null")) {
@@ -136,7 +141,7 @@ public class LoginActivity extends AppCompatActivity {
             public void run() {
                 try {
                     Thread.sleep(MyUtility.isRunningTest ? 5000 : 0);
-                    MyUtility.goToActivity(me, MenuActivity.class);
+                    MyUtility.goToActivity(me, MainActivity.class);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
