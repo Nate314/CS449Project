@@ -54,3 +54,8 @@ Finally, in order to log in, you will need a user. To do so, you can manually cr
 POST http://{Your IP Address}/auth/createaccount
 
 With a JSON body: {"username": "hare", "password": "brianharepassword"}
+
+Finally, if you are running this on a fresh database, make sure to add 3-4 accounts, income categories, and expense categories on the "Settings" screen before navigating to any of the other screens. If we had a Sprint7, the next story I would work on would fix the issues associated to trying to use any of the other screens without these items set up first.
+
+Also, if I had a Sprint7, I would add Google Authentication so that you wouldn't have to manually create a user in the unsecure way listed above.
+
