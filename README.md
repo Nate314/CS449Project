@@ -83,9 +83,9 @@ Stretch Goals:
 | ~~7~~ | ~~Create Report view screen with: - Table view of the report configured in the Reports screen~~ | ~~7~~ | ~~1.5~~ | ~~Sprint4~~ |
 | ~~8~~ | ~~Allow the user to edit/delete an account name, income/expense category from the Settings screen~~ | ~~5~~ | ~~2.0~~ | ~~Sprint5~~ |
 | ~~9~~ | ~~Create Account/Category Transfer screens with: - Same fields as Income/Expense screen - And To/From account/category dropdowns~~ | ~~5~~ | ~~2.1~~ | ~~Sprint5~~ |
-| 19 | Edit/Delete income/expense/transfers from register screen | 5 | 2.3 | Sprint6 |
-| 20 | Fix all bugs found in Sprint5 | 3.5 | 2.3 | Sprint6 |
-| 21 | Add Side Navigation Menu | 1.5 | 2.4 | Sprint6 |
+| ~~19~~ | ~~Edit/Delete income/expense/transfers from register screen~~ | ~~5~~ | ~~2.3~~ | ~~Sprint6~~ |
+| ~~20~~ | ~~Fix all bugs found in Sprint5~~ | ~~3.5~~ | ~~2.3~~ | ~~Sprint6~~ |
+| ~~21~~ | ~~Add Side Navigation Menu~~ | ~~1.5~~ | ~~2.4~~ | ~~Sprint6~~ |
 | 18 | Allow the user to edit their first/last name from the settings screen | 1.5 | 2.4 | TODO |
 | 10 | Integrate Google authentication | 4 | 3.0 | TODO |
 | 11 | Filter Register based on Category, Description, Amount, etc. | 3 | 4.0 | TODO |
@@ -372,26 +372,57 @@ Sprint Backlog
 
 | Story ID | Story / Task | Estimated Hours | Actual Hours |
 | --- | --- | --- | --- |
-| 19 | Edit/Delete income/expense/transfers from register screen | 5:00 |  |
-| 20 | Fix all bugs found in Sprint5 | 3:30 |  |
+| 19 | Edit/Delete income/expense/transfers from register screen | 5:00 | 5:21 |
+| 20 | Fix all bugs found in Sprint5 | 3:30 | 1:58 |
 | 20.1 | Report screen not working sometimes |  |  |
 | 20.2 | Register in the wrong order |  |  |
 | 20.3 | Don't show the account transfering from on transfer screen and settings |  |  |
 | 20.4 | Put ("From {ACCOUNT}") on next line |  |  |
 | 20.5 | No transactions over 1 million dollars |  |  |
 | 20.6 | Modify Messages |  |  |
-| 21 | Add Side Navigation Menu | 1:30 |  |
+| 21 | Add Side Navigation Menu | 1:30 | 4:09 |
 | ~~18~~ | ~~Allow the user to edit their first/last name from the settings screen~~ | ~~1:30~~ |  |
 | --- | --- | --- | --- |
-|  | Total | 10:00 |  |
+|  | Total | 10:00 | 11:28 |
 
 ## Sprint 6 Review
 
-[TODO]
+Video showing that the new features for this sprint including editing or deleting a transaction, added icons to the menu, and added side navigation menu: https://www.youtube.com/watch?v=XWR6xDRbCiI
+
+As you can see from the [screenshots below](#sprint-6-screenshots), what I achieved this sprint was:
+- Added edit feature to register entries
+  - Built off of the Income/Espense screen and contains these fields:
+    - Amount
+    - Description
+    - From (Account/Category)
+    - To (Account/Category)
+    - Submit button text changes to "UPDATE" when in edit mode
+  - After pressing the update button:
+    - The API runs update statement(s) on the transaction table
+      - Income/Expense transactions only require one update
+      - Transfers require two transaction records to update
+- Added delete feature to register entries
+- Menu
+  - Added icons to buttons on the menu screen
+  - Added side navigation menu
+- Added Functionality to other screens
+  - Fixed bug in report screen due to a change in the transaction table from last sprint
+  - Edited error messages
 
 ## Sprint 6 Retrospective
 
-[TODO]
+What went well:
+- Good last sprint overall.
+- After this sprint, all stories in the backlog with priority of 1.x or 2.x are finished, except for the story that adds the functionality to edit the user's first/last name from the settings screen.
+  - This story was in this sprint originally, but I removed it because if I were to release this on the app store, I would use Google authentication (story 10 with priority 3.0) and just use the name from the user's Google account.
+
+What didn't go well:
+- Again, my estimates were a little too short since I spent 11.5 hours on what I had originally estimated at 10 hours of work.
+- The main contributing factor this sprint was underestimating the effort to add in the side navigation menu, which caused me to convert all of my Activites to Fragments, which is the more correct thing to do with the Java Android framework.
+
+Changes for future sprints:
+- This was the last sprint, so no changes are necessary!
+- If I continue work on this application in the summer, I would like to integrate Google authentication because I think that would be a good learning oportunity.
 
 # Sprint 1 Screenshots:
 
@@ -441,7 +472,8 @@ Sprint Backlog
 
 .|.
 :----:|:----:
-[TODO]|[TODO]
+![iter6_updated_menu](readme_assets/iter6_updated_menu.png?raw=true)|![iter6_side_menu](readme_assets/iter6_side_menu.png?raw=true)
+![iter6_delete_transaction](readme_assets/iter6_delete_transaction.png?raw=true)|![iter6_edit_transaction](readme_assets/iter6_edit_transaction.png?raw=true)
 
 # Original Mockups
 

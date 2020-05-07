@@ -93,9 +93,8 @@ public class RegisterActivity extends Fragment implements IBackNavigable {
         MyState.LAST_SCREEN = MyConstants.REGISTER;
         TransactionDto editing_transaction = this.transactions.stream().filter(x -> x.TransactionID == entry.getTransactionID()).findFirst().orElse(null);
         if (editing_transaction != null) {
-//            MyState.EDITING_TRANSACTION = editing_transaction;
-////            MyUtility.goToActivity(this, IncomeExpenseActivity.class);
-            MyState.GOTO = MyConstants.INCOME;
+            MyState.EDITING_TRANSACTION = editing_transaction;
+            MyState.GOTO = entry.getTransactionType();
         } else {
             MyUtility.okDialog(getFragmentManager(), "ERROR", "Could not find transaction to edit");
         }
