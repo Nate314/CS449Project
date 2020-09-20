@@ -100,7 +100,14 @@ public class Database implements IDatabase {
 	}
 
 	private Connection getConnection() throws ClassNotFoundException, SQLException {
+		try {
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+		}
+		catch (Exception ex) {
+			System.out.println(ex);
+		}
 		String conn = Config.dbConnectionURL, usr = Config.dbUser, pass = Config.dbPassword;
+		System.out.printf("%s, %s, %s\n", conn, usr, pass);
 		return DriverManager.getConnection(conn, usr, pass);
 	}
 

@@ -46,16 +46,10 @@ CREATE TABLE Transactions (
 -- Type column added to Categories table in Sprint2
 ALTER TABLE Categories ADD Type VARCHAR(20);
 
--- These views allow mariadb to work with lowercase table names
-CREATE VIEW users AS SELECT * FROM Users;
-CREATE VIEW categories AS SELECT * FROM Categories;
-CREATE VIEW accounts AS SELECT * FROM Accounts;
-CREATE VIEW transactions AS SELECT * FROM Transactions;
-
 -- delete statements to remove android instrumentation test data
-DELETE FROM accounts WHERE Description LIKE '@%';
-DELETE FROM categories WHERE Description LIKE '@%';
-DELETE FROM transactions WHERE Description LIKE '@%';
+DELETE FROM Accounts WHERE Description LIKE '@%';
+DELETE FROM Categories WHERE Description LIKE '@%';
+DELETE FROM Transactions WHERE Description LIKE '@%';
 
 -- change amount column type
 ALTER TABLE Transactions MODIFY amount DECIMAL(15,2);
@@ -81,6 +75,14 @@ ALTER TABLE Transactions MODIFY CategoryID INT(11);
 
 -- Add Enabled column to Accounts and Categories Tables
 ALTER TABLE Accounts ADD Enabled INT(1);
-UPDATE accounts SET Enabled = 1;
+UPDATE Accounts SET Enabled = 1;
 ALTER TABLE Categories ADD Enabled INT(1);
-UPDATE categories SET Enabled = 1;
+UPDATE Categories SET Enabled = 1;
+
+-- These views allow mariadb to work with lowercase table names
+CREATE VIEW users AS SELECT * FROM Users;
+CREATE VIEW categories AS SELECT * FROM Categories;
+CREATE VIEW accounts AS SELECT * FROM Accounts;
+CREATE VIEW transactions AS SELECT * FROM Transactions;
+
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'secret';

@@ -1,0 +1,23 @@
+version: "3.7"
+
+services:
+
+    java-api:
+        container_name: java-rest-api
+        image: maven:3.3-jdk-8
+        command: mvn spring-boot:run
+        ports:
+            - 9090:9090
+        working_dir: /api
+        volumes:
+            - ./api:/api
+
+    mysql-db:
+        container_name: java-rest-api-mysql-db
+        image: mysql:5.7
+        ports:
+            - 3306:3306
+        environment:
+            MYSQL_USER: root
+            MYSQL_ROOT_PASSWORD: secret
+            MYSQL_ROOT_HOST: '%'

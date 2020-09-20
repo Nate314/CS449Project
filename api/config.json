@@ -1,7 +1,7 @@
 {	
-	"dbConnectionURL": "jdbc:mysql://localhost:3306/cs449project",
+	"dbConnectionURL": "jdbc:mysql://mysql-db:3306/CS449Project",
 	"dbUser": "root",
-	"dbPassword": "r00t",
+	"dbPassword": "secret",
 	"jwtSecretKey": "TmF0aGFuIEdhd2l0aCBTZWNyZXQgS2V5",
 	"tokenLifespan": 15
 }
