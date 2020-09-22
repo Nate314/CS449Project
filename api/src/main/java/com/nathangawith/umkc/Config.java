@@ -11,6 +11,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import com.google.gson.Gson;
 import com.nathangawith.umkc.interceptors.JWTInterceptor;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.context.annotation.*;
+
 class ConfigDto {
 	public String dbConnectionURL;
 	public String dbUser;
@@ -20,6 +25,7 @@ class ConfigDto {
 }
 
 @Component
+@Configuration
 public class Config extends WebMvcConfigurerAdapter {
 
 	public static String dbConnectionURL;
@@ -52,5 +58,10 @@ public class Config extends WebMvcConfigurerAdapter {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(jwtMiddleware);
+	}
+
+	@Override
+	public void addCorsMappings(CorsRegistry registry) {
+		registry.addMapping("/**").allowedOrigins("http://localhost:8080");
 	}
 }
