@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -22,7 +22,7 @@ import com.nathangawith.umkc.dtos.DBCategory;
 import com.nathangawith.umkc.dtos.GenericResponse;
 import com.nathangawith.umkc.services.SettingsService;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class ControllerSettingsTest extends BaseTest {
 
 	@Mock

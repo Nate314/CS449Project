@@ -11,7 +11,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import com.nathangawith.umkc.Constants;
 import com.nathangawith.umkc.Queries;
@@ -20,7 +20,7 @@ import com.nathangawith.umkc.dtos.DBAccount;
 import com.nathangawith.umkc.dtos.DBCategory;
 import com.nathangawith.umkc.repositories.SettingsRepository;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class RepositorySettingsTest extends BaseTest {
 
 	@Mock

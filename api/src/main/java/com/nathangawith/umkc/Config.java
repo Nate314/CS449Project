@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import com.google.gson.Gson;
 import com.nathangawith.umkc.interceptors.JWTInterceptor;
@@ -26,7 +25,7 @@ class ConfigDto {
 
 @Component
 @Configuration
-public class Config extends WebMvcConfigurerAdapter {
+public class Config implements WebMvcConfigurer {
 
 	public static String dbConnectionURL;
 	public static String dbUser;
@@ -38,7 +37,6 @@ public class Config extends WebMvcConfigurerAdapter {
 	JWTInterceptor jwtMiddleware;
 		
 	public Config() {
-		super();
     	List<String> jsonLines;
 		try {
 			jsonLines = Arrays.asList(FileIO.readFileLines("config.json"));
@@ -57,7 +55,8 @@ public class Config extends WebMvcConfigurerAdapter {
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(jwtMiddleware);
+		// The ping endpoint is the health check, so it must answer without a token.
+		registry.addInterceptor(jwtMiddleware).excludePathPatterns("/api/test/ping");
 	}
 
 	@Override

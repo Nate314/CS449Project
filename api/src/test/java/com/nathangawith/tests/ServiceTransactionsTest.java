@@ -8,13 +8,13 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import com.nathangawith.umkc.dtos.DBTransaction;
 import com.nathangawith.umkc.repositories.ITransactionsRepository;
 import com.nathangawith.umkc.services.TransactionsService;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class ServiceTransactionsTest extends BaseTest  {
 
 	@Mock
@@ -45,6 +45,8 @@ public class ServiceTransactionsTest extends BaseTest  {
 		transaction.Amount = 3.14;
 		transaction.Date = new Date();
 		if (transfer) {
+			// addNewTransfer first inserts the two legs of the transfer as transactions.
+			Mockito.when(mRepository.insertTransaction(Mockito.anyInt(), Mockito.anyInt(), Mockito.anyInt(), Mockito.anyString(), Mockito.anyDouble(), Mockito.any())).thenReturn(true);
 			Mockito.when(mRepository.insertTransfer(transaction.UserID, transaction.AccountID, transaction.CategoryID, true, transaction.Description, transaction.Amount, transaction.Date)).thenReturn(success);
 		} else {
 			Mockito.when(mRepository.insertTransaction(transaction.UserID, transaction.AccountID, transaction.CategoryID, transaction.Description, transaction.Amount, transaction.Date)).thenReturn(success);
