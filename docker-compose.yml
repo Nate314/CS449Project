@@ -33,7 +33,8 @@ services:
             - ./db:/docker-entrypoint-initdb.d:ro
             - mysql-data:/var/lib/mysql
         healthcheck:
-            test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -p\"$$MYSQL_ROOT_PASSWORD\" --silent"]
+            # TCP, not the socket: the temporary server that loads db/ during init listens on no port.
+            test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p\"$$MYSQL_ROOT_PASSWORD\" --silent"]
             interval: 5s
             timeout: 5s
             retries: 30
