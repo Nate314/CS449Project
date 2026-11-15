@@ -1,0 +1,11 @@
+.idea
+.settings
+.vscode
+.classpath
+.project
+.travis.yml
+.mvn
+target
+*.iml
+Dockerfile
+config*.json

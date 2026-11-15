@@ -11,7 +11,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import com.nathangawith.umkc.dtos.ReportRequest;
 import com.nathangawith.umkc.dtos.ReportResponse;
@@ -19,7 +19,7 @@ import com.nathangawith.umkc.dtos.Transaction;
 import com.nathangawith.umkc.repositories.IReportRepository;
 import com.nathangawith.umkc.services.ReportService;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class ServiceReportTest extends BaseTest {
 	
 	class ReportRequestResponse {

@@ -1,23 +1,42 @@
-version: "3.7"
-
+# Local dev stack. Start it with ./run.ps1 or ./run.sh (ports are in run.conf).
+# The DB credentials match api/config.json, which is for local use only.
 services:
 
     java-api:
-        container_name: java-rest-api
-        image: maven:3.3-jdk-8
-        command: mvn spring-boot:run
+        build: ./api
+        restart: unless-stopped
+        depends_on:
+            mysql-db:
+                condition: service_healthy
         ports:
-            - 9090:9090
-        working_dir: /api
+            - "${API_PORT:-9090}:9090"
         volumes:
-            - ./api:/api
+            - ./api/config.json:/app/config.json:ro
+        read_only: true
+        tmpfs:
+            - /tmp
+        cap_drop:
+            - ALL
+        security_opt:
+            - no-new-privileges:true
 
     mysql-db:
-        container_name: java-rest-api-mysql-db
-        image: mysql:5.7
+        image: mysql:8.4
+        restart: unless-stopped
         ports:
-            - 3306:3306
+            - "127.0.0.1:${MYSQL_PORT:-3306}:3306"
         environment:
-            MYSQL_USER: root
             MYSQL_ROOT_PASSWORD: secret
             MYSQL_ROOT_HOST: '%'
+        volumes:
+            # Creates the CS449Project schema on the first start.
+            - ./db:/docker-entrypoint-initdb.d:ro
+            - mysql-data:/var/lib/mysql
+        healthcheck:
+            test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -p\"$$MYSQL_ROOT_PASSWORD\" --silent"]
+            interval: 5s
+            timeout: 5s
+            retries: 30
+
+volumes:
+    mysql-data:

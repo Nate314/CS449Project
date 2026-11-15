@@ -11,7 +11,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import com.nathangawith.umkc.Algorithms;
 import com.nathangawith.umkc.Queries;
@@ -21,7 +21,7 @@ import com.nathangawith.umkc.dtos.ReportResponse;
 import com.nathangawith.umkc.dtos.Transaction;
 import com.nathangawith.umkc.repositories.ReportRepository;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class RepositoryReportTest extends BaseTest {
 	
 	class ReportRequestResponse {

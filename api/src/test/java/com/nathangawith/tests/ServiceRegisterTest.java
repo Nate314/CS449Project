@@ -10,13 +10,13 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import com.nathangawith.umkc.dtos.Transaction;
 import com.nathangawith.umkc.repositories.IRegisterRepository;
 import com.nathangawith.umkc.services.RegisterService;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class ServiceRegisterTest extends BaseTest {
 
 	@Mock

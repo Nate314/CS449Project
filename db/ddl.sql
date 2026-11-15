@@ -85,4 +85,4 @@ CREATE VIEW categories AS SELECT * FROM Categories;
 CREATE VIEW accounts AS SELECT * FROM Accounts;
 CREATE VIEW transactions AS SELECT * FROM Transactions;
 
-GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'secret';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%';

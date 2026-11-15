@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.ResponseEntity;
 
 import com.nathangawith.umkc.Messages;
@@ -14,7 +14,7 @@ import com.nathangawith.umkc.controllers.AuthenticationController;
 import com.nathangawith.umkc.dtos.LoginRequest;
 import com.nathangawith.umkc.services.AuthenticationService;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class ControllerAuthenticationTest extends BaseTest {
 
 	@Mock
