@@ -3,6 +3,9 @@ package com.nathangawith.umkc;
 import java.util.Arrays;
 import java.util.List;
 
+import jakarta.servlet.Filter;
+import jakarta.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -57,6 +60,17 @@ public class Config implements WebMvcConfigurer {
 	public void addInterceptors(InterceptorRegistry registry) {
 		// The ping endpoint is the health check, so it must answer without a token.
 		registry.addInterceptor(jwtMiddleware).excludePathPatterns("/api/test/ping");
+	}
+
+	// The Android app builds URLs like http://host:9090//auth/login. Spring 7 path patterns do not
+	// match the double slash and Boot 4 dropped the Ant matcher, so collapse slashes and forward.
+	@Bean
+	public Filter collapseSlashesFilter() {
+		return (request, response, chain) -> {
+			String uri = ((HttpServletRequest) request).getRequestURI();
+			if (uri.contains("//")) request.getRequestDispatcher(uri.replaceAll("/{2,}", "/")).forward(request, response);
+			else chain.doFilter(request, response);
+		};
 	}
 
 	@Override
